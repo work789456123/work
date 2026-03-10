@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
-import { Upload, Mic, Send, Loader2, X, MicOff, CreditCard, AlertTriangle } from "lucide-react";
+import { Upload, Mic, Send, Loader2, X, MicOff, CreditCard, AlertTriangle, Volume2, VolumeX } from "lucide-react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import api from "@/utils/api";
@@ -19,6 +19,7 @@ const GopuChat = () => {
   const [credits, setCredits] = useState(null);
   const [limitReached, setLimitReached] = useState(false);
   const [remainingMessages, setRemainingMessages] = useState(10);
+  const [isPlaying, setIsPlaying] = useState(null);
   const fileInputRef = useRef(null);
   const messagesEndRef = useRef(null);
 
@@ -38,17 +39,29 @@ const GopuChat = () => {
     try {
       const response = await api.get("/credits/balance");
       setCredits(response.data);
-      setRemainingMessages(10 - response.data.daily_count);
-      setLimitReached(response.data.daily_count >= 10 && !response.data.has_subscription);
+      setRemainingMessages(response.data.daily_limit - response.data.daily_count);
+      setLimitReached(response.data.daily_count >= response.data.daily_limit && !response.data.has_subscription);
     } catch (error) {
       console.error("Failed to fetch credits", error);
+    }
+  };
+
+  const handleSpeak = async (text, messageId) => {
+    try {
+      setIsPlaying(messageId);
+      const response = await api.post("/speech/synthesize", { text });
+      const audio = new Audio(response.data.audio_base64);
+      audio.onended = () => setIsPlaying(null);
+      await audio.play();
+    } catch (error) {
+      toast.error("Failed to synthesize speech");
+      setIsPlaying(null);
     }
   };
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Check if user has subscription for image uploads
       if (credits && !credits.has_subscription) {
         toast.error("Image upload is available only with paid plans. Explore PashuCare Suraksha Plan!");
         return;
@@ -87,12 +100,11 @@ const GopuChat = () => {
           const base64Audio = reader.result.split(',')[1];
           try {
             const response = await api.post("/speech/transcribe", {
-              audio_base64: base64Audio
+              audio_base64: base64Audio,
+              language: "hi"
             });
-            const transcribedText = response.data.text;
+            setInput(response.data.text);
             toast.success("Voice recorded successfully");
-            // Auto-send the transcribed text
-            handleSend(transcribedText);
           } catch (error) {
             toast.error("Failed to transcribe audio");
           }
@@ -117,14 +129,14 @@ const GopuChat = () => {
     }
   };
 
-  const handleSend = async (autoSendText = null) => {
-    const textToSend = autoSendText || input;
-    if (!textToSend.trim() && !uploadedImage) return;
+  const handleSend = async () => {
+    if (!input.trim() && !uploadedImage) return;
     if (limitReached) return;
 
     const userMessage = {
+      id: Date.now(),
       role: "user",
-      content: textToSend,
+      content: input,
       image: uploadedImage?.preview
     };
     setMessages(prev => [...prev, userMessage]);
@@ -132,25 +144,26 @@ const GopuChat = () => {
 
     try {
       const response = await api.post("/chat", {
-        message: textToSend,
+        message: input,
         session_id: sessionId,
         image_base64: uploadedImage?.base64
       });
 
-      // Check for limit reached
+      const botId = Date.now() + 1;
       if (response.data.limit_reached) {
         setLimitReached(true);
         setRemainingMessages(0);
         const blockMessage = {
+          id: botId,
           role: "assistant",
           content: response.data.response,
           isBlocked: true
         };
         setMessages(prev => [...prev, blockMessage]);
       } else if (response.data.credits_warning) {
-        // Show warning message
         setRemainingMessages(response.data.remaining);
         const warningMessage = {
+          id: botId,
           role: "assistant",
           content: response.data.response,
           isWarning: true,
@@ -158,25 +171,13 @@ const GopuChat = () => {
         };
         setMessages(prev => [...prev, warningMessage]);
       } else {
-        // Normal response
         const botMessage = {
+          id: botId,
           role: "assistant",
           content: response.data.response
         };
         setMessages(prev => [...prev, botMessage]);
 
-        // Synthesize and play audio for the bot's response
-        try {
-          const ttsResponse = await api.post("/speech/synthesize", {
-            text: response.data.response
-          });
-          const audio = new Audio(`data:audio/mp3;base64,${ttsResponse.data.audio_base64}`);
-          audio.play();
-        } catch (ttsError) {
-          console.error("Failed to play audio response", ttsError);
-        }
-
-        // Update remaining count
         if (credits && !credits.has_subscription) {
           setRemainingMessages(prev => Math.max(0, prev - 1));
         }
@@ -185,8 +186,6 @@ const GopuChat = () => {
       setInput("");
       setUploadedImage(null);
       if (fileInputRef.current) fileInputRef.current.value = "";
-
-      // Refresh credit balance
       fetchCreditBalance();
     } catch (error) {
       toast.error(error.response?.data?.detail || "Failed to send message");
@@ -198,7 +197,6 @@ const GopuChat = () => {
   return (
     <div className="min-h-screen bg-[#FAFAFA] py-12" data-testid="gopu-chat-page">
       <div className="max-w-4xl mx-auto px-6">
-        {/* Gopu Header */}
         <div className="text-center mb-8 space-y-4">
           <div className="w-24 h-24 mx-auto rounded-full overflow-hidden bg-white border-4 border-[#1F6559]/20 shadow-lg" style={{ borderRadius: '50%' }}>
             <img
@@ -211,7 +209,6 @@ const GopuChat = () => {
           <h1 className="heading-font text-4xl font-bold text-[#111111]" data-testid="gopu-title">Gopu.AI</h1>
           <p className="text-[#6F6F6F]">Your pet's intelligent health companion</p>
 
-          {/* Credit Balance Display */}
           {credits && (
             <div className={`inline-flex items-center space-x-2 px-4 py-2 rounded-full border ${credits.has_subscription
               ? 'bg-green-50 border-green-300'
@@ -230,9 +227,7 @@ const GopuChat = () => {
           )}
         </div>
 
-        {/* Chat Container */}
         <Card className="p-6 rounded-2xl border-[#EAEAEA] space-y-6 shadow-sm bg-white" data-testid="chat-container">
-          {/* Messages Area */}
           <div className="space-y-4 min-h-[400px] max-h-[500px] overflow-y-auto">
             {messages.length === 0 && (
               <div className="text-center py-12 text-[#6F6F6F]">
@@ -241,8 +236,8 @@ const GopuChat = () => {
               </div>
             )}
             {messages.map((msg, idx) => (
-              <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                <div className={`max-w-[85%] ${msg.role === 'user'
+              <div key={msg.id || idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                <div className={`relative max-w-[85%] ${msg.role === 'user'
                   ? 'bg-[#1F6559] text-white rounded-2xl rounded-br-sm'
                   : msg.isBlocked
                     ? 'bg-red-50 border-2 border-red-200 rounded-2xl rounded-bl-sm text-[#111111]'
@@ -258,6 +253,15 @@ const GopuChat = () => {
                   <div className="text-sm leading-relaxed whitespace-pre-wrap">
                     {msg.content}
                   </div>
+                  {msg.role === 'assistant' && !msg.isBlocked && (
+                    <button
+                      onClick={() => handleSpeak(msg.content, msg.id)}
+                      className="absolute -right-10 top-0 p-2 text-[#1F6559] hover:bg-gray-100 rounded-full transition-colors"
+                      title="Listen in Hindi"
+                    >
+                      {isPlaying === msg.id ? <VolumeX className="w-5 h-5 animate-pulse" /> : <Volume2 className="w-5 h-5" />}
+                    </button>
+                  )}
                   {msg.isWarning && (
                     <div className="mt-3 pt-3 border-t border-yellow-200 flex items-center">
                       <AlertTriangle className="w-4 h-4 text-yellow-600 mr-2" />
@@ -288,7 +292,6 @@ const GopuChat = () => {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Image Preview */}
           {uploadedImage && (
             <div className="relative inline-block">
               <img src={uploadedImage.preview} alt="Preview" className="h-20 rounded-lg border border-[#EAEAEA]" />
@@ -301,7 +304,6 @@ const GopuChat = () => {
             </div>
           )}
 
-          {/* Limit Reached Banner */}
           {limitReached && (
             <div className="bg-red-50 border-2 border-red-200 rounded-xl p-4 text-center">
               <p className="text-red-700 font-medium mb-2">0 chat remaining</p>
@@ -315,7 +317,6 @@ const GopuChat = () => {
             </div>
           )}
 
-          {/* Input Area */}
           <div className="space-y-3">
             <Textarea
               value={input}
@@ -373,7 +374,6 @@ const GopuChat = () => {
             </div>
           </div>
 
-          {/* Disclaimer */}
           <div className="text-xs text-[#6F6F6F] text-center p-4 bg-[#FAFAFA] rounded-xl border border-[#EAEAEA]">
             <p><strong>Disclaimer:</strong> This is advisory guidance. Please consult a veterinarian for treatment.</p>
           </div>
