@@ -18,7 +18,12 @@ const LoginPage = () => {
             localStorage.setItem('token', data.access_token);
             navigate('/dashboard');
         } catch (err: any) {
-            setError(err.response?.data?.detail || 'Login failed. Please check your credentials.');
+            const detail = err.response?.data?.detail;
+            if (Array.isArray(detail)) {
+                setError(detail[0]?.msg || 'Validation error occurred.');
+            } else {
+                setError(detail || 'Login failed. Please check your credentials.');
+            }
         } finally {
             setIsLoading(false);
         }

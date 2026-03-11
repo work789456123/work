@@ -12,7 +12,7 @@ class UserLogin(BaseModel):
     password: str
 
 class AdminLogin(BaseModel):
-    email: EmailStr
+    email: str
     password: str
 
 class UserResponse(BaseModel):
