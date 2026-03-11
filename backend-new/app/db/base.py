@@ -7,3 +7,4 @@ from app.models.blog import Blog
 from app.models.contact import ContactMessage, CareerApplication
 from app.models.admin_data import DoctorApplication, EmergencyLog
 from app.models.doctor import Doctor
+from app.models.farm import Farmer, Animal, FarmConsultation, AIAlert

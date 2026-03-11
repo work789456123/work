@@ -1,14 +1,18 @@
 import asyncio
 import logging
+import uuid
+import datetime
+from sqlalchemy.future import select
+from sqlalchemy import func
 from app.db.session import AsyncSessionLocal
 from app.core.config import settings
-from app.crud.user import crud_user, pwd_context
+from app.crud.user import crud_user
 from app.schemas.user import UserRegister
 from app.models.user import User
 from app.models.blog import Blog
 from app.models.doctor import Doctor
+from app.models.farm import Farmer, Animal, FarmConsultation, AIAlert
 import app.db.base  # Ensures all models are registered
-from sqlalchemy.future import select
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -74,24 +78,53 @@ async def init_db() -> None:
             await db.commit()
             
         # Seed Blogs
-        blogs_count = await db.scalar(select(User).where(Blog.published == True))
-        if blogs_count is None or blogs_count == 0:
+        blogs_count = await db.scalar(select(func.count(Blog.id)))
+        if not blogs_count:
              logger.info("Seeding static blogs...")
              for blog_data in sample_blogs:
                  db.add(Blog(**blog_data))
              await db.commit()
              
         # Seed Doctors
-        doctors_count = await db.scalar(select(User).where(Doctor.name != None))
-        if doctors_count is None or doctors_count == 0:
+        doctors_count = await db.scalar(select(func.count(Doctor.id)))
+        if not doctors_count:
              logger.info("Seeding static doctors...")
              for doc_data in static_doctors:
                   doc = Doctor(**doc_data)
-                  # Handle type conversion for testing legacy float vs string
-                  doc.rating = float(doc_data["rating"])
-                  doc.reviews = int(doc_data["reviews"])
                   db.add(doc)
              await db.commit()
+
+        # Seed Legacy Farm Data
+        farmers_count = await db.scalar(select(func.count(Farmer.id)))
+        if not farmers_count:
+            logger.info("Seeding legacy farm data...")
+            
+            # Farmers
+            f1 = Farmer(name="Aman Singh", location="Ambala, HR", contact="9876543210", status="Active")
+            f2 = Farmer(name="Rajesh Patil", location="Karnal, HR", contact="9876543211", status="Active")
+            f3 = Farmer(name="Sunita Devi", location="Rohtak, HR", contact="9876543212", status="Active")
+            db.add_all([f1, f2, f3])
+            await db.flush() # Get IDs
+            
+            # Animals
+            a1 = Animal(tag_id="#TAG-88", species="Cow", breed="Gir", health_status="Healthy", recent_diagnosis="Routine Checkup - Clear", farmer_id=f1.id)
+            a2 = Animal(tag_id="#TAG-42", species="Buffalo", breed="Murrah", health_status="Critical", recent_diagnosis="HS Infection detected by AI", farmer_id=f2.id)
+            a3 = Animal(tag_id="#TAG-15", species="Goat", breed="Jamnapari", health_status="Monitoring", recent_diagnosis="Mild fever, nutritional gap", farmer_id=f3.id)
+            db.add_all([a1, a2, a3])
+            await db.flush()
+            
+            # Consultations
+            c1 = FarmConsultation(ticket_id="C-12", animal_id=a1.id, farmer_id=f1.id, symptom="Reduced milk yield", diagnosis="Mastitis Risk (92%)", status="Active")
+            c2 = FarmConsultation(ticket_id="G-08", animal_id=a3.id, farmer_id=f3.id, symptom="Loss of appetite", diagnosis="Nutritional Gap", status="Resolved")
+            c3 = FarmConsultation(ticket_id="B-45", animal_id=a2.id, farmer_id=f2.id, symptom="Fever & lethargy", diagnosis="HS Infection (High)", status="Critical")
+            db.add_all([c1, c2, c3])
+            
+            # AI Alerts
+            al1 = AIAlert(alert_id="AI-8821", farm="Patil Dairy", tag_id="#TAG-42", type="Health Anomaly", confidence=94.0, time_label="2 mins ago", status="Critical", description="Thermal camera detects elevated body temperature. Potential HS Infection.")
+            al2 = AIAlert(alert_id="AI-8820", farm="Sunita Farm", tag_id="#TAG-15", type="Behavioral Shift", confidence=82.0, time_label="15 mins ago", status="Warning", description="Reduced feeding activity detected over the last 6 hours.")
+            db.add_all([al1, al2])
+            
+            await db.commit()
 
         logger.info("Database seeding complete!")
 

@@ -1,4 +1,4 @@
-import jwt
+from jose import jwt, JWTError
 from typing import Annotated
 from datetime import datetime
 from fastapi import Depends, HTTPException
@@ -17,7 +17,7 @@ def verify_token(token: str) -> dict:
         return payload
     except jwt.ExpiredSignatureError:
         raise HTTPException(status_code=401, detail="Token has expired")
-    except jwt.PyJWTError:
+    except JWTError:
         raise HTTPException(status_code=401, detail="Could not validate credentials")
 
 async def get_current_user(

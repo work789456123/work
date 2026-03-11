@@ -19,6 +19,13 @@ from app.api.endpoints.auth import create_access_token, pwd_context
 from app.crud.user import crud_user
 from app.crud.appointment import crud_appointment
 from app.crud.blog import crud_blog
+from app.crud.farm import crud_farm
+from app.schemas.farm import (
+    FarmerCreate, FarmerResponse, 
+    AnimalCreate, AnimalResponse,
+    FarmConsultationCreate, FarmConsultationResponse,
+    AIAlertCreate, AIAlertResponse
+)
 
 router = APIRouter()
 
@@ -51,6 +58,11 @@ async def get_admin_dashboard(
     seven_days_ago = datetime.utcnow() - timedelta(days=7)
     emergency_alerts_7d = await db.scalar(select(func.count(EmergencyLog.id)).where(EmergencyLog.timestamp >= seven_days_ago))
     
+    # Farm Stats
+    total_farmers = await db.scalar(select(func.count(Farmer.id)))
+    total_animals = await db.scalar(select(func.count(Animal.id)))
+    active_farm_consultations = await db.scalar(select(func.count(FarmConsultation.id)).where(FarmConsultation.status == "Active"))
+    
     # Credit Analytics (Simplified for parity)
     # In a real system we would track purchases in a separate table
     # For now, we'll return 0 or placeholder based on current schema
@@ -61,6 +73,9 @@ async def get_admin_dashboard(
         "total_appointments": total_appointments,
         "pending_doctor_applications": pending_doctor_applications,
         "emergency_alerts_7d": emergency_alerts_7d,
+        "total_farmers": total_farmers,
+        "total_animals": total_animals,
+        "active_farm_consultations": active_farm_consultations,
         "total_credits_purchased": 0,
         "total_credits_used": await db.scalar(select(func.sum(User.daily_message_count))) or 0,
         "revenue_from_credits": 0
@@ -161,3 +176,78 @@ async def create_blog(
     current_admin: User = Depends(get_current_admin)
 ):
     return await crud_blog.create(db, blog_in=blog_in)
+
+# --- Legacy Farm Management ---
+
+@router.get("/farmers", response_model=List[FarmerResponse])
+async def get_farmers(
+    skip: int = 0, limit: int = 100,
+    db: AsyncSession = Depends(get_db),
+    current_admin: User = Depends(get_current_admin)
+):
+    return await crud_farm.get_farmers(db, skip=skip, limit=limit)
+
+@router.post("/farmers", response_model=FarmerResponse)
+async def create_farmer(
+    farmer_in: FarmerCreate,
+    db: AsyncSession = Depends(get_db),
+    current_admin: User = Depends(get_current_admin)
+):
+    return await crud_farm.create_farmer(db, obj_in=farmer_in)
+
+@router.get("/animals", response_model=List[AnimalResponse])
+async def get_animals(
+    skip: int = 0, limit: int = 100,
+    db: AsyncSession = Depends(get_db),
+    current_admin: User = Depends(get_current_admin)
+):
+    return await crud_farm.get_animals(db, skip=skip, limit=limit)
+
+@router.post("/animals", response_model=AnimalResponse)
+async def create_animal(
+    animal_in: AnimalCreate,
+    db: AsyncSession = Depends(get_db),
+    current_admin: User = Depends(get_current_admin)
+):
+    return await crud_farm.create_animal(db, obj_in=animal_in)
+
+@router.get("/farm-consultations", response_model=List[FarmConsultationResponse])
+async def get_farm_consultations(
+    skip: int = 0, limit: int = 100,
+    db: AsyncSession = Depends(get_db),
+    current_admin: User = Depends(get_current_admin)
+):
+    consultations = await crud_farm.get_consultations(db, skip=skip, limit=limit)
+    # Enrich with legacy convenience fields
+    result = []
+    for c in consultations:
+         res = FarmConsultationResponse.model_validate(c)
+         res.animal_tag = c.animal.tag_id if c.animal else "N/A"
+         res.animal_species = c.animal.species if c.animal else "N/A"
+         res.farmer_name = c.farmer.name if c.farmer else "N/A"
+         result.append(res)
+    return result
+
+@router.post("/farm-consultations", response_model=FarmConsultationResponse)
+async def create_farm_consultation(
+    consult_in: FarmConsultationCreate,
+    db: AsyncSession = Depends(get_db),
+    current_admin: User = Depends(get_current_admin)
+):
+    return await crud_farm.create_consultation(db, obj_in=consult_in)
+
+@router.get("/farm-alerts", response_model=List[AIAlertResponse])
+async def get_farm_alerts(
+    skip: int = 0, limit: int = 100,
+    db: AsyncSession = Depends(get_db),
+    current_admin: User = Depends(get_current_admin)
+):
+    return await crud_farm.get_alerts(db, skip=skip, limit=limit)
+
+@router.post("/farm-alerts", response_model=AIAlertResponse)
+async def create_farm_alert(
+    alert_in: AIAlertCreate,
+    db: AsyncSession = Depends(get_db),
+    current_admin: User = Depends(get_current_admin)
+):
+    return await crud_farm.create_alert(db, obj_in=alert_in)
