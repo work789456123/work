@@ -10,43 +10,42 @@ const Footer = () => {
   }
 
   return (
-    <footer className="bg-[#1F6559] text-white py-12" data-testid="footer">
+    <footer className="bg-slate-950 text-white py-24 mt-20" data-testid="footer">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid md:grid-cols-4 gap-8">
           {/* Brand */}
-          <div className="space-y-4">
+          <div className="space-y-6">
             <img 
               src="https://customer-assets.emergentagent.com/job_c5cc5284-c7c6-4671-8ab4-5008fe8fa5a2/artifacts/zsncbn16_pashuvanilogpic.png" 
               alt="PashuVaani Logo" 
-              className="h-16"
-              style={{height: '70px'}}
+              className="h-20 drop-shadow-2xl"
             />
-            <p className="text-white/80 text-sm">
-              Pashu Bhi Pariwar Hai - Your trusted partner in animal healthcare.
+            <p className="text-slate-400 text-sm leading-relaxed max-w-xs font-medium">
+              Pashu Bhi Pariwar Hai. We are revolutionizing animal healthcare with <span className="text-primary font-bold">Gopu AI</span> technology.
             </p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h4 className="font-semibold text-lg mb-4">Quick Links</h4>
-            <ul className="space-y-2 text-white/80">
-              <li><Link to="/" className="hover:text-white transition-colors">Home</Link></li>
-              <li><Link to="/doctors" className="hover:text-white transition-colors">Our Doctors</Link></li>
-              <li><Link to="/appointments" className="hover:text-white transition-colors">Book Appointment</Link></li>
-              <li><Link to="/blogs" className="hover:text-white transition-colors">Blog</Link></li>
-              <li><Link to="/pashucare-suraksha-plan" className="hover:text-white transition-colors">PashuCare Suraksha Plan</Link></li>
+            <h4 className="font-black text-xs uppercase tracking-widest mb-6 text-slate-500">Quick Links</h4>
+            <ul className="space-y-4 text-slate-300 text-sm font-bold">
+              <li><Link to="/" className="hover:text-primary transition-all">Home</Link></li>
+              <li><Link to="/doctors" className="hover:text-primary transition-all">Our Doctors</Link></li>
+              <li><Link to="/appointments" className="hover:text-primary transition-all">Book Appointment</Link></li>
+              <li><Link to="/blogs" className="hover:text-primary transition-all">Blog</Link></li>
+              <li><Link to="/pashucare-suraksha-plan" className="hover:text-primary transition-all">Suraksha Plan</Link></li>
             </ul>
           </div>
 
           {/* Company */}
           <div>
-            <h4 className="font-semibold text-lg mb-4">Company</h4>
-            <ul className="space-y-2 text-white/80">
-              <li><Link to="/about" className="hover:text-white transition-colors">About Us</Link></li>
-              <li><Link to="/our-story" className="hover:text-white transition-colors">Founders Stories</Link></li>
-              <li><Link to="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
-              <li><Link to="/careers" className="hover:text-white transition-colors">Careers</Link></li>
-              <li><Link to="/gopu" className="hover:text-white transition-colors">Try Gopu.AI</Link></li>
+            <h4 className="font-black text-xs uppercase tracking-widest mb-6 text-slate-500">Company</h4>
+            <ul className="space-y-4 text-slate-300 text-sm font-bold">
+              <li><Link to="/about" className="hover:text-primary transition-all">About Us</Link></li>
+              <li><Link to="/our-story" className="hover:text-primary transition-all">Founders Stories</Link></li>
+              <li><Link to="/contact" className="hover:text-primary transition-all">Contact Us</Link></li>
+              <li><Link to="/careers" className="hover:text-primary transition-all">Careers</Link></li>
+              <li><Link to="/gopu" className="hover:text-primary transition-all underline decoration-primary underline-offset-4">Try Gopu.AI</Link></li>
             </ul>
           </div>
 

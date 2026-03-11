@@ -32,7 +32,8 @@ async def chat_with_gopu(
     else:
         chat_session = await crud_chat.get_session(db, session_id=chat_in.session_id)
         if not chat_session or chat_session.user_id != current_user.id:
-            raise HTTPException(status_code=404, detail="Chat session not found")
+            # Fallback: Create new session if requested session is invalid or not found
+            chat_session = await crud_chat.create_session(db, user_id=current_user.id)
         session_id = chat_session.id
 
     # Add user message

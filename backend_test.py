@@ -7,7 +7,7 @@ from io import BytesIO
 from PIL import Image
 
 class PashuVaaniAPITester:
-    def __init__(self, base_url="https://animal-health-ai-3.preview.emergentagent.com/api"):
+    def __init__(self, base_url="api.pashuvaani.com/api"):
         self.base_url = base_url
         self.user_token = None
         self.admin_token = None

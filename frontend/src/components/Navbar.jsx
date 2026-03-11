@@ -51,7 +51,7 @@ const Navbar = () => {
       const endpoint = authMode === "login" ? "/auth/login" : "/auth/register";
       const response = await api.post(endpoint, formData);
       
-      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('token', response.data.access_token);
       localStorage.setItem('user_name', response.data.full_name);
       setIsLoggedIn(true);
       setShowAuth(false);
@@ -100,7 +100,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="sticky top-0 z-50 bg-[#1F6559] shadow-md">
+    <nav className="sticky top-0 z-50 glass-morphism border-none !bg-white/70 dark:!bg-black/70 mt-4 mx-4 rounded-3xl">
         <div className="max-w-7xl mx-auto px-4 lg:px-6">
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
@@ -115,46 +115,46 @@ const Navbar = () => {
 
             {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center space-x-1">
-              <Link to="/" className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${location.pathname === "/" ? "text-white bg-white/20" : "text-white/90 hover:text-white hover:bg-white/10"}`}>
+              <Link to="/" className={`px-5 py-2 text-sm font-bold rounded-xl transition-all ${location.pathname === "/" ? "text-primary bg-primary/10" : "text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-primary/5"}`}>
                 Home
               </Link>
               
-              <Link to="/doctors" className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${location.pathname === "/doctors" ? "text-white bg-white/20" : "text-white/90 hover:text-white hover:bg-white/10"}`}>
+              <Link to="/doctors" className={`px-5 py-2 text-sm font-bold rounded-xl transition-all ${location.pathname === "/doctors" ? "text-primary bg-primary/10" : "text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-primary/5"}`}>
                 Our Doctors
               </Link>
               
-              <Link to="/product" className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${location.pathname === "/product" ? "text-white bg-white/20" : "text-white/90 hover:text-white hover:bg-white/10"}`}>
+              <Link to="/product" className={`px-5 py-2 text-sm font-bold rounded-xl transition-all ${location.pathname === "/product" ? "text-primary bg-primary/10" : "text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-primary/5"}`}>
                 Products
               </Link>
               
-              <Link to="/appointments" className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${location.pathname === "/appointments" ? "text-white bg-white/20" : "text-white/90 hover:text-white hover:bg-white/10"}`}>
-                Consult with Doctor
+              <Link to="/appointments" className={`px-5 py-2 text-sm font-bold rounded-xl transition-all ${location.pathname === "/appointments" ? "text-primary bg-primary/10" : "text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-primary/5"}`}>
+                Consultation
               </Link>
               
-              <Link to="/blogs" className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${location.pathname === "/blogs" ? "text-white bg-white/20" : "text-white/90 hover:text-white hover:bg-white/10"}`}>
+              <Link to="/blogs" className={`px-5 py-2 text-sm font-bold rounded-xl transition-all ${location.pathname === "/blogs" ? "text-primary bg-primary/10" : "text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-primary/5"}`}>
                 Blog
               </Link>
               
               {/* About PashuVaani Dropdown */}
               <DropdownMenu>
-                <DropdownMenuTrigger className="px-4 py-2 text-sm font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10 flex items-center">
-                  About PashuVaani <ChevronDown className="ml-1 h-4 w-4" />
+                <DropdownMenuTrigger className="px-5 py-2 text-sm font-bold rounded-xl text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-primary/5 flex items-center transition-all">
+                  About <ChevronDown className="ml-1 h-4 w-4" />
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="bg-white border-gray-200">
-                  <DropdownMenuItem onClick={() => navigate('/about')} className="cursor-pointer">
+                <DropdownMenuContent className="bg-white/90 backdrop-blur-xl border-slate-100 rounded-2xl shadow-2xl p-2 min-w-[200px]">
+                  <DropdownMenuItem onClick={() => navigate('/about')} className="cursor-pointer rounded-xl font-medium focus:bg-primary/10 focus:text-primary">
                     About Us
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate('/our-story')} className="cursor-pointer">
+                  <DropdownMenuItem onClick={() => navigate('/our-story')} className="cursor-pointer rounded-xl font-medium focus:bg-primary/10 focus:text-primary">
                     Founders Stories
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate('/contact')} className="cursor-pointer">
+                  <DropdownMenuItem onClick={() => navigate('/contact')} className="cursor-pointer rounded-xl font-medium focus:bg-primary/10 focus:text-primary">
                     Contact Us
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
 
-              <Link to="/pashucare-suraksha-plan" className="px-4 py-2 text-sm font-medium rounded-lg bg-yellow-500 text-black hover:bg-yellow-400 transition-colors">
-                PashuCare Suraksha Plan
+              <Link to="/pashucare-suraksha-plan" className="ml-2 px-5 py-2.5 text-xs font-black uppercase tracking-widest rounded-xl bg-amber-400 text-amber-950 hover:bg-amber-300 transition-all shadow-lg shadow-amber-400/20 active:scale-95">
+                Suraksha Plan
               </Link>
             </div>
 
@@ -162,17 +162,17 @@ const Navbar = () => {
             <div className="flex items-center space-x-3">
               <Button
                 onClick={handleGopuClick}
-                className="hidden lg:flex rounded-full bg-white text-[#1F6559] hover:bg-white/90 font-semibold"
+                className="hidden lg:flex rounded-2xl bg-primary text-white hover:bg-primary-hover font-black text-xs uppercase tracking-widest px-6 py-6 shadow-xl shadow-primary/20 active:scale-95 transition-all"
                 data-testid="try-gopu-button"
               >
-                Try Gopu.AI Free
+                Gopu.AI
               </Button>
 
               {isLoggedIn && (
                 <Button
                   onClick={handleLogout}
-                  variant="outline"
-                  className="hidden lg:flex rounded-full border-white/30 text-white hover:bg-white/10 hover:text-white"
+                  variant="ghost"
+                  className="hidden lg:flex rounded-2xl text-slate-600 hover:bg-red-50 hover:text-red-600 transition-all"
                   data-testid="logout-button"
                 >
                   Logout
@@ -183,7 +183,7 @@ const Navbar = () => {
               <Button
                 variant="ghost"
                 size="icon"
-                className="lg:hidden text-white hover:bg-white/10"
+                className="lg:hidden text-primary hover:bg-primary/5 rounded-xl transition-all"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 data-testid="mobile-menu-toggle"
               >

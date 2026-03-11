@@ -39,7 +39,7 @@ async def admin_login(admin_in: AdminLogin, db: AsyncSession = Depends(get_db)):
     token_data = {"sub": user.id, "email": user.phone_or_email, "role": user.role}
     token = create_access_token(token_data)
     
-    return {"token": token, "admin": {"id": user.id, "email": user.phone_or_email, "role": user.role}}
+    return {"access_token": token, "admin": {"id": user.id, "email": user.phone_or_email, "role": user.role}}
 
 @router.get("/dashboard")
 async def get_admin_dashboard(

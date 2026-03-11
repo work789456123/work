@@ -5,6 +5,7 @@ class UserRegister(BaseModel):
     full_name: str
     phone_or_email: str
     password: str
+    role: Optional[str] = "user"
 
 class UserLogin(BaseModel):
     phone_or_email: str

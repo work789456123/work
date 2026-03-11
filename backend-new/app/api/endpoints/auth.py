@@ -24,13 +24,13 @@ async def register(user_in: UserRegister, db: AsyncSession = Depends(get_db)):
             status_code=400,
             detail="The user with this username already exists in the system."
         )
-    user = await crud_user.create(db, user_in=user_in)
+    user = await crud_user.create(db, user_in=user_in, role=user_in.role if hasattr(user_in, 'role') else "user")
     
     # Generate token
     token_data = {"sub": user.id, "email": user.phone_or_email, "role": user.role}
     token = create_access_token(token_data)
     
-    return {"token": token, "user": {"id": user.id, "full_name": user.full_name, "role": user.role}}
+    return {"access_token": token, "user": {"id": user.id, "full_name": user.full_name, "role": user.role}}
 
 @router.post("/login")
 async def login(user_in: UserLogin, db: AsyncSession = Depends(get_db)):

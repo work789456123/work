@@ -15,12 +15,13 @@ class CRUDUser:
         result = await db.execute(select(User).where(User.id == user_id))
         return result.scalars().first()
 
-    async def create(self, db: AsyncSession, user_in: UserRegister) -> User:
+    async def create(self, db: AsyncSession, user_in: UserRegister, role: str = "user") -> User:
         hashed_password = pwd_context.hash(user_in.password)
         db_obj = User(
             full_name=user_in.full_name,
             phone_or_email=user_in.phone_or_email,
-            hashed_password=hashed_password
+            hashed_password=hashed_password,
+            role=role
         )
         db.add(db_obj)
         await db.commit()
