@@ -4,7 +4,7 @@ import uuid
 import datetime
 from sqlalchemy.future import select
 from sqlalchemy import func
-from app.db.session import AsyncSessionLocal
+from app.db.session import AsyncSessionLocal, engine
 from app.core.config import settings
 from app.crud.user import crud_user
 from app.schemas.user import UserRegister
@@ -60,6 +60,10 @@ static_doctors = [
 ]
 
 async def init_db() -> None:
+    # Create tables
+    async with engine.begin() as conn:
+        await conn.run_sync(app.db.base.Base.metadata.create_all)
+        
     async with AsyncSessionLocal() as db:
         admin_email = settings.ADMIN_EMAIL
         result = await db.execute(select(User).where(User.phone_or_email == admin_email))

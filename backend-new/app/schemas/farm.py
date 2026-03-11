@@ -13,6 +13,8 @@ class FarmerCreate(FarmerBase):
 
 class FarmerResponse(FarmerBase):
     id: str
+    created_at: datetime
+    animal_count: int = 0
 
     class Config:
         from_attributes = True
@@ -30,6 +32,7 @@ class AnimalCreate(AnimalBase):
 
 class AnimalResponse(AnimalBase):
     id: str
+    created_at: datetime
 
     class Config:
         from_attributes = True
@@ -72,6 +75,7 @@ class AIAlertCreate(AIAlertBase):
 
 class AIAlertResponse(AIAlertBase):
     id: str
+    created_at: datetime
 
     class Config:
         from_attributes = True

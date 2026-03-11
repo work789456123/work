@@ -12,6 +12,7 @@ class Farmer(Base):
     location = Column(String, nullable=False)
     contact = Column(String, nullable=False)
     status = Column(String, default="Active")
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
     
     animals = relationship("Animal", back_populates="farmer", cascade="all, delete-orphan")
     consultations = relationship("FarmConsultation", back_populates="farmer", cascade="all, delete-orphan")
@@ -26,6 +27,7 @@ class Animal(Base):
     health_status = Column(String, nullable=False)
     recent_diagnosis = Column(String, nullable=True)
     farmer_id = Column(String, ForeignKey("farmers.id"), nullable=False)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
     
     farmer = relationship("Farmer", back_populates="animals")
     consultations = relationship("FarmConsultation", back_populates="animal", cascade="all, delete-orphan")
@@ -57,3 +59,4 @@ class AIAlert(Base):
     time_label = Column(String, nullable=False)
     status = Column(String, nullable=False)
     description = Column(Text, nullable=False)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
