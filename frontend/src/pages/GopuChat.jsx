@@ -15,7 +15,7 @@ const GopuChat = () => {
   const [sessionId] = useState(() => `session_${Date.now()}`);
   const [uploadedImage, setUploadedImage] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
-  const [isVoiceMode, setIsVoiceMode] = useState(false);
+  const [isSoundEnabled, setIsSoundEnabled] = useState(true);
   const [mediaRecorder, setMediaRecorder] = useState(null);
   const [credits, setCredits] = useState(null);
   const [limitReached, setLimitReached] = useState(false);
@@ -106,7 +106,6 @@ const GopuChat = () => {
               });
               const transcribedText = response.data.text;
               setInput(transcribedText);
-              setIsVoiceMode(true);
               toast.success("आवाज़ रिकॉर्ड हो गई (Voice recorded)");
               
               // Auto-send transcribed text
@@ -187,10 +186,9 @@ const GopuChat = () => {
         };
         setMessages(prev => [...prev, botMessage]);
 
-        // Auto-play if in voice mode
-        if (isVoiceMode) {
+        // Auto-play speech for every response if sound is enabled
+        if (isSoundEnabled) {
           handleSpeak(response.data.response, botId);
-          setIsVoiceMode(false); // Reset for next message
         }
 
         if (credits && !credits.has_subscription) {
