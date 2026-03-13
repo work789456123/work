@@ -15,6 +15,7 @@ const GopuChat = () => {
   const [sessionId] = useState(() => `session_${Date.now()}`);
   const [uploadedImage, setUploadedImage] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
+  const [isVoiceMode, setIsVoiceMode] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState(null);
   const [credits, setCredits] = useState(null);
   const [limitReached, setLimitReached] = useState(false);
@@ -92,25 +93,32 @@ const GopuChat = () => {
         audioChunks.push(e.data);
       };
 
-      recorder.onstop = async () => {
-        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-        const reader = new FileReader();
-        reader.readAsDataURL(audioBlob);
-        reader.onloadend = async () => {
-          const base64Audio = reader.result.split(',')[1];
-          try {
-            const response = await api.post("/speech/transcribe", {
-              audio_base64: base64Audio,
-              language: "hi"
-            });
-            setInput(response.data.text);
-            toast.success("Voice recorded successfully");
-          } catch (error) {
-            toast.error("Failed to transcribe audio");
-          }
+        recorder.onstop = async () => {
+          const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+          const reader = new FileReader();
+          reader.readAsDataURL(audioBlob);
+          reader.onloadend = async () => {
+            const base64Audio = reader.result.split(',')[1];
+            try {
+              const response = await api.post("/speech/transcribe", {
+                audio_base64: base64Audio,
+                // language: "hi" // Let Whisper auto-detect the language
+              });
+              const transcribedText = response.data.text;
+              setInput(transcribedText);
+              setIsVoiceMode(true);
+              toast.success("आवाज़ रिकॉर्ड हो गई (Voice recorded)");
+              
+              // Auto-send transcribed text
+              if (transcribedText.trim()) {
+                handleSend(transcribedText);
+              }
+            } catch (error) {
+              toast.error("आवाज़ पहचानने में दिक्कत हुई (Transcription failed)");
+            }
+          };
+          stream.getTracks().forEach(track => track.stop());
         };
-        stream.getTracks().forEach(track => track.stop());
-      };
 
       recorder.start();
       setMediaRecorder(recorder);
@@ -129,8 +137,9 @@ const GopuChat = () => {
     }
   };
 
-  const handleSend = async () => {
-    if (!input.trim() && !uploadedImage) return;
+  const handleSend = async (overrideInput = null) => {
+    const currentInput = overrideInput !== null ? overrideInput : input;
+    if (!currentInput.trim() && !uploadedImage) return;
     if (limitReached) return;
 
     const userMessage = {
@@ -144,7 +153,7 @@ const GopuChat = () => {
 
     try {
       const response = await api.post("/chat", {
-        message: input,
+        message: currentInput,
         session_id: sessionId,
         image_base64: uploadedImage?.base64
       });
@@ -178,6 +187,12 @@ const GopuChat = () => {
         };
         setMessages(prev => [...prev, botMessage]);
 
+        // Auto-play if in voice mode
+        if (isVoiceMode) {
+          handleSpeak(response.data.response, botId);
+          setIsVoiceMode(false); // Reset for next message
+        }
+
         if (credits && !credits.has_subscription) {
           setRemainingMessages(prev => Math.max(0, prev - 1));
         }
@@ -206,8 +221,8 @@ const GopuChat = () => {
               data-testid="gopu-avatar"
             />
           </div>
-          <h1 className="heading-font text-4xl font-bold text-[#111111]" data-testid="gopu-title">Gopu.AI</h1>
-          <p className="text-[#6F6F6F]">Your pet's intelligent health companion</p>
+          <h1 className="heading-font text-4xl font-bold text-[#111111]" data-testid="gopu-title">Gopu.AI (गोपु)</h1>
+          <p className="text-[#6F6F6F]">पशुओं की सेहत का साथी (Your pet's health companion)</p>
 
           {credits && (
             <div className={`inline-flex items-center space-x-2 px-4 py-2 rounded-full border ${credits.has_subscription
@@ -231,8 +246,8 @@ const GopuChat = () => {
           <div className="space-y-4 min-h-[400px] max-h-[500px] overflow-y-auto">
             {messages.length === 0 && (
               <div className="text-center py-12 text-[#6F6F6F]">
-                <p className="text-lg">Hi! I'm Gopu, your caring veterinary assistant.</p>
-                <p className="text-sm mt-2">How can I help your pet today?</p>
+                <p className="text-lg font-medium">नमस्ते! मैं गोपु हूँ, आपका पशु सहायक।</p>
+                <p className="text-sm mt-2">मैं आपकी कैसे मदद कर सकता हूँ?</p>
               </div>
             )}
             {messages.map((msg, idx) => (
@@ -321,7 +336,7 @@ const GopuChat = () => {
             <Textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder={limitReached ? "Daily limit reached. Buy credits to continue..." : "Describe your pet's symptoms in detail..."}
+              placeholder={limitReached ? "Limit reached..." : "अपने पशु की समस्या यहाँ विस्तार से लिखें... (Describe symptoms here)"}
               data-testid="chat-input"
               disabled={limitReached}
               className={`min-h-[100px] rounded-xl border-[#EAEAEA] resize-none focus:border-[#1F6559] focus:ring-[#1F6559] bg-white text-[#111111] ${limitReached ? 'opacity-50 cursor-not-allowed' : ''}`}
@@ -369,7 +384,7 @@ const GopuChat = () => {
                 className="flex-1 rounded-full bg-[#1F6559] text-white hover:bg-[#184F46] disabled:bg-gray-300"
               >
                 <Send className="w-5 h-5 mr-2" />
-                Send
+                भेजें (Send)
               </Button>
             </div>
           </div>

@@ -40,22 +40,21 @@ class SpeechService:
     async def synthesize_speech(self, text: str) -> str:
         """Convert text to speech using OpenAI TTS and return as base64 audio."""
         try:
-            temp_filename = f"temp_tts_{uuid.uuid4()}.mp3"
+            # Using the modern response.content or writing to temp file
             response = await self.client.audio.speech.create(
                 model="tts-1",
                 voice="alloy",
                 input=text
             )
-            response.stream_to_file(temp_filename)
             
-            try:
-                with open(temp_filename, "rb") as audio_file:
-                    audio_data = audio_file.read()
-                    base64_audio = base64.b64encode(audio_data).decode("utf-8")
-                    return f"data:audio/mp3;base64,{base64_audio}"
-            finally:
-                if os.path.exists(temp_filename):
-                    os.remove(temp_filename)
+            # Use response.read() to get the bytes directly instead of deprecated stream_to_file
+            audio_data = await response.read()
+            base64_audio = base64.b64encode(audio_data).decode("utf-8")
+            return f"data:audio/mp3;base64,{base64_audio}"
+            
+        except Exception as e:
+            logger.error(f"Error in speech synthesis: {e}")
+            raise Exception(f"Failed to synthesize speech: {str(e)}")
         except Exception as e:
             logger.error(f"Error in speech synthesis: {e}")
             raise Exception(f"Failed to synthesize speech: {str(e)}")
