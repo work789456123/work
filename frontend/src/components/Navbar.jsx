@@ -51,19 +51,16 @@ const Navbar = () => {
       const endpoint = authMode === "login" ? "/auth/login" : "/auth/register";
       const response = await api.post(endpoint, formData);
 
-      localStorage.setItem('token', response.data.access_token);
-      localStorage.setItem('user_name', response.data.user?.full_name || response.data.full_name);
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('user_name', response.data.full_name);
       setIsLoggedIn(true);
       setShowAuth(false);
-
-      // Notify other components (like GopuChat) that login/signup succeeded
-      window.dispatchEvent(new Event('authSuccess'));
 
       if (authMode === "register") {
         setShowAddPet(true);
       }
 
-      toast.success(response.data.msg || response.data.message || "Success");
+      toast.success(response.data.message);
     } catch (error) {
       toast.error(error.response?.data?.detail || "Authentication failed");
     }
@@ -180,7 +177,7 @@ const Navbar = () => {
             </div>
 
             {/* Right Side Actions */}
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-3 ml-4 lg:ml-8">
               <Button
                 onClick={handleGopuClick}
                 className="hidden lg:flex rounded-full bg-white text-[#1F6559] hover:bg-white/90 font-semibold"
