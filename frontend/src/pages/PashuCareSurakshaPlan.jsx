@@ -56,7 +56,7 @@ const PashuCareSurakshaPlan = () => {
       id: "monthly",
       name: "Monthly Smart Plan",
       nameHindi: "मासिक स्मार्ट प्लान",
-      price: "₹99",
+      price: "₹199",
       period: "for 30 days",
       description: "Best value for regular users",
       icon: Crown,
@@ -70,7 +70,7 @@ const PashuCareSurakshaPlan = () => {
         "Emergency guidance priority"
       ],
       limitations: [],
-      buttonText: "Buy Now - ₹99",
+      buttonText: "Buy Now - ₹199",
       buttonStyle: "bg-[#1F6559] hover:bg-[#184F46] text-white",
       popular: false
     }
@@ -78,9 +78,19 @@ const PashuCareSurakshaPlan = () => {
 
   return (
     <div className="min-h-screen bg-[#FAFAFA] py-12" data-testid="suraksha-plan-page">
-      <div className="max-w-6xl mx-auto px-6">
+      <div className="max-w-6xl mx-auto px-6 relative">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="absolute right-6 top-0 text-gray-500 hover:bg-gray-200 rounded-full"
+          onClick={() => navigate('/gopu')}
+          data-testid="close-suraksha-plan"
+        >
+          <span className="sr-only">Close</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>
+        </Button>
         {/* Hero Section */}
-        <div className="text-center mb-16 space-y-4">
+        <div className="text-center mb-16 space-y-4 pt-8">
           <div className="inline-flex items-center space-x-2 px-4 py-2 bg-yellow-100 rounded-full text-yellow-800 font-medium">
             <Shield className="w-5 h-5" />
             <span>PashuCare Suraksha Plan</span>
@@ -91,19 +101,18 @@ const PashuCareSurakshaPlan = () => {
             <span className="text-[#1F6559]">Unlimited AI Care</span>
           </h1>
           <p className="text-lg text-[#6F6F6F] max-w-2xl mx-auto">
-            Because <strong>Pashu Bhi Pariwar Hai</strong>. Get instant veterinary guidance anytime, anywhere. 
+            Because <strong>Pashu Bhi Pariwar Hai</strong>. Get instant veterinary guidance anytime, anywhere.
             Choose a plan that fits your needs.
           </p>
         </div>
 
         {/* Pricing Cards */}
-        <div className="grid md:grid-cols-3 gap-8 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
           {plans.map((plan) => (
             <Card
               key={plan.id}
-              className={`relative p-8 rounded-2xl ${plan.color} ${plan.borderColor} border-2 space-y-6 ${
-                plan.popular ? "ring-2 ring-yellow-400 ring-offset-2" : ""
-              }`}
+              className={`relative p-8 rounded-2xl ${plan.color} ${plan.borderColor} border-2 space-y-6 ${plan.popular ? "ring-2 ring-yellow-400 ring-offset-2" : ""
+                }`}
               data-testid={`plan-card-${plan.id}`}
             >
               {plan.popular && (
@@ -159,7 +168,7 @@ const PashuCareSurakshaPlan = () => {
           <h2 className="heading-font text-2xl font-bold text-[#111111] text-center mb-8">
             How Credit System Works
           </h2>
-          <div className="grid md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
             <div className="text-center space-y-3">
               <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto text-green-600 font-bold text-xl">1</div>
               <h4 className="font-semibold text-[#111111]">Start Free</h4>

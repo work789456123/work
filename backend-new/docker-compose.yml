@@ -1,18 +1,14 @@
 version: '3.8'
 
 services:
-  db:
-    image: postgres:14-alpine
-    container_name: pashuvaani_db
+  backend:
+    build: .
+    container_name: pashuvaani_backend
     restart: always
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: pashuvaani_db
     ports:
-      - "5433:5432"
+      - "80:80"
+    env_file:
+      - .env
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-
-volumes:
-  postgres_data:
+      - .:/app
+    command: uvicorn app.main:app --host 0.0.0.0 --port 80

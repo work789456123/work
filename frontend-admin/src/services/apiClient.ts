@@ -8,8 +8,20 @@ const apiClient = axios.create({
     },
 });
 
+const getDeviceId = () => {
+    let deviceId = localStorage.getItem('pv_device_id');
+    if (!deviceId) {
+        deviceId = 'dv_adm_' + Math.random().toString(36).substr(2, 9) + Date.now().toString(36);
+        localStorage.setItem('pv_device_id', deviceId);
+    }
+    return deviceId;
+};
+
 apiClient.interceptors.request.use(
     (axiosConfig) => {
+        // Attach Device ID
+        axiosConfig.headers['X-Device-ID'] = getDeviceId();
+
         // Automatically attach the auth token if it exists
         const token = localStorage.getItem('token');
         if (token) {

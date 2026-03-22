@@ -12,22 +12,19 @@
     --card-foreground: 0 0% 6.7%;
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 6.7%;
-    --primary: 124 54% 24%;
-    --primary-foreground: 0 0% 100%;
-    --primary-hover: 124 54% 18%;
-    --background-light: 124 20% 97%;
-    --background-dark: 124 25% 10%;
-    --secondary: 124 20% 45%;
+    --primary: 173 52% 24%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 43.5%;
     --secondary-foreground: 0 0% 98%;
-    --muted: 124 10% 96.1%;
-    --muted-foreground: 124 10% 45.1%;
-    --accent: 124 54% 24%;
-    --accent-foreground: 0 0% 100%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 173 52% 24%;
+    --accent-foreground: 0 0% 98%;
     --destructive: 0 72.2% 50.6%;
     --destructive-foreground: 0 0% 98%;
-    --border: 124 15% 91.8%;
-    --input: 124 15% 91.8%;
-    --ring: 124 54% 24%;
+    --border: 0 0% 91.8%;
+    --input: 0 0% 91.8%;
+    --ring: 173 52% 24%;
     --radius: 12px;
   }
 
@@ -70,29 +67,18 @@
 
 /* Green hover effect for boxes */
 .hover-green:hover {
-  @apply border-primary transition-colors duration-300;
+  @apply border-[#1F6559] transition-colors duration-200;
 }
 
 .hover-green-bg:hover {
-  @apply bg-primary/5 transition-colors duration-300;
+  @apply bg-[#1F6559]/5 transition-colors duration-200;
 }
 
-.glass-morphism {
-  @apply bg-white/70 dark:bg-slate-900/70 backdrop-blur-md border border-white/20 dark:border-white/5 shadow-xl;
+.sidebar-scroll::-webkit-scrollbar {
+  width: 4px;
 }
 
-.glass-card {
-  @apply bg-white/40 dark:bg-white/5 backdrop-blur-sm border border-white/20 dark:border-white/5 rounded-2xl shadow-sm transition-all duration-300;
-}
-
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  @apply bg-transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  @apply bg-primary/20 rounded-full hover:bg-primary/30 transition-colors;
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  background: #1c5f2133;
+  border-radius: 10px;
 }

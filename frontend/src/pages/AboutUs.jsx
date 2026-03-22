@@ -8,37 +8,42 @@ const AboutUs = () => {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-b from-[#1F6559]/5 to-white">
-        <div className="max-w-4xl mx-auto px-6 text-center space-y-6">
-          <h1 className="heading-font text-5xl lg:text-6xl font-bold text-[#111111]">
-            About PashuVaani
-          </h1>
-          <p className="text-xl text-[#6F6F6F] leading-relaxed">
-            Voice of Animal Health
-          </p>
-        </div>
+      <section className="py-16 md:py-24 bg-gradient-to-r from-[#1FA7A6] via-[#38C2B4] to-[#78D65C]" data-testid="AboutUs-section">        <div className="max-w-4xl mx-auto px-6 text-center space-y-4 md:space-y-6">
+        <h1 className="heading-font text-3xl md:text-4xl lg:text-5xl font-bold text-white">
+          About PashuVaani
+        </h1>
+        <p className="heading-font text-lg md:text-xl lg:text-xl font-bold text-white">
+          Animals communicate constantly
+        </p>
+      </div>
       </section>
 
       {/* Introduction */}
       <section className="py-20">
-        <div className="max-w-5xl mx-auto px-6 space-y-8">
+        <div className="max-w-7xl mx-auto px-12 space-y-8">
           <div className="space-y-6">
             <p className="text-lg text-[#6F6F6F] leading-relaxed">
-              PashuVaani is an AI-driven animal health platform dedicated to making intelligent, accessible, 
-              and preventive healthcare available for every animal.
+              Through their behaviour, posture, sounds, and subtle changes in activity, they express discomfort, illness, stress, and pain. 
+              Yet for many farmers, pet owners, and animal caretakers, these signals are difficult to interpret until the situation becomes serious.
+              This gap in understanding is one of the biggest challenges in animal care.
             </p>
             <p className="text-lg text-[#6F6F6F] leading-relaxed">
-              We combine <span className="font-semibold text-[#1F6559]">Artificial Intelligence</span>, 
-              <span className="font-semibold text-[#1F6559]"> Veterinary Expertise</span>, 
-              <span className="font-semibold text-[#1F6559]"> Data Intelligence</span>, and 
-              <span className="font-semibold text-[#1F6559]"> Compassionate Design</span> to build a smarter future for animal care.
+              PashuVaani <span className="font-semibold text-[#1F6559]">was created to bridge this gap.</span>
+             {/* <span className="font-semibold text-[#1F6559]"> Veterinary Expertise</span>,
+              <span className="font-semibold text-[#1F6559]"> Data Intelligence</span>, and
+              <span className="font-semibold text-[#1F6559]"> Compassionate Design</span> to build a smarter future for animal care. */}
             </p>
             <p className="text-lg text-[#6F6F6F] leading-relaxed">
-              We are beginning our journey with pets — and building toward a universal animal health ecosystem.
+              PashuVaani is an<span className="font-semibold text-[#1F6559]"> AI-powered animal intelligence platform</span>, designed to help humans better understand the animals they care for. 
+              By combining artificial intelligence with veterinary knowledge, the platform helps interpret symptoms, behavioural signals, and observable changes that may indicate potential health concerns.
+              The goal is to support caretakers with early awareness and better understanding, so that they can take timely action when something seems wrong.
+            </p>
+            <p className="text-lg text-[#6F6F6F] leading-relaxed">
+              However, PashuVaani is <span className="font-semibold text-[#1F6559]">not a replacement for veterinary professionals</span>.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-4 gap-6 py-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 py-8">
             <div className="p-6 rounded-2xl bg-[#1F6559]/5 border border-[#1F6559]/20 space-y-3">
               <Sparkles className="w-10 h-10 text-[#1F6559]" />
               <h3 className="heading-font font-semibold text-[#111111]">Artificial Intelligence</h3>
@@ -59,49 +64,48 @@ const AboutUs = () => {
 
           <div className="space-y-6 pt-8">
             <p className="text-lg text-[#6F6F6F] leading-relaxed">
-              PashuVaani exists to answer a simple but powerful question: <span className="font-semibold text-[#111111]">What if animal healthcare could be proactive instead of reactive?</span>
-            </p>
+              Veterinarians play a critical role in diagnosing and treating animal health conditions. 
+              PashuVaani is designed to assist and support, helping caretakers recognize early warning signs and guiding them toward seeking professional veterinary care when needed.            </p>
             <p className="text-lg text-[#6F6F6F] leading-relaxed">
-              By combining technology with empathy, we aim to empower pet parents and caregivers with timely insights, 
-              trusted guidance, and peace of mind — exactly when it matters most.
-            </p>
-            <p className="text-lg text-[#6F6F6F] leading-relaxed">
-              Our mission is to make animal health intelligence available not just to a few, but to every household, 
-              clinic, and community that cares for animals.
+              In this way, the platform works <span className="font-semibold text-[#1F6559]"> alongside veterinary expertise, </span> helping improve awareness and 
+              decision-making in animal care.
             </p>
           </div>
         </div>
       </section>
 
       {/* Meet Gopu */}
-      <section className="py-20 bg-[#FAFAFA]">
+      <section className="py-20 bg-gradient-to-b from-[#1FA7A6] via-[#38C2B4] to-[#78D65C]/10">
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="order-2 lg:order-1">
-              <img
-                src="https://customer-assets.emergentagent.com/job_73651be8-bbea-4eee-a6be-0162100b6ac1/artifacts/mumll039_Gopu%20Ai%20Image.png"
-                alt="Gopu - The Heart of PashuVaani"
-                className="w-full max-w-md mx-auto"
+              <video
+                src="/gopuhivideo2.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-auto object-cover max-w-md mx-auto rounded-3xl"
               />
             </div>
             <div className="order-1 lg:order-2 space-y-6">
               <div className="space-y-3">
-                <h2 className="heading-font text-4xl font-bold text-[#111111]">
+                <h2 className="heading-font text-4xl font-bold text-[#000000]">
                   Meet Gopu
                 </h2>
-                <p className="text-lg font-semibold text-[#1F6559]">The Heart of PashuVaani</p>
+                <p className="text-lg font-semibold text-[#FFFFFF]">The Heart of PashuVaani</p>
               </div>
-              <p className="text-lg text-[#6F6F6F] leading-relaxed">
+              <p className="text-lg text-[#FFFFFF] leading-relaxed">
                 Gopu is the friendly face of PashuVaani — your pet's intelligent health companion.
               </p>
-              <p className="text-lg text-[#6F6F6F] leading-relaxed">
-                <span className="font-semibold text-[#111111]">Warm. Caring. Always alert.</span> Behind Gopu is advanced AI technology, 
-                but what pet parents experience is simplicity, clarity, and reassurance. Because when your pet isn't well, 
+              <p className="text-lg text-[#FFFFFF] leading-relaxed">
+                <span className="font-semibold text-[#FFFFFF]">Warm, Caring, Always alert,</span> Behind Gopu is advanced AI technology,
+                but what pet parents experience is simplicity, clarity, and reassurance. Because when your pet isn't well,
                 you need guidance — not confusion.
               </p>
-              <p className="text-lg text-[#6F6F6F] leading-relaxed">
-                Gopu listens before he speaks — noticing subtle changes, asking the right questions, and helping you act early. 
-                He is designed to feel less like a tool and more like a trusted companion — one that stands by you in moments 
+              <p className="text-lg text-[#FFFFFF] leading-relaxed">
+                Gopu listens before he speaks — noticing subtle changes, asking the right questions, and helping you act early.
+                He is designed to feel less like a tool and more like a trusted companion — one that stands by you in moments
                 of worry and guides you with calm confidence.
               </p>
               <p className="text-lg text-[#1F6559] font-semibold italic">
@@ -121,7 +125,7 @@ const AboutUs = () => {
           <p className="text-lg text-[#6F6F6F] leading-relaxed text-center">
             At the core of PashuVaani is our proprietary AI system designed to:
           </p>
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {[
               { icon: Target, text: "Understand symptoms" },
               { icon: Zap, text: "Analyse behavioural patterns" },
@@ -139,12 +143,12 @@ const AboutUs = () => {
           </div>
           <div className="space-y-6 pt-6">
             <p className="text-lg text-[#6F6F6F] leading-relaxed">
-              Our AI is built to simplify decision-making and reduce panic during health concerns. Our AI doesn't diagnose — 
+              Our AI is built to simplify decision-making and reduce panic during health concerns. Our AI doesn't diagnose —
               it supports decisions, helping pet parents understand urgency, reduce uncertainty, and take the right next step with confidence.
             </p>
             <p className="text-lg text-[#6F6F6F] leading-relaxed">
-              Every interaction makes the system smarter, enabling continuous learning from real-world cases while staying grounded 
-              in veterinary science. Built with safety, accuracy, and empathy at its core, PashuVaani's AI acts as a reliable 
+              Every interaction makes the system smarter, enabling continuous learning from real-world cases while staying grounded
+              in veterinary science. Built with safety, accuracy, and empathy at its core, PashuVaani's AI acts as a reliable
               first line of support — available anytime, anywhere.
             </p>
           </div>
@@ -152,53 +156,119 @@ const AboutUs = () => {
       </section>
 
       {/* Starting with Pets */}
-      <section className="py-20 bg-[#FAFAFA]">
-        <div className="max-w-5xl mx-auto px-6 space-y-8">
-          <h2 className="heading-font text-4xl font-bold text-[#111111] text-center">
-            Starting with Pets
-          </h2>
-          <p className="text-lg text-[#6F6F6F] leading-relaxed">
-            We are launching with pet healthcare to:
-          </p>
-          <div className="grid md:grid-cols-2 gap-6">
-            {[
-              "Provide instant symptom guidance",
-              "Offer vaccination and preventive reminders",
-              "Help pet parents make informed decisions",
-              "Bridge the gap between home care and clinical care"
-            ].map((item, idx) => (
-              <div key={idx} className="flex items-start space-x-3 p-4 bg-white rounded-xl border border-[#EAEAEA]">
-                <div className="w-2 h-2 bg-[#1F6559] rounded-full mt-2 flex-shrink-0"></div>
-                <p className="text-lg text-[#6F6F6F]">{item}</p>
-              </div>
-            ))}
-          </div>
-          <div className="space-y-6 pt-6">
-            <p className="text-lg text-[#6F6F6F] leading-relaxed">
-              <span className="font-semibold text-[#111111]">Pets are family — and their care should be intelligent, accessible, and trustworthy.</span>
-            </p>
-            <p className="text-lg text-[#6F6F6F] leading-relaxed">
-              Pets are often unable to express discomfort clearly — and small signs are easy to miss. PashuVaani helps pet parents 
-              notice early signals before they become serious problems.
-            </p>
-            <p className="text-lg text-[#6F6F6F] leading-relaxed">
-              By starting with pets, we are building a deeply personal, trust-led experience that forms the foundation for larger 
-              animal health ecosystems. What begins as care for pets becomes a blueprint for scalable, preventive animal healthcare across India.
+      <section className="py-20 bg-gradient-to-b from-[#1FA7A6] via-[#38C2B4] to-[#78D65C]/10">
+        <div className="max-w-7xl mx-auto px-6">
+
+          {/* Heading */}
+          <div className="max-w-3xl mb-16">
+            <div className="w-16 h-1 bg-gradient-to-r from-[#1F6559] to-[#4DB6AC] mb-6 rounded-full"></div>
+
+            <h2 className="text-4xl md:text-5xl font-bold text-[#111111] leading-tight">
+              The Story Behind PashuVaani
+            </h2>
+
+            <p className="text-lg text-[#FFFFFF] mt-6 leading-relaxed">
+              PashuVaani was born from a simple but powerful question —
+              when an animal falls sick, why is it so difficult to find reliable guidance quickly?
             </p>
           </div>
+
+
+          {/* 2 Column Layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
+
+
+            {/* LEFT SIDE STORY */}
+            <div className="space-y-6">
+
+              <p className="text-lg text-[#FFFFFF] leading-relaxed">
+                For many farmers and animal caregivers, health concerns begin with uncertainty.
+                Symptoms appear, questions arise, and answers are often difficult to access in the
+                moment they are needed most.
+              </p>
+
+              <p className="text-lg text-[#FFFFFF] leading-relaxed">
+                Across farms and homes, animals represent more than value — they represent
+                livelihoods, responsibility, and trust. Yet the systems supporting their healthcare
+                often remain fragmented.
+              </p>
+
+              <p className="text-lg text-[#FFFFFF] leading-relaxed">
+                For Mohan Vij, the founder of PashuVaani, this gap became impossible to ignore.
+                Years of observing the realities of animal care revealed a pattern — when animals
+                showed signs of illness, caregivers often had to rely on scattered information,
+                delayed consultations, or uncertain advice.
+              </p>
+
+              <p className="text-lg text-[#FFFFFF] leading-relaxed">
+                Technology had transformed industries across the world, yet animal healthcare still
+                lacked intelligent tools that could guide caregivers when they needed help the most.
+              </p>
+
+              <p className="text-xl font-semibold text-[#1F6559] pt-2">
+                That vision became PashuVaani — the Voice of Animal Health.
+              </p>
+
+            </div>
+
+
+            {/* RIGHT SIDE HIGHLIGHT CARDS */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+
+              {[
+                {
+                  title: "Early Symptom Understanding",
+                  desc: "Helping caregivers recognize early signs of illness before they become serious problems."
+                },
+                {
+                  title: "Accessible Knowledge",
+                  desc: "Providing instant guidance and reliable information anytime caregivers need help."
+                },
+                {
+                  title: "Trusted Veterinary Support",
+                  desc: "Connecting caregivers with expert knowledge and professional veterinary care."
+                },
+                {
+                  title: "Smarter Animal Healthcare",
+                  desc: "Building a technology-driven ecosystem for preventive and scalable animal health."
+                }
+              ].map((card, index) => (
+
+                <div
+                  key={index}
+                  className="p-6 bg-white border border-[#EAEAEA] rounded-2xl shadow-sm hover:shadow-lg transition duration-300"
+                >
+
+                  <h3 className="text-lg font-semibold text-[#111111] mb-2">
+                    {card.title}
+                  </h3>
+
+                  <p className="text-[#6F6F6F] text-sm leading-relaxed">
+                    {card.desc}
+                  </p>
+
+                </div>
+
+              ))}
+
+            </div>
+
+          </div>
+
         </div>
       </section>
-
       {/* Long-Term Vision */}
       <section className="py-20">
         <div className="max-w-5xl mx-auto px-6 space-y-8">
           <h2 className="heading-font text-4xl font-bold text-[#111111] text-center">
-            Our Long-Term Vision
+            Our Mission
           </h2>
+          <p className="text-lg text-[#6F6F6F] leading-relaxed">
+              Our mission is to <span className="font-semibold text-[#1F6559]"> help humans understand animals better through intelligent technology </span> while supporting responsible veterinary care.
+            </p>
           <p className="text-lg text-[#6F6F6F] leading-relaxed text-center">
-            While we begin with pets, PashuVaani is designed to scale into:
-          </p>
-          <div className="grid md:grid-cols-3 gap-6">
+            By developing AI-powered tools that assist in interpreting animal health signals and behavioural patterns, PashuVaani aims to help caretakers recognize potential concerns earlier and make more informed decisions for the animals they care for.          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
               { icon: Globe, text: "Livestock health" },
               { icon: Award, text: "Dairy productivity" },
@@ -219,18 +289,19 @@ const AboutUs = () => {
       </section>
 
       {/* Why PashuVaani */}
-      <section className="py-20 bg-[#FAFAFA]">
+      <section className="py-20 bg-gradient-to-b from-[#1FA7A6] via-[#38C2B4] to-[#78D65C]/10">
         <div className="max-w-5xl mx-auto px-6 space-y-8">
           <h2 className="heading-font text-4xl font-bold text-[#111111] text-center">
             Why PashuVaani?
           </h2>
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {[
+              "Farmers can recognize health concerns earlier",
+              "Pet owners can better understand their animals’ behaviour",
+              "Caretakers have access to intelligent guidance anytime",
+              "Veterinary professionals are supported by better early awareness tools",
               "AI-driven health intelligence",
-              "Human-centred design",
-              "Emotionally connected brand (Gopu)",
-              "Scalable tech foundation",
-              "Built for both urban and rural ecosystems"
+              "Emotionally connected brand (Gopu)"
             ].map((item, idx) => (
               <div key={idx} className="flex items-center space-x-3 p-4 bg-white rounded-xl border border-[#EAEAEA]">
                 <div className="w-6 h-6 text-[#1F6559] font-bold text-xl flex-shrink-0">✓</div>
@@ -253,7 +324,7 @@ const AboutUs = () => {
           <p className="text-lg text-[#6F6F6F] leading-relaxed">
             PashuVaani believes in blending:
           </p>
-          <p className="text-3xl font-bold text-[#1F6559]">
+          <p className="text-2xl md:text-3xl font-bold text-[#1F6559]">
             Compassion + Intelligence + Accessibility
           </p>
           <p className="text-lg text-[#6F6F6F] leading-relaxed">
@@ -263,12 +334,12 @@ const AboutUs = () => {
       </section>
 
       {/* Who We Serve */}
-      <section className="py-20 bg-[#FAFAFA]">
+      <section className="py-20 bg-gradient-to-b from-[#1FA7A6] via-[#38C2B4] to-[#78D65C]/10">
         <div className="max-w-5xl mx-auto px-6 space-y-8">
           <h2 className="heading-font text-4xl font-bold text-[#111111] text-center">
             Who We Serve
           </h2>
-          <div className="grid md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               { icon: Heart, text: "Pet parents" },
               { icon: Shield, text: "Veterinary professionals" },

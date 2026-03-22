@@ -48,7 +48,7 @@ const Careers = () => {
       reader.onloadend = async () => {
         const base64Resume = reader.result.split(',')[1];
         
-        await api.post("/careers/apply", {
+        await api.post("/career/", {
           name: formData.name,
           phone: formData.phone,
           email: formData.email,

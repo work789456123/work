@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+*.tfvars
+*.tfvars.json
+override.tf
+override.tf.json
+_override.tf
+_override.tf.json
+.terraformrc
+terraform.rc
+
+# Keys and Secrets
+*.pem
+deploy_key.pem
+deploy_key_fixed.pem
+
+# Logs
+*.log
+backend.log
+server.log
+app.log
+
+# OS
+.DS_Store
+Thumbs.db

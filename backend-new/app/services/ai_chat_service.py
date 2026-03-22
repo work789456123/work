@@ -25,6 +25,11 @@ class AIChatService:
         SAFETY:
         - If the animal's condition looks very bad, advice seeing a doctor immediately.
         - In Hindi: "कृपया तुरंत डॉक्टर (वेटिनरी डॉक्टर) को दिखाएं।"
+        
+        RESPONSE LENGTH:
+        - Keep responses short and to the point — maximum 3 to 4 sentences.
+        - Avoid lengthy explanations. Give only the most important advice clearly.
+        - If listing steps, limit to 3 key steps maximum.
         """
 
     async def get_response(self, user_message: str, image_base64: str = None, chat_history: list = None) -> dict:
@@ -56,7 +61,7 @@ class AIChatService:
             response = await self.client.chat.completions.create(
                 model=model,
                 messages=messages,
-                max_tokens=600,
+                max_tokens=300,
                 temperature=0.7
             )
             

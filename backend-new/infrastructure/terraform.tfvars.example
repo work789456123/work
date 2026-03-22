@@ -1,0 +1,5 @@
+aws_region     = "ap-south-1"
+aws_access_key = "YOUR_AWS_ACCESS_KEY_HERE"
+aws_secret_key = "YOUR_AWS_SECRET_KEY_HERE"
+db_password    = "YOUR_SECURE_DB_PASSWORD"
+my_ip          = "YOUR_IP_ADDRESS/32" # e.g. 1.2.3.4/32

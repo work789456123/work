@@ -17,7 +17,8 @@ class SpeechService:
         """Transcribe base64 encoded audio using OpenAI Whisper."""
         try:
             audio_data = base64.b64decode(audio_base64.split(",")[1] if "," in audio_base64 else audio_base64)
-            extension = ".webm" if "webm" in audio_base64[:50].lower() else ".wav"
+            # Default to webm as it's common for browser recordings, unless explicitly wav
+            extension = ".wav" if "wav" in audio_base64[:50].lower() else ".webm"
             temp_filename = f"temp_{uuid.uuid4()}{extension}"
             
             with open(temp_filename, "wb") as f:
@@ -47,16 +48,13 @@ class SpeechService:
                 input=text
             )
             
-            # Use response.read() to get the bytes directly instead of deprecated stream_to_file
-            audio_data = await response.read()
+            # Retrieve bytes from response.content (OpenAI's Async client returns pre-read content here)
+            audio_data = response.content
             base64_audio = base64.b64encode(audio_data).decode("utf-8")
             return f"data:audio/mp3;base64,{base64_audio}"
             
         except Exception as e:
             logger.error(f"Error in speech synthesis: {e}")
-            raise Exception(f"Failed to synthesize speech: {str(e)}")
-        except Exception as e:
-            logger.error(f"Error in speech synthesis: {e}")
-            raise Exception(f"Failed to synthesize speech: {str(e)}")
+            raise Exception(f"Speech synthesis error: {str(e)}")
 
 speech_service_impl = SpeechService()

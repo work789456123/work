@@ -15,6 +15,8 @@ class User(Base):
     daily_message_count = Column(Integer, default=0, nullable=False)
     last_message_at = Column(DateTime, nullable=True)
     has_subscription = Column(Boolean, default=False, nullable=False)
+    is_verified = Column(Boolean, default=False, nullable=False)
+    verification_token = Column(String, nullable=True)
 
     pets = relationship("Pet", back_populates="owner", cascade="all, delete-orphan")
     appointments = relationship("Appointment", back_populates="user", cascade="all, delete-orphan")

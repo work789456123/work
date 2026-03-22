@@ -1,261 +1,279 @@
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { toast } from "sonner";
-import api from "@/utils/api";
-import { Users, Heart, Stethoscope, Calendar, AlertTriangle, LogOut, CreditCard, IndianRupee, TrendingUp } from "lucide-react";
 
-const AdminDashboard = () => {
+export default function AdminDashboard() {
+
   const navigate = useNavigate();
-  const [stats, setStats] = useState(null);
-  const [applications, setApplications] = useState([]);
-  const [appointments, setAppointments] = useState([]);
-  const [emergencyLogs, setEmergencyLogs] = useState([]);
 
-  useEffect(() => {
-    const token = localStorage.getItem('admin_token');
-    if (!token) {
-      navigate('/admin');
-      return;
-    }
-    fetchDashboardData();
-  }, []);
-
-  const fetchDashboardData = async () => {
-    try {
-      const adminToken = localStorage.getItem('admin_token');
-      const adminApi = api;
-      adminApi.defaults.headers.common['Authorization'] = `Bearer ${adminToken}`;
-      
-      const [statsRes, appsRes, apptsRes, emergRes] = await Promise.all([
-        adminApi.get("/admin/dashboard"),
-        adminApi.get("/admin/doctor-applications?status=pending"),
-        adminApi.get("/admin/appointments"),
-        adminApi.get("/admin/emergency-logs")
-      ]);
-      setStats(statsRes.data);
-      setApplications(appsRes.data);
-      setAppointments(apptsRes.data);
-      setEmergencyLogs(emergRes.data);
-    } catch (error) {
-      console.error("Dashboard error:", error);
-      toast.error("Failed to load dashboard data");
-    }
+  const logout = () => {
+    localStorage.removeItem("admin_token");
+    navigate("/admin");
   };
-
-  const handleApprove = async (appId) => {
-    try {
-      await api.put(`/admin/doctor-applications/${appId}/approve`);
-      toast.success("Doctor application approved");
-      fetchDashboardData();
-    } catch (error) {
-      toast.error("Failed to approve application");
-    }
-  };
-
-  const handleReject = async (appId) => {
-    try {
-      await api.put(`/admin/doctor-applications/${appId}/reject`);
-      toast.success("Doctor application rejected");
-      fetchDashboardData();
-    } catch (error) {
-      toast.error("Failed to reject application");
-    }
-  };
-
-  const handleConfirmAppointment = async (appointmentId) => {
-    try {
-      await api.put(`/admin/appointments/${appointmentId}/confirm`);
-      toast.success("Appointment confirmed");
-      fetchDashboardData();
-    } catch (error) {
-      toast.error("Failed to confirm appointment");
-    }
-  };
-
-  const handleCancelAppointment = async (appointmentId) => {
-    try {
-      await api.put(`/admin/appointments/${appointmentId}/cancel`);
-      toast.success("Appointment cancelled");
-      fetchDashboardData();
-    } catch (error) {
-      toast.error("Failed to cancel appointment");
-    }
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem('admin_token');
-    navigate('/admin');
-  };
-
-  if (!stats) return <div className="min-h-screen bg-[#FAFAFA] flex items-center justify-center"><p>Loading...</p></div>;
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA] py-12" data-testid="admin-dashboard">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="flex items-center justify-between mb-12">
+
+    <div className="flex flex-col w-full h-screen bg-gray-50">
+
+      {/* Top Navbar */}
+
+      <header className="h-16 border-b bg-white px-8 flex items-center justify-between">
+
+        <input
+          type="text"
+          placeholder="Search animals, farmers, or alerts..."
+          className="w-96 px-4 py-2 bg-gray-100 rounded-lg outline-none"
+        />
+
+        <div className="flex items-center gap-6">
+
+          <span className="font-semibold">
+            Dr. Rajesh Kumar
+          </span>
+
+          <button
+            onClick={logout}
+            className="bg-red-500 text-white px-4 py-2 rounded-lg"
+          >
+            Logout
+          </button>
+
+        </div>
+
+      </header>
+
+
+      {/* Dashboard Body */}
+
+      <div className="flex-1 overflow-y-auto p-8">
+
+        {/* Title */}
+
+        <div className="flex justify-between items-end mb-8">
+
           <div>
-            <h1 className="heading-font text-4xl font-bold text-[#111111]" data-testid="dashboard-heading">Admin Dashboard</h1>
-            <p className="text-[#6F6F6F]">PashuVaani Management Portal</p>
+
+            <h1 className="text-3xl font-bold">
+              Dashboard Overview
+            </h1>
+
+            <p className="text-gray-500">
+              Real-time health monitoring powered by Gopu AI
+            </p>
+
           </div>
-          <Button onClick={handleLogout} variant="outline" data-testid="admin-logout" className="rounded-full border-[#EAEAEA]">
-            <LogOut className="w-4 h-4 mr-2" /> Logout
-          </Button>
+
+          <div className="flex gap-3">
+
+            <button className="bg-white border px-4 py-2 rounded-lg text-sm">
+              Last 30 Days
+            </button>
+
+            <button className="bg-white border px-4 py-2 rounded-lg text-sm">
+              Export
+            </button>
+
+          </div>
+
         </div>
 
-        {/* Main Stats */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <Card className="p-6 rounded-2xl border-[#EAEAEA]" data-testid="stat-card-users">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-[#6F6F6F]">Total Users</p>
-                <p className="heading-font text-3xl font-bold text-[#111111] mt-2">{stats.total_users}</p>
-              </div>
-              <Users className="w-12 h-12 text-[#1F6559] opacity-20" />
-            </div>
-          </Card>
-          <Card className="p-6 rounded-2xl border-[#EAEAEA]" data-testid="stat-card-pets">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-[#6F6F6F]">Total Pets</p>
-                <p className="heading-font text-3xl font-bold text-[#111111] mt-2">{stats.total_pets}</p>
-              </div>
-              <Heart className="w-12 h-12 text-[#1F6559] opacity-20" />
-            </div>
-          </Card>
-          <Card className="p-6 rounded-2xl border-[#EAEAEA]" data-testid="stat-card-doctors">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-[#6F6F6F]">Total Doctors</p>
-                <p className="heading-font text-3xl font-bold text-[#111111] mt-2">{stats.total_doctors || 4}</p>
-              </div>
-              <Stethoscope className="w-12 h-12 text-[#1F6559] opacity-20" />
-            </div>
-          </Card>
-          <Card className="p-6 rounded-2xl border-[#EAEAEA]" data-testid="stat-card-appointments">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-[#6F6F6F]">Appointments</p>
-                <p className="heading-font text-3xl font-bold text-[#111111] mt-2">{stats.total_appointments}</p>
-              </div>
-              <Calendar className="w-12 h-12 text-[#1F6559] opacity-20" />
-            </div>
-          </Card>
+
+        {/* Stats Cards */}
+
+        <div className="grid grid-cols-4 gap-6 mb-8">
+
+          <div className="bg-white p-6 rounded-xl shadow-sm">
+            <p className="text-gray-500 text-sm">Total Animals</p>
+            <h2 className="text-2xl font-bold">12,840</h2>
+          </div>
+
+          <div className="bg-white p-6 rounded-xl shadow-sm">
+            <p className="text-gray-500 text-sm">Active Alerts</p>
+            <h2 className="text-2xl font-bold">24</h2>
+          </div>
+
+          <div className="bg-white p-6 rounded-xl shadow-sm">
+            <p className="text-gray-500 text-sm">Recent Consultations</p>
+            <h2 className="text-2xl font-bold">156</h2>
+          </div>
+
+          <div className="bg-white p-6 rounded-xl shadow-sm">
+            <p className="text-gray-500 text-sm">Verified Farmers</p>
+            <h2 className="text-2xl font-bold">3420</h2>
+          </div>
+
         </div>
 
-        {/* Credit Analytics */}
-        <div className="grid md:grid-cols-3 gap-6 mb-12">
-          <Card className="p-6 rounded-2xl border-[#1F6559] bg-[#1F6559]/5" data-testid="stat-card-credits-purchased">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-[#1F6559]">Total Credits Purchased</p>
-                <p className="heading-font text-3xl font-bold text-[#111111] mt-2">{stats.total_credits_purchased || 0}</p>
-              </div>
-              <CreditCard className="w-12 h-12 text-[#1F6559] opacity-40" />
+
+        {/* Charts + Alerts */}
+
+        <div className="grid grid-cols-3 gap-8 mb-8">
+
+          {/* Chart */}
+
+          <div className="col-span-2 bg-white p-8 rounded-xl shadow-sm">
+
+            <h3 className="font-bold mb-6">
+              Health Trends & AI Insights
+            </h3>
+
+            <div className="flex items-end gap-2 h-56">
+
+              <div className="bg-green-200 w-full h-24 rounded"></div>
+              <div className="bg-green-300 w-full h-36 rounded"></div>
+              <div className="bg-green-400 w-full h-28 rounded"></div>
+              <div className="bg-green-200 w-full h-40 rounded"></div>
+              <div className="bg-green-600 w-full h-52 rounded"></div>
+              <div className="bg-green-300 w-full h-32 rounded"></div>
+              <div className="bg-green-200 w-full h-20 rounded"></div>
+              <div className="bg-green-500 w-full h-36 rounded"></div>
+              <div className="bg-green-200 w-full h-24 rounded"></div>
+              <div className="bg-green-400 w-full h-44 rounded"></div>
+
             </div>
-          </Card>
-          <Card className="p-6 rounded-2xl border-yellow-400 bg-yellow-50" data-testid="stat-card-credits-used">
-            <div className="flex items-center justify-between">
+
+          </div>
+
+
+          {/* Alerts Panel */}
+
+          <div className="bg-white p-8 rounded-xl shadow-sm">
+
+            <h3 className="font-bold mb-6">
+              Critical AI Alerts
+            </h3>
+
+            <div className="space-y-6">
+
               <div>
-                <p className="text-sm text-yellow-700">Total Credits Used</p>
-                <p className="heading-font text-3xl font-bold text-[#111111] mt-2">{stats.total_credits_used || 0}</p>
+
+                <p className="font-semibold">
+                  Lumpy Skin Detection
+                </p>
+
+                <p className="text-sm text-gray-500">
+                  Farmer: Ram Singh
+                </p>
+
+                <span className="text-red-500 text-xs font-bold">
+                  ACTION REQUIRED
+                </span>
+
               </div>
-              <TrendingUp className="w-12 h-12 text-yellow-600 opacity-40" />
-            </div>
-          </Card>
-          <Card className="p-6 rounded-2xl border-green-400 bg-green-50" data-testid="stat-card-revenue">
-            <div className="flex items-center justify-between">
+
+
               <div>
-                <p className="text-sm text-green-700">Revenue from Credits</p>
-                <p className="heading-font text-3xl font-bold text-[#111111] mt-2">₹{stats.revenue_from_credits || 0}</p>
+
+                <p className="font-semibold">
+                  Abnormal Temperature
+                </p>
+
+                <p className="text-sm text-gray-500">
+                  Cow - 88
+                </p>
+
+                <span className="text-yellow-500 text-xs font-bold">
+                  MONITORING
+                </span>
+
               </div>
-              <IndianRupee className="w-12 h-12 text-green-600 opacity-40" />
+
+
+              <div>
+
+                <p className="font-semibold">
+                  Feeding Pattern Shift
+                </p>
+
+                <p className="text-sm text-gray-500">
+                  Possible Ketosis
+                </p>
+
+                <span className="text-green-600 text-xs font-bold">
+                  VERIFIED
+                </span>
+
+              </div>
+
             </div>
-          </Card>
+
+          </div>
+
         </div>
 
-        <Tabs defaultValue="appointments" className="space-y-6">
-          <TabsList className="bg-white border border-[#EAEAEA] rounded-xl p-1">
-            <TabsTrigger value="appointments" data-testid="tab-appointments">Appointments ({stats.total_appointments})</TabsTrigger>
-            <TabsTrigger value="applications" data-testid="tab-applications">Doctor Applications ({stats.pending_doctor_applications || 0})</TabsTrigger>
-            <TabsTrigger value="emergencies" data-testid="tab-emergencies">Emergency Logs ({stats.emergency_alerts_7d})</TabsTrigger>
-          </TabsList>
 
-          <TabsContent value="appointments" className="space-y-4">
-            {appointments.slice(0, 10).map((appt) => (
-              <Card key={appt.id} className="p-6 rounded-2xl border-[#EAEAEA]" data-testid="appointment-card">
-                <div className="flex items-start justify-between">
-                  <div className="grid md:grid-cols-2 gap-4 flex-1">
-                    <div>
-                      <p className="text-sm text-[#6F6F6F]">Pet: <strong className="text-[#111111]">{appt.pet_name}</strong> ({appt.pet_type})</p>
-                      <p className="text-sm text-[#6F6F6F]">Owner: <strong className="text-[#111111]">{appt.owner_name}</strong></p>
-                      <p className="text-sm text-[#6F6F6F]">Contact: {appt.owner_number}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-[#6F6F6F]">Time Slot: <strong className="text-[#111111]">{appt.time_slot}</strong></p>
-                      <p className="text-sm text-[#6F6F6F]">Status: <span className={`font-semibold ${appt.status === 'pending' ? 'text-[#F59E0B]' : appt.status === 'confirmed' ? 'text-[#1F6559]' : 'text-red-500'}`}>{appt.status}</span></p>
-                    </div>
-                  </div>
-                  {appt.status === 'pending' && (
-                    <div className="flex space-x-2 ml-4">
-                      <Button onClick={() => handleConfirmAppointment(appt.id)} size="sm" className="rounded-full bg-[#1F6559] text-white hover:bg-[#184F46]">
-                        Confirm
-                      </Button>
-                      <Button onClick={() => handleCancelAppointment(appt.id)} size="sm" variant="outline" className="rounded-full border-red-300 text-red-600 hover:bg-red-50">
-                        Cancel
-                      </Button>
-                    </div>
-                  )}
-                </div>
-              </Card>
-            ))}
-            {appointments.length === 0 && <p className="text-center text-[#6F6F6F] py-12">No appointments yet</p>}
-          </TabsContent>
+        {/* Table */}
 
-          <TabsContent value="applications" className="space-y-4">
-            {applications.map((app) => (
-              <Card key={app.id} className="p-6 rounded-2xl border-[#EAEAEA]" data-testid="application-card">
-                <div className="flex items-start justify-between">
-                  <div className="space-y-2">
-                    <h3 className="heading-font text-lg font-semibold text-[#111111]">{app.name}</h3>
-                    <p className="text-sm text-[#6F6F6F]">{app.qualification} | {app.specialization}</p>
-                    <p className="text-sm text-[#6F6F6F]">Experience: {app.experience_years} years | District: {app.district}</p>
-                    <p className="text-sm text-[#6F6F6F]">Email: {app.email} | Phone: {app.phone}</p>
-                  </div>
-                  <div className="flex space-x-2">
-                    <Button onClick={() => handleApprove(app.id)} data-testid="approve-button" className="rounded-full bg-[#1F6559] text-white hover:bg-[#1F6559]/90">
-                      Approve
-                    </Button>
-                    <Button onClick={() => handleReject(app.id)} data-testid="reject-button" variant="outline" className="rounded-full border-[#D92D20] text-[#D92D20] hover:bg-[#D92D20]/5">
-                      Reject
-                    </Button>
-                  </div>
-                </div>
-              </Card>
-            ))}
-            {applications.length === 0 && <p className="text-center text-[#6F6F6F] py-12">No pending applications</p>}
-          </TabsContent>
+        <div className="bg-white rounded-xl shadow-sm">
 
-          <TabsContent value="emergencies" className="space-y-4">
-            {emergencyLogs.map((log) => (
-              <Card key={log.id} className="p-6 rounded-2xl border-[#D92D20] bg-[#D92D20]/5" data-testid="emergency-card">
-                <div className="flex items-start space-x-4">
-                  <AlertTriangle className="w-6 h-6 text-[#D92D20] flex-shrink-0 mt-1" />
-                  <div className="flex-1">
-                    <p className="text-sm text-[#6F6F6F] mb-2">{new Date(log.timestamp).toLocaleString()}</p>
-                    <p className="text-[#111111]">{log.message}</p>
-                  </div>
-                </div>
-              </Card>
-            ))}
-            {emergencyLogs.length === 0 && <p className="text-center text-[#6F6F6F] py-12">No emergency logs</p>}
-          </TabsContent>
-        </Tabs>
+          <div className="p-6 border-b flex justify-between">
+
+            <h3 className="font-bold text-lg">
+              Recent Consultations
+            </h3>
+
+            <button className="text-green-700 font-semibold">
+              View History
+            </button>
+
+          </div>
+
+
+          <table className="w-full text-left">
+
+            <thead className="bg-gray-100">
+
+              <tr>
+
+                <th className="p-4">Animal</th>
+                <th className="p-4">Farmer</th>
+                <th className="p-4">Symptom</th>
+                <th className="p-4">AI Diagnosis</th>
+                <th className="p-4">Status</th>
+
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              <tr className="border-t">
+
+                <td className="p-4">Jersey Cow</td>
+                <td className="p-4">Amit Verma</td>
+                <td className="p-4">Reduced milk</td>
+                <td className="p-4 text-blue-600">
+                  Mastitis Risk
+                </td>
+                <td className="p-4 text-green-600">
+                  Active
+                </td>
+
+              </tr>
+
+
+              <tr className="border-t">
+
+                <td className="p-4">Beetal Goat</td>
+                <td className="p-4">Sunita Devi</td>
+                <td className="p-4">Loss of appetite</td>
+                <td className="p-4">
+                  Nutritional Gap
+                </td>
+                <td className="p-4 text-gray-500">
+                  Resolved
+                </td>
+
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
       </div>
-    </div>
-  );
-};
 
-export default AdminDashboard;
+    </div>
+
+  );
+
+}

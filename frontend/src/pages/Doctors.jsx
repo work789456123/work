@@ -25,11 +25,11 @@ const Doctors = () => {
     <div className="min-h-screen bg-[#FAFAFA] py-12" data-testid="doctors-page">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-12 space-y-4">
-          <h1 className="heading-font text-4xl lg:text-5xl font-bold text-[#111111]" data-testid="doctors-heading">Our Doctors</h1>
+          <h1 className="heading-font text-4xl lg:text-5xl font-bold text-[#111111]" data-testid="doctors-heading"></h1>
           <p className="text-lg text-[#6F6F6F]">Verified veterinary professionals ready to help your animals</p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {doctors.map((doctor) => (
             <Card key={doctor.id} className="p-6 rounded-2xl border-[#EAEAEA] space-y-4 hover:shadow-lg hover:border-[#1F6559] transition-all" data-testid="doctor-card">
               <div className="aspect-square rounded-xl overflow-hidden">

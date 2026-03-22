@@ -27,6 +27,8 @@ from app.schemas.farm import (
     FarmConsultationCreate, FarmConsultationResponse,
     AIAlertCreate, AIAlertResponse
 )
+from app.schemas.ratelimit_exception import RatelimitException, RatelimitExceptionCreate
+from app.crud.ratelimit_exception import crud_ratelimit_exception
 
 router = APIRouter()
 
@@ -268,3 +270,36 @@ async def create_farm_alert(
     current_admin: User = Depends(get_current_admin)
 ):
     return await crud_farm.create_alert(db, obj_in=alert_in)
+
+# --- Ratelimit Exceptions ---
+
+@router.get("/ratelimit-exceptions", response_model=List[RatelimitException])
+async def get_ratelimit_exceptions(
+    skip: int = 0, limit: int = 100,
+    db: AsyncSession = Depends(get_db),
+    current_admin: User = Depends(get_current_admin)
+):
+    return await crud_ratelimit_exception.get_multi(db, skip=skip, limit=limit)
+
+@router.post("/ratelimit-exceptions", response_model=RatelimitException)
+async def create_ratelimit_exception(
+    exception_in: RatelimitExceptionCreate,
+    db: AsyncSession = Depends(get_db),
+    current_admin: User = Depends(get_current_admin)
+):
+    # Check if already exists
+    existing = await crud_ratelimit_exception.get_by_email(db, email=exception_in.email)
+    if existing:
+        raise HTTPException(status_code=400, detail="Email already in exception list")
+    return await crud_ratelimit_exception.create(db, obj_in=exception_in)
+
+@router.delete("/ratelimit-exceptions/{exception_id}", response_model=RatelimitException)
+async def delete_ratelimit_exception(
+    exception_id: str,
+    db: AsyncSession = Depends(get_db),
+    current_admin: User = Depends(get_current_admin)
+):
+    obj = await crud_ratelimit_exception.remove(db, id=exception_id)
+    if not obj:
+        raise HTTPException(status_code=404, detail="Exception not found")
+    return obj

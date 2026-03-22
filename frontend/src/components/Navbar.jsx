@@ -50,17 +50,20 @@ const Navbar = () => {
     try {
       const endpoint = authMode === "login" ? "/auth/login" : "/auth/register";
       const response = await api.post(endpoint, formData);
-      
+
       localStorage.setItem('token', response.data.access_token);
-      localStorage.setItem('user_name', response.data.full_name);
+      localStorage.setItem('user_name', response.data.user?.full_name || response.data.full_name);
       setIsLoggedIn(true);
       setShowAuth(false);
-      
+
+      // Notify other components (like GopuChat) that login/signup succeeded
+      window.dispatchEvent(new Event('authSuccess'));
+
       if (authMode === "register") {
         setShowAddPet(true);
       }
-      
-      toast.success(response.data.message);
+
+      toast.success(response.data.msg || response.data.message || "Success");
     } catch (error) {
       toast.error(error.response?.data?.detail || "Authentication failed");
     }
@@ -90,7 +93,7 @@ const Navbar = () => {
     if (!isLoggedIn) {
       setShowAuth(true);
     } else {
-      navigate('/gopu');
+      window.dispatchEvent(new CustomEvent('openPromoModal'));
     }
   };
 
@@ -100,61 +103,79 @@ const Navbar = () => {
 
   return (
     <>
-    <nav className="sticky top-0 z-50 glass-morphism border-none !bg-white/70 dark:!bg-black/70 mt-4 mx-4 rounded-3xl">
-        <div className="max-w-7xl mx-auto px-4 lg:px-6">
+      <nav className="sticky top-0 z-50 bg-[#1F6559] shadow-md">
+        <div className="max-w-[110rem] mx-auto px-4 lg:px-6">
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
-            <Link to="/" className="flex items-center space-x-3 z-50" data-testid="logo-link">
-              <img 
-                src="https://customer-assets.emergentagent.com/job_c5cc5284-c7c6-4671-8ab4-5008fe8fa5a2/artifacts/zsncbn16_pashuvanilogpic.png" 
-                alt="PashuVaani Logo" 
-                className="h-16"
-                style={{height: '70px'}}
+            <Link to="/" className="flex items-center z-50 mr-auto shrink-0" data-testid="logo-link">
+              <img
+                src="/pvhalflogo.png"
+                alt="PashuVaani Logo"
+                className="h-10 sm:h-12 md:h-16 w-auto object-contain"
+                style={{ maxHeight: '150px' }}
               />
+              <span className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight bg-gradient-to-r from-[#1FA7A6] via-[#38C2B4] to-[#78D65C] bg-clip-text text-transparent ml-1 sm:ml-2">
+                PashuVaani
+              </span>
             </Link>
 
             {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center space-x-1">
-              <Link to="/" className={`px-5 py-2 text-sm font-bold rounded-xl transition-all ${location.pathname === "/" ? "text-primary bg-primary/10" : "text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-primary/5"}`}>
+              <Link to="/" className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${location.pathname === "/" ? "text-white bg-white/20" : "text-white/90 hover:text-white hover:bg-white/10"}`}>
                 Home
               </Link>
-              
-              <Link to="/doctors" className={`px-5 py-2 text-sm font-bold rounded-xl transition-all ${location.pathname === "/doctors" ? "text-primary bg-primary/10" : "text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-primary/5"}`}>
+
+              {/*<Link to="/doctors" className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${location.pathname === "/doctors" ? "text-white bg-white/20" : "text-white/90 hover:text-white hover:bg-white/10"}`}>
                 Our Doctors
+              </Link>*/}
+
+              <DropdownMenu>
+                <DropdownMenuTrigger className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${location.pathname === "/pashucare-suraksha-plan" ? "text-white bg-white/20" : "text-white/90 hover:text-white hover:bg-white/10 flex items-center"}`}>
+                  Pashu Raksha <ChevronDown className="ml-1 h-4 w-4" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="bg-white border-gray-200">
+                  <DropdownMenuItem onClick={() => navigate('/pashucare-suraksha-plan')} className="cursor-pointer">
+                    Gopu.AI
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => toast.info('Care Collection is Coming Soon!', { closeButton: true })} className="cursor-pointer">
+                    Care Collection
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              {/*<Link to="/appointmentsform" className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${location.pathname === "/appointmentsform" ? "text-white bg-white/20" : "text-white/90 hover:text-white hover:bg-white/10"}`}>
+                Consult with Doctor
+              </Link>*/}
+
+              <Link to="/appointments" className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${location.pathname === "/appointments" ? "text-white bg-white/20" : "text-white/90 hover:text-white hover:bg-white/10"}`}
+              >
+                Consult with Doctor
               </Link>
-              
-              <Link to="/product" className={`px-5 py-2 text-sm font-bold rounded-xl transition-all ${location.pathname === "/product" ? "text-primary bg-primary/10" : "text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-primary/5"}`}>
-                Products
-              </Link>
-              
-              <Link to="/appointments" className={`px-5 py-2 text-sm font-bold rounded-xl transition-all ${location.pathname === "/appointments" ? "text-primary bg-primary/10" : "text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-primary/5"}`}>
-                Consultation
-              </Link>
-              
-              <Link to="/blogs" className={`px-5 py-2 text-sm font-bold rounded-xl transition-all ${location.pathname === "/blogs" ? "text-primary bg-primary/10" : "text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-primary/5"}`}>
+
+              <Link to="/blogs" className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${location.pathname === "/blogs" ? "text-white bg-white/20" : "text-white/90 hover:text-white hover:bg-white/10"}`}>
                 Blog
               </Link>
-              
+
               {/* About PashuVaani Dropdown */}
               <DropdownMenu>
-                <DropdownMenuTrigger className="px-5 py-2 text-sm font-bold rounded-xl text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-primary/5 flex items-center transition-all">
-                  About <ChevronDown className="ml-1 h-4 w-4" />
+                <DropdownMenuTrigger className="px-4 py-2 text-sm font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10 flex items-center">
+                  About PashuVaani <ChevronDown className="ml-1 h-4 w-4" />
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="bg-white/90 backdrop-blur-xl border-slate-100 rounded-2xl shadow-2xl p-2 min-w-[200px]">
-                  <DropdownMenuItem onClick={() => navigate('/about')} className="cursor-pointer rounded-xl font-medium focus:bg-primary/10 focus:text-primary">
+                <DropdownMenuContent className="bg-white border-gray-200">
+                  <DropdownMenuItem onClick={() => navigate('/about')} className="cursor-pointer">
                     About Us
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate('/our-story')} className="cursor-pointer rounded-xl font-medium focus:bg-primary/10 focus:text-primary">
+                  <DropdownMenuItem onClick={() => navigate('/our-story')} className="cursor-pointer">
                     Founders Stories
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate('/contact')} className="cursor-pointer rounded-xl font-medium focus:bg-primary/10 focus:text-primary">
+                  <DropdownMenuItem onClick={() => navigate('/contact')} className="cursor-pointer">
                     Contact Us
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
 
-              <Link to="/pashucare-suraksha-plan" className="ml-2 px-5 py-2.5 text-xs font-black uppercase tracking-widest rounded-xl bg-amber-400 text-amber-950 hover:bg-amber-300 transition-all shadow-lg shadow-amber-400/20 active:scale-95">
-                Suraksha Plan
+              <Link to="/pashucare-suraksha-plan" className="px-4 py-2 text-sm font-medium rounded-lg bg-yellow-500 text-black hover:bg-yellow-400 transition-colors">
+                PashuCare Suraksha Plan
               </Link>
             </div>
 
@@ -162,17 +183,17 @@ const Navbar = () => {
             <div className="flex items-center space-x-3">
               <Button
                 onClick={handleGopuClick}
-                className="hidden lg:flex rounded-2xl bg-primary text-white hover:bg-primary-hover font-black text-xs uppercase tracking-widest px-6 py-6 shadow-xl shadow-primary/20 active:scale-95 transition-all"
+                className="hidden lg:flex rounded-full bg-white text-[#1F6559] hover:bg-white/90 font-semibold"
                 data-testid="try-gopu-button"
               >
-                Gopu.AI
+                Try Gopu.AI Free
               </Button>
 
               {isLoggedIn && (
                 <Button
                   onClick={handleLogout}
-                  variant="ghost"
-                  className="hidden lg:flex rounded-2xl text-slate-600 hover:bg-red-50 hover:text-red-600 transition-all"
+                  variant="outline"
+                  className="hidden lg:flex rounded-full border-white/30 text-white hover:bg-white/10 hover:text-white"
                   data-testid="logout-button"
                 >
                   Logout
@@ -183,7 +204,7 @@ const Navbar = () => {
               <Button
                 variant="ghost"
                 size="icon"
-                className="lg:hidden text-primary hover:bg-primary/5 rounded-xl transition-all"
+                className="lg:hidden text-white hover:bg-white/10"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 data-testid="mobile-menu-toggle"
               >
@@ -198,12 +219,22 @@ const Navbar = () => {
               <Link to="/" onClick={() => setMobileMenuOpen(false)} className="block px-4 py-3 text-sm font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10">
                 Home
               </Link>
-              <Link to="/doctors" onClick={() => setMobileMenuOpen(false)} className="block px-4 py-3 text-sm font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10">
-                Our Doctors
+              <Link
+                to="/pashucare-suraksha-plan"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10"
+              >
+                Gopu.AI (Pashu Raksha)
               </Link>
-              <Link to="/product" onClick={() => setMobileMenuOpen(false)} className="block px-4 py-3 text-sm font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10">
-                Products
-              </Link>
+              <button
+                onClick={() => {
+                  toast.info('Care Collection is Coming Soon!', { closeButton: true });
+                  setMobileMenuOpen(false);
+                }}
+                className="w-full text-left px-4 py-3 text-sm font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10 opacity-70"
+              >
+                Care Collection (Coming Soon)
+              </button>
               <Link to="/appointments" onClick={() => setMobileMenuOpen(false)} className="block px-4 py-3 text-sm font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10">
                 Consult with Doctor
               </Link>
@@ -222,7 +253,7 @@ const Navbar = () => {
               <Link to="/pashucare-suraksha-plan" onClick={() => setMobileMenuOpen(false)} className="block px-4 py-3 text-sm font-medium rounded-lg bg-yellow-500 text-black hover:bg-yellow-400">
                 PashuCare Suraksha Plan
               </Link>
-              
+
               <Button
                 onClick={() => {
                   handleGopuClick();
@@ -266,7 +297,7 @@ const Navbar = () => {
                   id="full_name"
                   data-testid="auth-fullname-input"
                   value={formData.full_name}
-                  onChange={(e) => setFormData({...formData, full_name: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
                   required
                   className="rounded-lg border-[#EAEAEA]"
                 />
@@ -278,7 +309,7 @@ const Navbar = () => {
                 id="phone_or_email"
                 data-testid="auth-phone-email-input"
                 value={formData.phone_or_email}
-                onChange={(e) => setFormData({...formData, phone_or_email: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, phone_or_email: e.target.value })}
                 required
                 className="rounded-lg border-[#EAEAEA]"
               />
@@ -290,7 +321,7 @@ const Navbar = () => {
                 type="password"
                 data-testid="auth-password-input"
                 value={formData.password}
-                onChange={(e) => setFormData({...formData, password: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 required
                 className="rounded-lg border-[#EAEAEA]"
               />
@@ -333,7 +364,7 @@ const Navbar = () => {
                 id="pet_name"
                 data-testid="pet-name-input"
                 value={petData.name}
-                onChange={(e) => setPetData({...petData, name: e.target.value})}
+                onChange={(e) => setPetData({ ...petData, name: e.target.value })}
                 required
                 className="rounded-lg border-[#EAEAEA]"
               />
@@ -345,7 +376,7 @@ const Navbar = () => {
                 data-testid="pet-type-input"
                 placeholder="Dog, Cat, etc."
                 value={petData.pet_type}
-                onChange={(e) => setPetData({...petData, pet_type: e.target.value})}
+                onChange={(e) => setPetData({ ...petData, pet_type: e.target.value })}
                 required
                 className="rounded-lg border-[#EAEAEA]"
               />
@@ -358,7 +389,7 @@ const Navbar = () => {
                   data-testid="pet-age-input"
                   placeholder="2 years"
                   value={petData.age}
-                  onChange={(e) => setPetData({...petData, age: e.target.value})}
+                  onChange={(e) => setPetData({ ...petData, age: e.target.value })}
                   className="rounded-lg border-[#EAEAEA]"
                 />
               </div>
@@ -369,7 +400,7 @@ const Navbar = () => {
                   data-testid="pet-gender-input"
                   placeholder="Male/Female"
                   value={petData.gender}
-                  onChange={(e) => setPetData({...petData, gender: e.target.value})}
+                  onChange={(e) => setPetData({ ...petData, gender: e.target.value })}
                   className="rounded-lg border-[#EAEAEA]"
                 />
               </div>
@@ -380,7 +411,7 @@ const Navbar = () => {
                   data-testid="pet-weight-input"
                   placeholder="10 kg"
                   value={petData.weight}
-                  onChange={(e) => setPetData({...petData, weight: e.target.value})}
+                  onChange={(e) => setPetData({ ...petData, weight: e.target.value })}
                   className="rounded-lg border-[#EAEAEA]"
                 />
               </div>

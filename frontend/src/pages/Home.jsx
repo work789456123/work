@@ -1,66 +1,130 @@
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { Sparkles, Heart, Globe, Users, Shield, Zap } from "lucide-react";
+import { Sparkles, Heart, Globe, Users, Shield, Zap, ChevronLeft, ChevronRight } from "lucide-react";
+import { useState, useEffect } from "react";
 
 const Home = () => {
   const navigate = useNavigate();
 
+  const slides = [
+    { image: "/heropageimage.jpeg" },
+    { image: "/slider1.jpeg" },
+    { image: "/slider2.jpeg" },
+    { image: "/slider3.jpeg" }
+  ];
+
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 2500);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="min-h-screen">
       {/* Hero Section with Fixed Tagline Structure */}
-      {/* Hero Section with Fixed Tagline Structure */}
-      <section className="relative overflow-hidden pt-32 pb-24" data-testid="hero-section">
-        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-primary/5 to-transparent -z-10"></div>
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div className="space-y-4">
-              <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 text-primary text-[10px] font-black uppercase tracking-[0.2em] rounded-full mb-4">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
-                </span>
-                Next-Gen Healthcare
-              </div>
-              
-              <h1 className="heading-font text-7xl lg:text-9xl font-black text-slate-900 tracking-tighter leading-[0.85]" data-testid="main-heading">
-                Pashu<span className="text-primary italic">Vaani</span>
+      <section className="relative bg-white py-12 md:py-24" data-testid="hero-section">
+        <div className="max-w-[110rem] mx-auto px-4 md:px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 items-center">
+            <div className="space-y-0 lg:col-span-5 text-center lg:text-left">
+              {/* Main Heading */}
+              <h1 className="heading-font text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-[#111111] leading-tight mb-0" data-testid="main-heading">
+                PashuVaani
               </h1>
-              
-              <p className="text-2xl font-bold text-primary tracking-tight" style={{marginTop: '20px', marginBottom: '24px'}}>
-                The intelligent voice of animal health.
+
+              {/* Tagline - EXACTLY as specified with inline styles */}
+              <p className="text-xl md:text-2xl font-semibold text-[#1F6559]" style={{ marginTop: '10px', marginBottom: '18px' }}>
+                The Voice of Animal Health
               </p>
-              
-              <p className="text-xl text-slate-500 leading-relaxed font-medium max-w-lg">
-                AI-powered diagnostics for pets today. <br/>
-                A universal health ecosystem for the future.
+
+              {/* Description */}
+              <p className="text-base md:text-xl text-[#6F6F6F] leading-relaxed">
+                AI-powered care for pets today.<br />
+                Universal animal health ecosystem for tomorrow.
               </p>
-              
-              <div className="flex gap-4 pt-6">
-                <Button
-                  onClick={() => navigate('/gopu')}
-                  data-testid="get-started-btn"
-                  className="rounded-2xl bg-primary text-white hover:bg-primary-hover px-10 py-8 text-lg font-black uppercase tracking-widest shadow-2xl shadow-primary/30 transition-all hover:-translate-y-1 active:scale-95"
-                >
-                  Meet Gopu AI
-                </Button>
-                <Button
-                  onClick={() => navigate('/appointments')}
-                  variant="outline"
-                  className="rounded-2xl border-slate-200 text-slate-600 hover:bg-slate-50 px-10 py-8 text-lg font-bold"
-                >
-                  Find a Doctor
-                </Button>
-              </div>
+
+              <Button
+                onClick={() => window.dispatchEvent(new CustomEvent('openPromoModal'))}
+                data-testid="get-started-btn"
+                className="rounded-full bg-[#1F6559] text-white hover:bg-[#184F46] px-6 py-4 md:px-8 md:py-6 text-base md:text-lg mt-6"
+              >
+                Chat with Gopu AI
+              </Button>
             </div>
-            <div className="relative group">
-              <div className="absolute -inset-4 bg-primary/20 rounded-[3rem] blur-3xl opacity-30 group-hover:opacity-50 transition-opacity"></div>
-              <div className="relative aspect-square glass-morphism !bg-white/40 dark:!bg-white/5 rounded-[4rem] flex items-center justify-center p-12 overflow-hidden border-white/40 shadow-2xl transform hover:rotate-1 transition-transform duration-700">
-                <img
-                  src="https://customer-assets.emergentagent.com/job_73651be8-bbea-4eee-a6be-0162100b6ac1/artifacts/mumll039_Gopu%20Ai%20Image.png"
-                  alt="Gopu AI"
-                  className="w-full h-full object-contain scale-110 group-hover:scale-125 transition-transform duration-1000"
-                  data-testid="gopu-hero-image"
-                />
+            <div className="relative lg:col-span-7 lg:ml-4 flex justify-center lg:justify-end mt-8 lg:mt-0">
+              <div className="bg-gradient-to-br from-[#1F6559]/10 to-transparent rounded-[2rem] flex items-center justify-center p-2 sm:p-4 group w-full">
+                <div className="relative w-full overflow-hidden rounded-[1.5rem] shadow-xl">
+
+                  <img
+                    src={slides[currentSlide].image}
+                    className="w-full h-auto max-h-[400px] sm:max-h-[500px] lg:max-h-[700px] object-contain transition-all duration-700 bg-white"
+                  />
+
+                  {/* Slider Controls */}
+                  <div className="absolute inset-y-0 left-0 flex items-center pl-4 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                    <button 
+                      onClick={() => setCurrentSlide(prev => (prev === 0 ? slides.length - 1 : prev - 1))}
+                      className="p-2 rounded-full bg-white/90 hover:bg-white text-[#1F6559] shadow-lg transition-transform hover:scale-110"
+                    >
+                      <ChevronLeft className="w-6 h-6" />
+                    </button>
+                  </div>
+                  <div className="absolute inset-y-0 right-0 flex items-center pr-4 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                    <button 
+                      onClick={() => setCurrentSlide(prev => (prev + 1) % slides.length)}
+                      className="p-2 rounded-full bg-white/90 hover:bg-white text-[#1F6559] shadow-lg transition-transform hover:scale-110"
+                    >
+                      <ChevronRight className="w-6 h-6" />
+                    </button>
+                  </div>
+
+                  {/* Buttons for Slider 1 */}
+                  {currentSlide === 0 && (
+                    <div className="absolute bottom-4 sm:bottom-8 left-0 right-0 px-4 sm:px-8 flex flex-col sm:flex-row justify-center sm:justify-start gap-2 sm:gap-4 z-20">
+                      <Button
+                        onClick={() => window.dispatchEvent(new CustomEvent('openPromoModal'))}
+                        className="rounded-full bg-[#1F6559] text-white hover:bg-[#184F46] px-4 py-2 sm:px-6 sm:py-3 shadow-lg text-sm sm:text-base w-full sm:w-auto"
+                      >
+                        Try Gopu AI
+                      </Button>
+
+                      <Button
+                        onClick={() => navigate("/about")}
+                        className="rounded-full bg-white text-[#1F6559] hover:bg-gray-50 px-4 py-2 sm:px-6 sm:py-3 shadow-lg text-sm sm:text-base w-full sm:w-auto"
+                      >
+                        Learn More
+                      </Button>
+                    </div>
+                  )}
+
+                  {/* Button for Slider 3 */}
+                  {currentSlide === 2 && (
+                    <div className="absolute bottom-8 left-0 right-0 px-8 flex justify-center sm:justify-start z-20">
+                      <Button
+                        onClick={() => window.dispatchEvent(new CustomEvent('openPromoModal'))}
+                        className="rounded-full bg-[#1F6559] text-white hover:bg-[#184F46] px-6 py-3 shadow-lg"
+                      >
+                        Chat with Gopu
+                      </Button>
+                    </div>
+                  )}
+                  
+                  {/* Button for Slider 4 */}
+                  {currentSlide === 3 && (
+                    <div className="absolute bottom-8 left-0 right-0 px-8 flex justify-center sm:justify-start z-20">
+                      <Button
+                        onClick={() => window.dispatchEvent(new CustomEvent('openPromoModal'))}
+                        className="rounded-full bg-[#1F6559] text-white hover:bg-[#184F46] px-6 py-3 shadow-lg"
+                      >
+                        Chat with Gopu
+                      </Button>
+                    </div>
+                  )}
+
+                </div>
               </div>
             </div>
           </div>
@@ -68,39 +132,39 @@ const Home = () => {
       </section>
 
       {/* About PashuVaani */}
-      <section className="py-32 bg-slate-50/50" data-testid="about-section">
-        <div className="max-w-6xl mx-auto px-6 text-center">
-          <h2 className="heading-font text-5xl lg:text-6xl font-black text-slate-900 tracking-tighter mb-6">
-            PashuVaani Philosophy
+      <section className="py-24 bg-gradient-to-r from-[#1FA7A6] via-[#38C2B4] to-[#78D65C]" data-testid="about-section">
+        <div className="max-w-5xl mx-auto px-6 text-center space-y-6">
+          <h2 className="heading-font text-4xl lg:text-5xl font-bold text-white">
+            About PashuVaani
           </h2>
-          <p className="text-xl text-slate-500 leading-relaxed max-w-3xl mx-auto font-medium">
-            We are building an AI-driven animal health platform dedicated to making intelligent, 
-            accessible, and preventive healthcare available for every life.
+          <p className="text-lg text-white/90 leading-relaxed">
+            PashuVaani is an AI-driven animal health platform dedicated to making intelligent, accessible,
+            and preventive healthcare available for every animal.
           </p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-20">
-            <div className="glass-card p-10 group hover:-translate-y-2">
-              <div className="size-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
-                <Sparkles className="w-8 h-8 text-primary" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 pt-12">
+            <div className="space-y-3">
+              <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mx-auto backdrop-blur-sm">
+                <Sparkles className="w-6 h-6 text-white" />
               </div>
-              <h3 className="heading-font font-black text-xs uppercase tracking-widest text-slate-900">AI Logic</h3>
+              <h3 className="heading-font font-semibold text-white">Artificial Intelligence</h3>
             </div>
-            <div className="glass-card p-10 group hover:-translate-y-2">
-              <div className="size-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
-                <Heart className="w-8 h-8 text-primary" />
+            <div className="space-y-3">
+              <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mx-auto backdrop-blur-sm">
+                <Heart className="w-6 h-6 text-white" />
               </div>
-              <h3 className="heading-font font-black text-xs uppercase tracking-widest text-slate-900">Compassion</h3>
+              <h3 className="heading-font font-semibold text-white">Veterinary Expertise</h3>
             </div>
-            <div className="glass-card p-10 group hover:-translate-y-2">
-              <div className="size-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
-                <Zap className="w-8 h-8 text-primary" />
+            <div className="space-y-3">
+              <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mx-auto backdrop-blur-sm">
+                <Zap className="w-6 h-6 text-white" />
               </div>
-              <h3 className="heading-font font-black text-xs uppercase tracking-widest text-slate-900">Intelligence</h3>
+              <h3 className="heading-font font-semibold text-white">Data Intelligence</h3>
             </div>
-            <div className="glass-card p-10 group hover:-translate-y-2">
-              <div className="size-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
-                <Shield className="w-8 h-8 text-primary" />
+            <div className="space-y-3">
+              <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mx-auto backdrop-blur-sm">
+                <Shield className="w-6 h-6 text-white" />
               </div>
-              <h3 className="heading-font font-black text-xs uppercase tracking-widest text-slate-900">Security</h3>
+              <h3 className="heading-font font-semibold text-white">Compassionate Design</h3>
             </div>
           </div>
         </div>
@@ -109,13 +173,15 @@ const Home = () => {
       {/* Meet Gopu */}
       <section className="py-24 bg-white" data-testid="meet-gopu-section">
         <div className="max-w-6xl mx-auto px-6">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="order-2 lg:order-1">
-              <img
-                src="https://customer-assets.emergentagent.com/job_73651be8-bbea-4eee-a6be-0162100b6ac1/artifacts/mumll039_Gopu%20Ai%20Image.png"
-                alt="Gopu - The Heart of PashuVaani"
-                className="w-full max-w-md mx-auto"
-                data-testid="gopu-character-image"
+              <video
+                src="/gopuhivideo2.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-auto object-cover max-w-md mx-auto rounded-3xl"
               />
             </div>
             <div className="order-1 lg:order-2 space-y-6">
@@ -124,13 +190,13 @@ const Home = () => {
               </h2>
               <p className="text-sm font-medium text-[#1F6559]">The Heart of PashuVaani</p>
               <p className="text-lg text-[#6F6F6F] leading-relaxed">
-                Gopu is the friendly face of PashuVaani — your pet's intelligent health companion. 
-                Warm. Caring. Always alert. Behind Gopu is advanced AI technology, but what pet parents 
+                Gopu is the friendly face of PashuVaani — your pet's intelligent health companion.
+                Warm. Caring. Always alert. Behind Gopu is advanced AI technology, but what pet parents
                 experience is simplicity, clarity, and reassurance.
               </p>
               <p className="text-lg text-[#6F6F6F] leading-relaxed">
-                Gopu listens before he speaks — noticing subtle changes, asking the right questions, 
-                and helping you act early. He is designed to feel less like a tool and more like a trusted 
+                Gopu listens before he speaks — noticing subtle changes, asking the right questions,
+                and helping you act early. He is designed to feel less like a tool and more like a trusted
                 companion — one that stands by you in moments of worry and guides you with calm confidence.
               </p>
             </div>
@@ -139,30 +205,23 @@ const Home = () => {
       </section>
 
       {/* Why PashuVaani */}
-      <section className="py-32 bg-white" data-testid="why-section">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex flex-col md:flex-row items-end justify-between mb-16 gap-6">
-            <div className="max-w-2xl">
-              <h2 className="heading-font text-5xl lg:text-6xl font-black text-slate-900 tracking-tighter mb-4">
-                Why PashuVaani?
-              </h2>
-              <p className="text-lg text-slate-500 font-medium">Built for the modern pet parent and the global livestock ecosystem.</p>
-            </div>
-            <Button variant="link" className="text-primary font-black uppercase tracking-widest text-xs">Explore all features</Button>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <section className="py-24 bg-gradient-to-r from-[#1FA7A6] via-[#38C2B4] to-[#78D65C]" data-testid="why-section">
+        <div className="max-w-6xl mx-auto px-6">
+          <h2 className="heading-font text-4xl lg:text-5xl font-bold text-white text-center mb-16">
+            Why PashuVaani?
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
-              { title: "AI-driven health intelligence", icon: Sparkles, desc: "Real-time diagnostics and predictive analytics." },
-              { title: "Human-centred design", icon: Users, desc: "Simple, intuitive interface for everyone." },
-              { title: "Emotionally connected", icon: Heart, desc: "Technology that understands the bond." },
-              { title: "Scalable tech foundation", icon: Zap, desc: "Built to serve millions of animals globally." },
-              { title: "Urban & rural ecosystems", icon: Globe, desc: "Bridging the gap in veterinary access." },
-              { title: "Trusted and secure", icon: Shield, desc: "Your data is protected and private." },
+              { title: "AI-driven health intelligence", icon: Sparkles },
+              { title: "Human-centred design", icon: Users },
+              { title: "Emotionally connected brand", icon: Heart },
+              { title: "Scalable tech foundation", icon: Zap },
+              { title: "Urban and rural ecosystems", icon: Globe },
+              { title: "Trusted and secure", icon: Shield },
             ].map((item, idx) => (
-              <div key={idx} className="glass-card p-10 hover:border-primary/20 hover:shadow-2xl hover:shadow-primary/5 group">
-                <item.icon className="w-10 h-10 text-primary mb-6 group-hover:scale-110 transition-transform" />
-                <h3 className="heading-font text-xl font-black text-slate-900 tracking-tight mb-2">{item.title}</h3>
-                <p className="text-sm text-slate-500 font-medium">{item.desc}</p>
+              <div key={idx} className="p-8 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 space-y-4 hover:bg-white/20 transition-colors">
+                <item.icon className="w-8 h-8 text-white" />
+                <h3 className="heading-font text-lg font-semibold text-white">{item.title}</h3>
               </div>
             ))}
           </div>
@@ -185,24 +244,22 @@ const Home = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-24 bg-[#1F6559] text-white" data-testid="cta-section">
-        <div className="max-w-4xl mx-auto px-6 text-center space-y-8">
-          <h2 className="heading-font text-4xl lg:text-5xl font-bold">
-            Join the PashuVaani Movement
-          </h2>
-          <p className="text-xl opacity-90">
-            Smarter care. Healthier animals. Peace of mind.
-          </p>
-          <Button
-            onClick={() => navigate('/gopu')}
-            data-testid="cta-button"
-            className="rounded-full bg-white text-[#1F6559] hover:bg-white/90 px-8 py-6 text-lg font-semibold"
-          >
-            Get Started Now
-          </Button>
-        </div>
-      </section>
+      {/* WhatsApp Floating Icon */}
+      <a
+        href="https://wa.me/918097891101"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-6 right-6 z-50 flex items-center justify-center group"
+      >
+        <div className="absolute inset-0 bg-[#25D366] rounded-full animate-ping opacity-20 group-hover:opacity-40 transition-opacity duration-300"></div>
+        <div className="absolute inset-0 bg-[#25D366] rounded-full animate-pulse opacity-30 shadow-[0_0_15px_rgba(37,211,102,0.8)]"></div>
+        <img
+          src="https://cdn-icons-png.flaticon.com/512/733/733585.png"
+          alt="WhatsApp"
+          className="relative w-14 h-14 hover:scale-110 transition-transform drop-shadow-xl"
+        />
+      </a>
+
     </div>
   );
 };

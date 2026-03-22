@@ -9,220 +9,180 @@ const OurStory = () => {
     {
       name: "Mr. Mohan Vij",
       role: "Founder & CEO",
-      image: "https://customer-assets.emergentagent.com/job_73651be8-bbea-4eee-a6be-0162100b6ac1/artifacts/ni8cmuaj_Mohan%20Vij.jpeg",
+      image: "/foundermohan.jpg",
       story: [
-        "For Mr. Mohan Vij, the idea behind PashuVaani began with a simple realization — when animals fall sick, people often feel helpless.",
-        "Pet parents panic. Farmers lose income. Veterinary support is delayed. Reliable guidance is difficult to access.",
-        "He saw a gap — not just in technology, but in confidence. There was no intelligent, accessible system that could guide people in real time and reduce uncertainty during health concerns.",
-        "With a strong entrepreneurial drive and a vision to create meaningful impact, he set out to build a platform that would combine technology with compassion.",
-        "That vision became PashuVaani — the Voice of Animal Health."
+        "The idea behind PashuVaani began with a moment that changed how our founder saw the relationship between humans and animals.",
+        "During a visit to a village, he noticed a farmer sitting beside his cow. The animal appeared restless and uncomfortable. The farmer gently patted her and kept asking softly:",
+        "What is wrong? Tell me what is wrong.",
+        "But the cow could not answer.",
+        "The nearest veterinarian was far away, and it would take hours before help could arrive. The farmer cared deeply about his animal, yet he had no way of understanding what the cow was trying to communicate.",
+        "That moment revealed something powerful:",
+        "Animals communicate constantly through behaviour, posture, and sound — but humans often struggle to understand these signals in time.",
+        "The experience stayed with our founder and sparked a deeper curiosity about how this gap could be solved."
       ]
     },
     {
       name: "Mr. Utkarsh Srivastava",
-      role: "Co-Founder, CTO & COO",
-      image: "https://customer-assets.emergentagent.com/job_73651be8-bbea-4eee-a6be-0162100b6ac1/artifacts/r2osltwb_Utkarsh%20Srivastava.jpeg",
+      role: "Co-Founder & COO",
+      image: "/founderutkarsh.jpg",
       story: [
-        "For Mr. Utkarsh Srivastava, the mission was about building something scalable, intelligent, and dependable.",
-        "He believed that artificial intelligence could do more than automate conversations — it could become a protective layer for animals and a decision-support system for their caregivers.",
-        "He focused on building the technological backbone that powers Gopu — ensuring the platform would be reliable, secure, and designed for real-world use.",
-        "His goal was clear: Technology should not replace human care. It should strengthen it."
+        "To turn the idea of PashuVaani into something real, our founder shared the vision with Mr. Utkarsh Srivastava our co-founder.",
+        "From the very first conversation, the idea resonated strongly with him. The possibility of using technology to help humans better understand animals represented more than just a product idea — it was an opportunity to solve a meaningful problem faced by millions of farmers, pet owners, and animal caretakers.",
+        "Utkarsh recognized that many challenges in animal healthcare arise not because people do not care, but because they lack the tools and information needed to recognize problems early.",
+        "Together, Mohan and Utkarsh began shaping the concept of PashuVaani into a platform that could combine artificial intelligence, practical animal health knowledge, and accessible technology to support better decision-making for animal care."
       ]
     }
   ];
 
   return (
     <div className="min-h-screen bg-white">
+
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-b from-[#1F6559]/5 to-white">
-        <div className="max-w-4xl mx-auto px-6 text-center space-y-6">
-          <h1 className="heading-font text-5xl lg:text-6xl font-bold text-[#111111]">
+      <section className="py-16 md:py-20 bg-gradient-to-b from-[#1FA7A6] via-[#38C2B4] to-[#78D65C]/10">
+        <div className="max-w-2xl mx-auto px-4 text-center space-y-4">
+          <h1 className="heading-font text-3xl md:text-4xl lg:text-5xl font-bold text-white">
             Our Story
           </h1>
-          <p className="text-xl text-[#6F6F6F] leading-relaxed">
-            Building a future where no pet parent feels alone
+          <p className="heading-font text-xl lg:text-xl font-bold text-white">
+            From the Desk of the Founders
           </p>
         </div>
       </section>
 
+
       {/* Why We Built PashuVaani */}
-      <section className="py-20">
+      {/*<section className="py-20 bg-gradient-to-b from-[#1FA7A6]/10 via-[#38C2B4]/10 to-[#78D65C]/10">
         <div className="max-w-5xl mx-auto px-6 space-y-8">
           <h2 className="heading-font text-4xl font-bold text-[#111111] text-center mb-12">
-            Why We Built PashuVaani
+            The Beginning of PashuVaani
           </h2>
           <div className="space-y-6">
             <p className="text-lg text-[#6F6F6F] leading-relaxed">
-              PashuVaani was not born in a boardroom. It was born from observation, concern, and a deep belief 
-              that animal healthcare deserves to be smarter, faster, and more accessible.
+              Some companies are created from business plans.
+              Others begin with a deeper realization — that something important needs to change , PashuVaani was born from observing a challenge that exists across farms, homes, and communities: when animals fall sick, the people who care for them often face uncertainty.
             </p>
+
             <p className="text-lg text-[#6F6F6F] leading-relaxed">
-              In a country where animals support livelihoods and emotions alike, delayed advice often means irreversible loss. 
-              We built PashuVaani to ensure that help is not limited by time, location, or availability.
+              Farmers try to interpret symptoms without clear guidance.
+              Animal caregivers search for reliable information.
+              Veterinary support may not always be immediately accessible.
+
+              Despite the critical role animals play in livelihoods, food systems, and companionship, animal healthcare often remains reactive instead of preventive. PashuVaani was founded with a vision to help change that reality — by building a platform that combines technology, data insights, and veterinary knowledge to make animal healthcare more accessible and informed.
             </p>
+
             <p className="text-lg text-[#1F6559] font-semibold text-xl">
               Our goal was simple yet ambitious: no animal caretaker should ever feel alone when an animal's health is at risk.
             </p>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Founders Section */}
       <section className="py-20 bg-[#FAFAFA]">
         <div className="max-w-6xl mx-auto px-6">
-          <h2 className="heading-font text-4xl font-bold text-[#111111] text-center mb-16">
-            From the Desk of the Founders
+          <h2 className="heading-font text-3xl md:text-4xl font-bold text-[#111111] text-center mb-10 md:mb-16">
+            Where the Idea Began
           </h2>
-          
-          <div className="space-y-20">
+
+          <div className="space-y-24 md:space-y-40">
             {founders.map((founder, idx) => (
-              <div key={idx} className="grid lg:grid-cols-2 gap-12 items-start">
-                <div className={`${idx % 2 === 0 ? 'lg:order-1' : 'lg:order-2'}`}>
-                  <div 
-                    className="relative group cursor-zoom-in overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300"
-                    onClick={() => setZoomedImage(founder.image)}
-                  >
-                    <img
-                      src={founder.image}
-                      alt={founder.name}
-                      className="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 flex items-center justify-center">
-                      <span className="text-white opacity-0 group-hover:opacity-100 bg-black/50 px-4 py-2 rounded-full text-sm transition-opacity duration-300">
-                        Click to zoom
-                      </span>
+              <div key={idx} className="flex flex-col">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+
+                  <div className={`${idx % 2 === 0 ? "lg:order-1" : "lg:order-2"}`}>
+                    <div
+                      className="relative group cursor-zoom-in overflow-hidden rounded-[2.5rem] shadow-xl hover:shadow-2xl transition-all duration-300 aspect-[4/5] w-full mx-auto"
+                      onClick={() => setZoomedImage(founder.image)}
+                    >
+                      <img
+                        src={founder.image}
+                        alt={founder.name}
+                        className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
+                      />
                     </div>
                   </div>
-                </div>
-                
-                <div className={`space-y-6 ${idx % 2 === 0 ? 'lg:order-2' : 'lg:order-1'}`}>
-                  <div className="space-y-2">
-                    <h3 className="heading-font text-3xl font-bold text-[#111111]">
-                      {founder.name}
-                    </h3>
-                    <p className="text-lg font-semibold text-[#1F6559]">{founder.role}</p>
-                  </div>
-                  <div className="space-y-4">
-                    {founder.story.map((paragraph, pIdx) => (
-                      <p key={pIdx} className="text-lg text-[#6F6F6F] leading-relaxed">
-                        {paragraph}
+
+                  <div className={`space-y-6 ${idx % 2 === 0 ? "lg:order-2" : "lg:order-1"}`}>
+                    <div className="space-y-2 text-center lg:text-left">
+                      <h3 className="heading-font text-2xl md:text-3xl font-bold text-[#111111]">
+                        {founder.name}
+                      </h3>
+                      <p className="text-base md:text-lg font-semibold text-[#1F6559]">
+                        {founder.role}
                       </p>
-                    ))}
+                    </div>
+
+                    <div className="space-y-4">
+                      {founder.story.map((paragraph, pIdx) => (
+                        <p key={pIdx} className="text-lg text-[#6F6F6F] leading-relaxed">
+                          {paragraph}
+                        </p>
+                      ))}
+                    </div>
                   </div>
+
                 </div>
+
+                {idx === 0 && (
+                  <div className="mt-16 md:mt-32 mb-8 md:mb-16 py-10 md:py-16 bg-gradient-to-b from-[#1FA7A6]/10 via-[#38C2B4]/10 to-[#78D65C]/10 rounded-[2rem]">
+                    <div className="max-w-5xl mx-auto px-6 space-y-6 md:space-y-8">
+                      <h2 className="heading-font text-2xl md:text-4xl font-bold text-[#111111] text-center mb-6 md:mb-8">
+                        A Question That Sparked PashuVaani
+                      </h2>
+                      <div className="space-y-6 text-center">
+                        <p className="text-lg text-[#6F6F6F] leading-relaxed">
+                          As our founder reflected on that moment, he began thinking about how far technology has evolved.
+                          Artificial intelligence today can translate languages, recognize faces, detect emotions, and analyse complex behavioural patterns.
+                        </p>
+                        <p className="text-lg text-[#6F6F6F] leading-relaxed">
+                          During a visit to a village, our founder noticed a farmer sitting beside his cow, gently patting her and asking softly, <span className="font-semibold text-[#1F6559]">“What is wrong? Tell me what is wrong.”</span> But the cow could not answer.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Why We Started with Pets */}
-      <section className="py-20">
-        <div className="max-w-5xl mx-auto px-6 space-y-8">
-          <h2 className="heading-font text-4xl font-bold text-[#111111] text-center mb-12">
-            Why We Started with Pets
+
+      {/* The Journey Ahead */}
+      <section className="py-20 bg-gradient-to-b from-[#1FA7A6]/10 via-[#38C2B4]/10 to-[#78D65C]/10">
+        <div className="max-w-5xl mx-auto px-6 space-y-8 text-center">
+          <h2 className="heading-font text-4xl font-bold text-[#111111]">
+            The Journey Ahead
           </h2>
           <div className="space-y-6">
             <p className="text-lg text-[#6F6F6F] leading-relaxed">
-              We chose to begin with pets because <span className="font-semibold text-[#111111]">they are family</span>.
+              Today, PashuVaani is being developed to help farmers, pet owners, and animal caretakers better understand animal health signals through intelligent assistance.
             </p>
             <p className="text-lg text-[#6F6F6F] leading-relaxed">
-              When a pet is unwell, emotions run high. Decisions must be made quickly. Reliable guidance matters.
+              By combining artificial intelligence with veterinary knowledge, the platform aims to make animal healthcare more proactive, accessible, and informed.
             </p>
             <p className="text-lg text-[#6F6F6F] leading-relaxed">
-              By starting with pets, we are building a foundation of trust, empathy, and intelligent care — 
-              before expanding into a universal animal health ecosystem.
+              What began as a quiet moment between a farmer and his cow has now grown into a mission to transform how humans care for animals.
+            </p>
+            <p className="text-xl text-[#1F6559] font-semibold leading-relaxed">
+              Because when animals cannot speak our language, technology can help us listen.
             </p>
           </div>
         </div>
       </section>
 
-      {/* The Birth of Gopu */}
-      <section className="py-20 bg-[#FAFAFA]">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <img
-                src="https://customer-assets.emergentagent.com/job_73651be8-bbea-4eee-a6be-0162100b6ac1/artifacts/mumll039_Gopu%20Ai%20Image.png"
-                alt="Gopu"
-                className="w-full max-w-md mx-auto"
-              />
-            </div>
-            <div className="space-y-6">
-              <h2 className="heading-font text-4xl font-bold text-[#111111]">
-                The Birth of Gopu
-              </h2>
-              <div className="space-y-4">
-                <p className="text-lg text-[#6F6F6F] leading-relaxed">
-                  As we built the platform, we realized something important.
-                </p>
-                <p className="text-lg text-[#1F6559] font-semibold">
-                  People do not connect with algorithms. They connect with warmth.
-                </p>
-                <p className="text-lg text-[#6F6F6F] leading-relaxed">
-                  That is how Gopu was born — not just as a mascot, but as a symbol of protection, intelligence, and reassurance.
-                </p>
-                <p className="text-lg text-[#6F6F6F] leading-relaxed">
-                  Gopu represents what we stand for: <span className="font-semibold text-[#111111]">Compassion powered by technology</span>. 
-                  A voice that does not panic, does not judge — but listens, understands, and guides.
-                </p>
-                <p className="text-lg text-[#6F6F6F] leading-relaxed">
-                  In every interaction, Gopu exists to replace fear with clarity and confusion with confidence. 
-                  It was created to stand beside farmers when help feels out of reach.
-                </p>
-                <p className="text-lg text-[#6F6F6F] leading-relaxed">
-                  Whether it's a late-night concern or a critical health question, Gopu is designed to respond with 
-                  empathy, accuracy, and speed.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* The Road Ahead */}
-      <section className="py-20">
-        <div className="max-w-5xl mx-auto px-6 space-y-8">
-          <h2 className="heading-font text-4xl font-bold text-[#111111] text-center mb-12">
-            The Road Ahead
-          </h2>
-          <div className="space-y-6">
-            <p className="text-lg text-[#6F6F6F] leading-relaxed">
-              PashuVaani is more than an app. It is a long-term commitment to:
-            </p>
-            <div className="grid md:grid-cols-2 gap-6">
-              {[
-                "Preventive animal healthcare",
-                "Intelligent decision support",
-                "Reduced disease losses",
-                "Stronger, more confident caregivers"
-              ].map((item, idx) => (
-                <div key={idx} className="flex items-start space-x-3 p-4 bg-[#FAFAFA] rounded-xl border border-[#EAEAEA]">
-                  <div className="w-2 h-2 bg-[#1F6559] rounded-full mt-2 flex-shrink-0"></div>
-                  <p className="text-lg text-[#6F6F6F]">{item}</p>
-                </div>
-              ))}
-            </div>
-            <p className="text-xl text-[#1F6559] font-semibold text-center pt-6">
-              We are building a future where no pet parent or animal caretaker feels alone during a health concern.
-            </p>
-            <p className="text-xl text-[#111111] font-bold text-center">
-              And this is just the beginning.
-            </p>
-          </div>
-        </div>
-      </section>
 
       {/* Image Zoom Modal */}
       <Dialog open={!!zoomedImage} onOpenChange={() => setZoomedImage(null)}>
-        <DialogContent className="max-w-4xl p-0 bg-transparent border-0">
+        <DialogContent className="max-w-[95vw] md:max-w-4xl p-0 bg-transparent border-0 outline-none shadow-none">
           <div className="relative">
             <button
               onClick={() => setZoomedImage(null)}
-              className="absolute -top-10 right-0 bg-white/90 hover:bg-white text-gray-900 rounded-full p-2 z-50"
+              className="absolute -top-12 md:-top-10 right-0 bg-white/90 hover:bg-white text-gray-900 rounded-full p-2 z-50"
             >
               <X className="w-6 h-6" />
             </button>
+
             <img
               src={zoomedImage}
               alt="Zoomed view"
@@ -231,6 +191,7 @@ const OurStory = () => {
           </div>
         </DialogContent>
       </Dialog>
+
     </div>
   );
 };

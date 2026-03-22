@@ -1,6 +1,10 @@
 import axios from 'axios';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+// Use relative path by default in production, absolute URL for dev
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL !== undefined 
+  ? process.env.REACT_APP_BACKEND_URL 
+  : (process.env.NODE_ENV === 'production' ? "" : "http://localhost:8000");
+
 export const API_BASE = `${BACKEND_URL}/api`;
 
 const api = axios.create({
@@ -12,7 +16,6 @@ const api = axios.create({
 
 // Add auth token to requests
 api.interceptors.request.use((config) => {
-  // Check for admin token first, then regular token
   const adminToken = localStorage.getItem('admin_token');
   const token = localStorage.getItem('token');
   
