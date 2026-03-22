@@ -3,6 +3,8 @@ import { Toaster } from "sonner";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import ScrollToTop from "./components/ScrollToTop";
+
 
 // ADMIN LAYOUT
 import AdminLayout from "./components/admin/AdminLayout";
@@ -227,6 +229,7 @@ function App() {
     <div className="App min-h-screen flex flex-col">
 
       <BrowserRouter>
+        <ScrollToTop />
 
         <Layout />
 
