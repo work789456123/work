@@ -2,9 +2,20 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Check, Star, Zap, Crown, Shield, MessageCircle, Image } from "lucide-react";
+import { toast } from "sonner";
 
 const PashuCareSurakshaPlan = () => {
   const navigate = useNavigate();
+
+  const handleNavigateToGopu = () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      toast.error("To continue with this feature please log in");
+      window.dispatchEvent(new CustomEvent('openAuthModal'));
+    } else {
+      navigate('/gopu');
+    }
+  };
 
   const plans = [
     {
@@ -83,7 +94,7 @@ const PashuCareSurakshaPlan = () => {
           variant="ghost"
           size="icon"
           className="absolute right-6 top-0 text-gray-500 hover:bg-gray-200 rounded-full"
-          onClick={() => navigate('/gopu')}
+          onClick={handleNavigateToGopu}
           data-testid="close-suraksha-plan"
         >
           <span className="sr-only">Close</span>
@@ -152,7 +163,7 @@ const PashuCareSurakshaPlan = () => {
               </ul>
 
               <Button
-                onClick={() => plan.id !== 'free' && navigate('/gopu')}
+                onClick={() => plan.id !== 'free' && handleNavigateToGopu()}
                 disabled={plan.id === 'free'}
                 className={`w-full rounded-full py-6 text-lg font-semibold ${plan.buttonStyle}`}
                 data-testid={`plan-button-${plan.id}`}
@@ -201,7 +212,7 @@ const PashuCareSurakshaPlan = () => {
             This is what you'll see when your daily free limit is used. Just ₹10 gives you 24 hours of unlimited guidance!
           </p>
           <Button
-            onClick={() => navigate('/gopu')}
+            onClick={handleNavigateToGopu}
             className="rounded-full bg-white text-[#1F6559] hover:bg-white/90 px-8 py-6 text-lg font-semibold"
           >
             Try Gopu.AI Now

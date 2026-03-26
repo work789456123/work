@@ -1,8 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 function AppointmentsPage() {
+  const navigate = useNavigate();
 
   const [showPopup, setShowPopup] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      toast.error("To continue with this feature please log in");
+      navigate("/");
+      setTimeout(() => {
+        window.dispatchEvent(new CustomEvent('openAuthModal'));
+      }, 100);
+    }
+  }, [navigate]);
 
   const [formData, setFormData] = useState({
     pet_name: "",
