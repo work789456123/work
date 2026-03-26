@@ -27,6 +27,7 @@ const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showAddPet, setShowAddPet] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [rakshaOpen, setRakshaOpen] = useState(false);
   const [formData, setFormData] = useState({
     full_name: "",
     phone_or_email: "",
@@ -43,6 +44,13 @@ const Navbar = () => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     setIsLoggedIn(!!token);
+
+    const handleOpenAuth = () => setShowAuth(true);
+    window.addEventListener('openAuthModal', handleOpenAuth);
+
+    return () => {
+      window.removeEventListener('openAuthModal', handleOpenAuth);
+    };
   }, []);
 
   const handleAuth = async (e) => {
@@ -180,7 +188,7 @@ const Navbar = () => {
             <div className="flex items-center space-x-3 ml-4 lg:ml-8">
               <Button
                 onClick={handleGopuClick}
-                className="hidden lg:flex rounded-full bg-white text-[#1F6559] hover:bg-white/90 font-semibold"
+                className="hidden lg:flex rounded-full bg-white text-[#1F6559] hover:bg-white/90 font-semibold mr-3"
                 data-testid="try-gopu-button"
               >
                 Try Gopu.AI Free
@@ -194,6 +202,16 @@ const Navbar = () => {
                   data-testid="logout-button"
                 >
                   Logout
+                </Button>
+              )}
+
+              {!isLoggedIn && (
+                <Button
+                  onClick={() => setShowAuth(true)}
+                  variant="outline"
+                  className="hidden lg:flex rounded-full border-white/30 text-white hover:bg-white/10 hover:text-white"
+                >
+                  Login / Sign up
                 </Button>
               )}
 
@@ -216,22 +234,31 @@ const Navbar = () => {
               <Link to="/" onClick={() => setMobileMenuOpen(false)} className="block px-4 py-3 text-sm font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10">
                 Home
               </Link>
-              <Link
-                to="/pashucare-suraksha-plan"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10"
-              >
-                Gopu.AI (Pashu Raksha)
-              </Link>
-              <button
-                onClick={() => {
-                  toast.info('Care Collection is Coming Soon!', { closeButton: true });
-                  setMobileMenuOpen(false);
-                }}
-                className="w-full text-left px-4 py-3 text-sm font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10 opacity-70"
-              >
-                Care Collection (Coming Soon)
-              </button>
+              <div className="space-y-1">
+                <button
+                  onClick={() => setRakshaOpen(!rakshaOpen)}
+                  className="w-full flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10"
+                >
+                  Pashu Raksha <ChevronDown className={`ml-1 h-4 w-4 transition-transform ${rakshaOpen ? 'rotate-180' : ''}`} />
+                </button>
+                {rakshaOpen && (
+                  <div className="space-y-1 border-l-2 border-white/20 ml-4 py-1">
+                    <Link
+                      to="/pashucare-suraksha-plan"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block w-full text-left px-4 py-2 text-sm font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10 ml-2"
+                    >
+                      Gopu.AI
+                    </Link>
+                    <button
+                      onClick={() => { toast.info('Care Collection is Coming Soon!', { closeButton: true }); setMobileMenuOpen(false); }}
+                      className="block w-full text-left px-4 py-2 text-sm font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10 opacity-70 ml-2"
+                    >
+                      Care Collection
+                    </button>
+                  </div>
+                )}
+              </div>
               <Link to="/appointments" onClick={() => setMobileMenuOpen(false)} className="block px-4 py-3 text-sm font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10">
                 Consult with Doctor
               </Link>
@@ -268,9 +295,22 @@ const Navbar = () => {
                     setMobileMenuOpen(false);
                   }}
                   variant="outline"
-                  className="w-full rounded-full border-white/30 text-white hover:bg-white/10"
+                  className="w-full rounded-full border-white/30 text-white hover:bg-white/10 mt-2"
                 >
                   Logout
+                </Button>
+              )}
+
+              {!isLoggedIn && (
+                <Button
+                  onClick={() => {
+                    setShowAuth(true);
+                    setMobileMenuOpen(false);
+                  }}
+                  variant="outline"
+                  className="w-full rounded-full border-white/30 text-white hover:bg-white/10 mt-2"
+                >
+                  Login / Sign up
                 </Button>
               )}
             </div>

@@ -36,6 +36,16 @@ const GopuChat = () => {
   }, [messages]);
 
   useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      toast.error("To continue with this feature please log in");
+      navigate("/");
+      setTimeout(() => {
+        window.dispatchEvent(new CustomEvent('openAuthModal'));
+      }, 100);
+      return;
+    }
+
     const fetchData = () => {
       fetchCreditBalance();
       fetchUserSessions();
@@ -50,7 +60,7 @@ const GopuChat = () => {
     return () => {
       window.removeEventListener('authSuccess', fetchData);
     };
-  }, []);
+  }, [navigate]);
 
   const fetchCreditBalance = async () => {
     try {
