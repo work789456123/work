@@ -10,30 +10,30 @@ import ScrollToTop from "./components/ScrollToTop";
 import AdminLayout from "./components/admin/AdminLayout";
 
 // PUBLIC PAGES
-import Home from "./pages/Home";
-import GopuChat from "./pages/GopuChat";
-import Doctors from "./pages/Doctors";
-import AppointmentsPage from "./pages/AppointmentsPage";
-import Product from "./pages/Product";
-import Blogs from "./pages/Blogs";
-import BlogDetail from "./pages/BlogDetail";
-import AboutUs from "./pages/AboutUs";
-import OurStory from "./pages/OurStory";
-import Contact from "./pages/Contact";
-import Careers from "./pages/Careers";
-import PashuCareSurakshaPlan from "./pages/PashuCareSurakshaPlan";
-import TermsAndConditions from "./pages/TermsAndConditions";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Home from "./pages/user/Home";
+import GopuChat from "./pages/user/GopuChat";
+import Doctors from "./pages/user/Doctors";
+import AppointmentsPage from "./pages/user/AppointmentsPage";
+import Product from "./pages/user/Product";
+import Blogs from "./pages/user/Blogs";
+import BlogDetail from "./pages/user/BlogDetail";
+import AboutUs from "./pages/user/AboutUs";
+import OurStory from "./pages/user/OurStory";
+import Contact from "./pages/user/Contact";
+import Careers from "./pages/user/Careers";
+import PashuCareSurakshaPlan from "./pages/user/PashuCareSurakshaPlan";
+import TermsAndConditions from "./pages/user/TermsAndConditions";
+import PrivacyPolicy from "./pages/user/PrivacyPolicy";
 import TermsModal from "./components/TermsModal";
 import PromoModal from "./components/PromoModal";
 
 // ADMIN PAGES
-import AdminLogin from "./pages/AdminLogin";
-import AdminDashboard from "./pages/AdminDashboard";
-import AdminUsers from "./pages/AdminUsers";
-import AdminDoctors from "./pages/AdminDoctors";
-import AdminAppointments from "./pages/AdminAppointments";
-import AdminBlogs from "./pages/AdminBlogs";
+import AdminLogin from "./pages/admin/AdminLogin";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminUsers from "./pages/admin/AdminUsers";
+import AdminDoctors from "./pages/admin/AdminDoctors";
+import AdminAppointments from "./pages/admin/AdminAppointments";
+import AdminBlogs from "./pages/admin/AdminBlogs";
 
 // NEW ADMIN DASHBOARD
 import NewAdminLayout from "./components/new-admin/NewAdminLayout";
