@@ -8,18 +8,21 @@ export const careersPage = {
   valueCards: [
     {
       key: "meaningful",
+      icon: "heart",
       title: "Meaningful Work",
       description:
         "Make a real difference in the lives of animals and their families across India.",
     },
     {
       key: "team",
+      icon: "users",
       title: "Amazing Team",
       description:
         "Work with passionate veterinarians, technologists, and animal lovers.",
     },
     {
       key: "growth",
+      icon: "briefcase",
       title: "Growth Opportunities",
       description:
         "Learn, grow, and advance your career in a fast-growing startup.",

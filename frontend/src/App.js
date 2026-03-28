@@ -1,8 +1,8 @@
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { Toaster } from "sonner";
 
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
+import Navbar from "./components/user/Navbar/Navbar";
+import Footer from "./components/user/Footer";
 import ScrollToTop from "./components/ScrollToTop";
 
 
@@ -10,20 +10,20 @@ import ScrollToTop from "./components/ScrollToTop";
 import AdminLayout from "./components/admin/AdminLayout";
 
 // PUBLIC PAGES
-import Home from "./pages/user/Home";
-import GopuChat from "./pages/user/GopuChat";
+import Home from "./pages/user/Home/Home";
+import GopuChat from "./pages/user/Gopu/GopuChat";
 import Doctors from "./pages/user/Doctors";
-import AppointmentsPage from "./pages/user/AppointmentsPage";
+import AppointmentsPage from "./pages/user/Appointments/AppointmentsPage";
 import Product from "./pages/user/Product";
 import Blogs from "./pages/user/Blogs";
 import BlogDetail from "./pages/user/BlogDetail";
-import AboutUs from "./pages/user/AboutUs";
+import AboutUs from "./pages/user/AboutUs/AboutUs";
 import OurStory from "./pages/user/OurStory";
 import Contact from "./pages/user/Contact";
 import Careers from "./pages/user/Careers";
 import PashuCareSurakshaPlan from "./pages/user/PashuCareSurakshaPlan";
-import TermsAndConditions from "./pages/user/TermsAndConditions";
-import PrivacyPolicy from "./pages/user/PrivacyPolicy";
+import TermsAndConditions from "./pages/user/TermsAndConditions/TermsAndConditions";
+import PrivacyPolicy from "./pages/user/PrivacyPolicy/PrivacyPolicy";
 import TermsModal from "./components/TermsModal";
 import PromoModal from "./components/PromoModal";
 
@@ -155,46 +155,46 @@ function Layout() {
           {/* ================= NEW ADMIN PORTAL ================= */}
           <Route path="/admin-portal" element={<AdminProtectedRoute><NewAdminLayout /></AdminProtectedRoute>}>
             <Route index element={<DashboardOverview />} />
-            
+
             {/* Farmers */}
             <Route path="farmers/all" element={<PlaceholderPage title="All Farmers" />} />
             <Route path="farmers/registry" element={<PlaceholderPage title="Animal Registry" />} />
-            
+
             {/* Animal Health */}
             <Route path="health/reports" element={<PlaceholderPage title="Disease Reports" />} />
             <Route path="health/heatmap" element={<PlaceholderPage title="Disease Heatmap" />} />
             <Route path="health/alerts" element={<PlaceholderPage title="Outbreak Alerts" />} />
-            
+
             {/* AI Monitoring */}
             <Route path="ai/chat-logs" element={<PlaceholderPage title="Chat Logs" />} />
             <Route path="ai/flagged" element={<PlaceholderPage title="Flagged Responses" />} />
             <Route path="ai/accuracy" element={<PlaceholderPage title="AI Accuracy" />} />
-            
+
             {/* Vet Network */}
             <Route path="vets/profiles" element={<PlaceholderPage title="Vet Profiles" />} />
             <Route path="vets/performance" element={<PlaceholderPage title="Vet Performance" />} />
-            
+
             {/* Consultations */}
             <Route path="consultations/logs" element={<PlaceholderPage title="Consultation Logs" />} />
             <Route path="consultations/recordings" element={<PlaceholderPage title="Call Recordings" />} />
-            
+
             {/* Knowledge Base */}
             <Route path="knowledge/diseases" element={<PlaceholderPage title="Diseases" />} />
             <Route path="knowledge/symptoms" element={<PlaceholderPage title="Symptoms" />} />
             <Route path="knowledge/treatments" element={<PlaceholderPage title="Treatments" />} />
-            
+
             {/* Notifications */}
             <Route path="notifications/alerts" element={<PlaceholderPage title="Alerts" />} />
             <Route path="notifications/campaigns" element={<PlaceholderPage title="Campaigns" />} />
-            
+
             {/* Payments */}
             <Route path="payments/revenue" element={<PlaceholderPage title="Revenue" />} />
             <Route path="payments/transactions" element={<PlaceholderPage title="Transactions" />} />
-            
+
             {/* Reports */}
             <Route path="reports/analytics" element={<PlaceholderPage title="Analytics" />} />
             <Route path="reports/export" element={<PlaceholderPage title="Data Export" />} />
-            
+
             {/* Settings */}
             <Route path="settings/roles" element={<PlaceholderPage title="Roles" />} />
             <Route path="settings/platform" element={<PlaceholderPage title="Platform Settings" />} />

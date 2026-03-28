@@ -96,8 +96,10 @@ export const aboutStory = {
 
 export const aboutMission = {
   title: "Our Mission",
-  lead:
-    "Our mission is to help humans understand animals better through intelligent technology while supporting responsible veterinary care.",
+  leadPrefix: "Our mission is to ",
+  leadHighlight:
+    "help humans understand animals better through intelligent technology",
+  leadSuffix: " while supporting responsible veterinary care.",
   body:
     "By developing AI-powered tools that assist in interpreting animal health signals and behavioural patterns, PashuVaani aims to help caretakers recognize potential concerns earlier and make more informed decisions for the animals they care for.",
   pillars: [

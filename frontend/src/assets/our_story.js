@@ -34,3 +34,25 @@ export const founders = [
     ],
   },
 ];
+
+export const ourStoryQuestion = {
+  title: "A Question That Sparked PashuVaani",
+  lead:
+    "As our founder reflected on that moment, he began thinking about how far technology has evolved. Artificial intelligence today can translate languages, recognize faces, detect emotions, and analyse complex behavioural patterns.",
+  villageStory: {
+    before:
+      "During a visit to a village, our founder noticed a farmer sitting beside his cow, gently patting her and asking softly, ",
+    emphasis: "“What is wrong? Tell me what is wrong.”",
+    after: " But the cow could not answer.",
+  },
+};
+
+export const ourStoryJourney = {
+  title: "The Journey Ahead",
+  paragraphs: [
+    "Today, PashuVaani is being developed to help farmers, pet owners, and animal caretakers better understand animal health signals through intelligent assistance.",
+    "By combining artificial intelligence with veterinary knowledge, the platform aims to make animal healthcare more proactive, accessible, and informed.",
+    "What began as a quiet moment between a farmer and his cow has now grown into a mission to transform how humans care for animals.",
+  ],
+  closing: "Because when animals cannot speak our language, technology can help us listen.",
+};
