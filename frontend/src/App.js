@@ -67,7 +67,7 @@ function Layout() {
       {/* Hide Navbar on Admin Pages */}
       {(!isAdminPage && !location.pathname.startsWith('/admin-portal')) && <Navbar />}
 
-      <main className="flex-1">
+      <main className="flex-1 [overflow-anchor:none]">
 
         <Routes>
 

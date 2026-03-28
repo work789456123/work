@@ -1,5 +1,7 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useReducer } from "react";
+import { motion } from "framer-motion";
+import { transitionShort, useScrollMotion } from "@/motion/scrollMotion";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { toast } from "sonner";
@@ -16,6 +18,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [state, dispatch] = useReducer(navbarReducer, initialNavbarState);
+  const { t } = useScrollMotion();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -79,7 +82,14 @@ const Navbar = () => {
   return (
     <>
       <nav id="user-navbar" className="sticky top-0 z-50 bg-[#1F6559] shadow-md">
-        <div id="user-navbar-inner" className="max-w-[1400px] mx-auto  px-4 sm:px-6 lg:px-2">
+        <motion.div
+          key={location.pathname}
+          id="user-navbar-inner"
+          className="max-w-[1400px] mx-auto  px-4 sm:px-6 lg:px-2"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={t(transitionShort)}
+        >
           <div id="user-navbar-bar" className="flex items-center justify-between h-20">
             <Button
               variant="ghost"
@@ -133,7 +143,7 @@ const Navbar = () => {
             onLogout={handleLogout}
             onOpenAuth={() => dispatch({ type: "SHOW_AUTH" })}
           />
-        </div>
+        </motion.div>
       </nav>
 
       <NavbarAuthDialog

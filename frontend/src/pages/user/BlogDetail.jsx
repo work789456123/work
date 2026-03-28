@@ -6,6 +6,7 @@ import {
   blogArticle,
   blogFaqs,
 } from "@/assets/content/blog_detail";
+import UserPageShell from "@/motion/UserPageShell";
 
 const BlogDetails = () => {
   const [language, setLanguage] = useState("en");
@@ -18,12 +19,13 @@ const BlogDetails = () => {
   };
 
   return (
-    <div id="page-blog-detail" className="py-20 bg-gradient-to-b from-[#1FA7A6] via-[#38C2B4] to-[#78D65C]/10">
+    <>
       <Helmet>
         <title>{blogHelmet.title}</title>
         <meta name="description" content={blogHelmet.description} />
       </Helmet>
 
+      <UserPageShell id="page-blog-detail" className="py-20 bg-gradient-to-b from-[#1FA7A6] via-[#38C2B4] to-[#78D65C]/10">
       <div id="blog-detail-hero" className="bg-gradient-to-r from-[#E6F4EF] to-[#E8F0FF] py-16">
         <div id="blog-detail-hero-inner" className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-10 items-center">
           <img
@@ -108,7 +110,8 @@ const BlogDetails = () => {
         <h2 className="text-2xl font-semibold mt-10 mb-4">{t(art.conclusion.heading)}</h2>
         <p>{t(art.conclusion.paragraph)}</p>
       </div>
-    </div>
+      </UserPageShell>
+    </>
   );
 };
 

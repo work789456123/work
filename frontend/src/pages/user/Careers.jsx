@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { Upload, Briefcase, Users, Heart } from "lucide-react";
 import api from "@/utils/api";
 import { careersPage } from "@/assets/content/careers";
+import UserPageShell from "@/motion/UserPageShell";
 
 const valueIcons = { heart: Heart, users: Users, briefcase: Briefcase };
 
@@ -82,7 +83,7 @@ const Careers = () => {
   };
 
   return (
-    <div id="page-careers" className="min-h-screen bg-[#FAFAFA] py-12" data-testid="careers-page">
+    <UserPageShell id="page-careers" className="min-h-screen bg-[#FAFAFA] py-12" data-testid="careers-page">
       <div id="careers-inner" className="max-w-6xl mx-auto px-6">
         <div id="careers-hero" className="text-center mb-16 space-y-4">
           <h1
@@ -202,7 +203,7 @@ const Careers = () => {
           </form>
         </Card>
       </div>
-    </div>
+    </UserPageShell>
   );
 };
 

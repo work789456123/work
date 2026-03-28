@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Check, Star, Zap, Crown, Shield, MessageCircle } from "lucide-react";
 import { toast } from "sonner";
 import { surakshaPage, surakshaPlans } from "@/assets/content/pashucare_suraksha_plan";
+import UserPageShell from "@/motion/UserPageShell";
 
 const planIcons = {
   message: MessageCircle,
@@ -26,7 +27,7 @@ const PashuCareSurakshaPlan = () => {
   };
 
   return (
-    <div
+    <UserPageShell
       id="page-pashucare-suraksha-plan"
       className="min-h-screen bg-[#FAFAFA] py-12"
       data-testid="suraksha-plan-page"
@@ -175,7 +176,7 @@ const PashuCareSurakshaPlan = () => {
           </Button>
         </div>
       </div>
-    </div>
+    </UserPageShell>
   );
 };
 

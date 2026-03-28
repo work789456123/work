@@ -2,13 +2,14 @@ import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { blogsHeader, blogList, readMoreLabel } from "@/assets/content/blogs";
+import UserPageShell from "@/motion/UserPageShell";
 
 const Blogs = () => {
   const navigate = useNavigate();
   const h = blogsHeader;
 
   return (
-    <div id="page-blogs" className="py-20 bg-gradient-to-b from-[#1FA7A6] via-[#38C2B4] to-[#78D65C]/10">
+    <UserPageShell id="page-blogs" className="py-20 bg-gradient-to-b from-[#1FA7A6] via-[#38C2B4] to-[#78D65C]/10">
       <div id="blogs-inner" className="heading-font text-2xl lg:text-2xl font-bold text-white">
         <div id="blogs-header" className="text-center mb-12">
           <h1 id="blogs-page-title" className="text-4xl font-bold">
@@ -33,7 +34,7 @@ const Blogs = () => {
           ))}
         </div>
       </div>
-    </div>
+    </UserPageShell>
   );
 };
 

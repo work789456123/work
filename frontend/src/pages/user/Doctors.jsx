@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import api from "@/utils/api";
 import { doctorsPage } from "@/assets/content/doctors";
+import UserPageShell from "@/motion/UserPageShell";
 
 const Doctors = () => {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ const Doctors = () => {
   }, []);
 
   return (
-    <div id="page-doctors" className="min-h-screen bg-[#FAFAFA] py-12" data-testid="doctors-page">
+    <UserPageShell id="page-doctors" className="min-h-screen bg-[#FAFAFA] py-12" data-testid="doctors-page">
       <div id="doctors-inner" className="max-w-7xl mx-auto px-6">
         <div id="doctors-intro" className="text-center mb-12 space-y-4">
           <h1
@@ -75,7 +76,7 @@ const Doctors = () => {
           ))}
         </div>
       </div>
-    </div>
+    </UserPageShell>
   );
 };
 

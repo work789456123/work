@@ -1,9 +1,10 @@
 import { productPage } from "@/assets/content/product";
+import UserPageShell from "@/motion/UserPageShell";
 
 const Product = () => {
   const p = productPage;
   return (
-    <div
+    <UserPageShell
       id="page-product"
       className="min-h-screen bg-[#FAFAFA] flex items-center justify-center py-12"
       data-testid="product-page"
@@ -21,7 +22,7 @@ const Product = () => {
         </h1>
         <p className="text-lg text-[#6F6F6F]">{p.description}</p>
       </div>
-    </div>
+    </UserPageShell>
   );
 };
 

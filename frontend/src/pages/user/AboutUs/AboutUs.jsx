@@ -8,9 +8,10 @@ import AboutWhySection from "./components/AboutWhySection";
 import AboutPhilosophySection from "./components/AboutPhilosophySection";
 import AboutWhoWeServeSection from "./components/AboutWhoWeServeSection";
 import AboutClosingCtaSection from "./components/AboutClosingCtaSection";
+import UserPageShell from "@/motion/UserPageShell";
 
 const AboutUs = () => (
-  <div id="page-about-us" className="min-h-screen bg-teal-50">
+  <UserPageShell id="page-about-us" className="min-h-screen bg-teal-50">
     <AboutHeroSection />
     <AboutIntroPillarsVetSection />
     <AboutMeetGopuSection />
@@ -21,7 +22,7 @@ const AboutUs = () => (
     <AboutPhilosophySection />
     <AboutWhoWeServeSection />
     <AboutClosingCtaSection />
-  </div>
+  </UserPageShell>
 );
 
 export default AboutUs;

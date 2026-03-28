@@ -8,13 +8,14 @@ import {
   ourStoryQuestion,
   ourStoryJourney,
 } from "@/assets/content/our_story";
+import UserPageShell from "@/motion/UserPageShell";
 
 const OurStory = () => {
   const [zoomedImage, setZoomedImage] = useState(null);
   const q = ourStoryQuestion;
 
   return (
-    <div id="page-our-story" className="min-h-screen bg-teal-50">
+    <UserPageShell id="page-our-story" className="min-h-screen bg-teal-50">
       <section id="our-story-hero" className="py-16 md:py-20 bg-gradient-to-b from-[#1FA7A6] via-[#38C2B4] to-[#78D65C]/10">
         <div className="max-w-2xl mx-auto px-4 text-center space-y-4">
           <h1 className="heading-font text-3xl md:text-4xl lg:text-5xl font-bold text-white">
@@ -118,7 +119,7 @@ const OurStory = () => {
           </div>
         </DialogContent>
       </Dialog>
-    </div>
+    </UserPageShell>
   );
 };
 

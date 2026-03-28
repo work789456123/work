@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { appointmentsPage } from "@/assets/content/appointments";
 import AppointmentsFormBody from "./components/AppointmentsFormBody";
 import { appointmentsReducer, initialAppointmentState } from "./appointmentsReducer";
+import UserPageShell from "@/motion/UserPageShell";
 
 function AppointmentsPage() {
   const navigate = useNavigate();
@@ -33,7 +34,7 @@ function AppointmentsPage() {
   const c = appointmentsPage;
 
   return (
-    <div
+    <UserPageShell
       id="page-appointments"
       className="container mx-auto p-6 py-20 bg-gradient-to-b from-[#1FA7A6] via-[#38C2B4] to-[#78D65C]/10 min-h-screen"
     >
@@ -65,7 +66,7 @@ function AppointmentsPage() {
           </div>
         </div>
       )}
-    </div>
+    </UserPageShell>
   );
 }
 

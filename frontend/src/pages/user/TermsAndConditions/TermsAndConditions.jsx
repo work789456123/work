@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import TermsLegalSections from "./components/TermsLegalSections";
 import { termsPage, termsConsent, termsConsentItems } from "@/assets/content/terms_and_conditions";
 import { termsConsentReducer, termsConsentInitialState } from "./termsConsentReducer";
+import UserPageShell from "@/motion/UserPageShell";
 
 const THRESHOLD = 10;
 
@@ -42,7 +43,7 @@ export default function TermsAndConditions() {
   };
 
   return (
-    <div id="page-terms-and-conditions" className="bg-gray-100 min-h-screen py-10 px-4 sm:px-6 lg:px-8">
+    <UserPageShell id="page-terms-and-conditions" className="bg-gray-100 min-h-screen py-10 px-4 sm:px-6 lg:px-8">
       <div id="terms-shell" className="max-w-[900px] mx-auto bg-teal-50 rounded-2xl shadow-sm p-6 sm:p-10">
         <h1 id="terms-page-title" className="text-[32px] font-bold text-gray-900 mb-8 text-center border-b pb-6">
           {termsPage.title}
@@ -123,6 +124,6 @@ export default function TermsAndConditions() {
           </div>
         </div>
       </div>
-    </div>
+    </UserPageShell>
   );
 }

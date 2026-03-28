@@ -1,5 +1,8 @@
+import { useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { motion, useInView } from "framer-motion";
 import { Phone, Mail, MapPin, Linkedin, Instagram } from "lucide-react";
+import { fadeUp, useScrollMotion, transitionMedium, viewportRepeat } from "@/motion/scrollMotion";
 import { brand } from "@/assets/content/shared/brand";
 import {
   footerBrand,
@@ -16,13 +19,26 @@ const contactIcon = {
 
 const Footer = () => {
   const location = useLocation();
+  const ref = useRef(null);
+  const isInView = useInView(ref, viewportRepeat);
+  const { reduced, t } = useScrollMotion();
+  const footerMotion = fadeUp(t(transitionMedium));
+  const animate = reduced ? "visible" : isInView ? "visible" : "hidden";
 
   if (location.pathname.startsWith("/admin")) {
     return null;
   }
 
   return (
-    <footer id="user-footer" className="bg-[#1F6559] text-white py-6 pt-12" data-testid="footer">
+    <motion.footer
+      ref={ref}
+      id="user-footer"
+      className="bg-[#1F6559] text-white py-6 pt-12"
+      data-testid="footer"
+      variants={footerMotion}
+      initial="hidden"
+      animate={animate}
+    >
       <div id="user-footer-inner" className="max-w-7xl mx-auto px-6">
         <div id="user-footer-grid" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-left">
           <div id="user-footer-brand" className="space-y-4 col-span-1 sm:col-span-2 lg:col-span-1 flex flex-col items-start">
@@ -147,7 +163,7 @@ const Footer = () => {
           </div>
         </div>
       </div>
-    </footer>
+    </motion.footer>
   );
 };
 

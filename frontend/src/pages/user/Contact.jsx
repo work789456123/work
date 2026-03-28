@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import api from "@/utils/api";
 import { Mail, Phone, MapPin } from "lucide-react";
 import { contactPage, contactChannels, contactForm } from "@/assets/content/contact";
+import UserPageShell from "@/motion/UserPageShell";
 
 const iconFor = { phone: Phone, email: Mail, address: MapPin };
 
@@ -28,7 +29,7 @@ const Contact = () => {
   };
 
   return (
-    <div id="page-contact" className="min-h-screen bg-[#FAFAFA] py-12" data-testid="contact-page">
+    <UserPageShell id="page-contact" className="min-h-screen bg-[#FAFAFA] py-12" data-testid="contact-page">
       <div id="contact-inner" className="max-w-6xl mx-auto px-6">
         <div id="contact-intro" className="text-center mb-12">
           <h1
@@ -108,7 +109,7 @@ const Contact = () => {
           </Card>
         </div>
       </div>
-    </div>
+    </UserPageShell>
   );
 };
 
