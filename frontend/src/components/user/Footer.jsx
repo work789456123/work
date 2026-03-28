@@ -3,13 +3,16 @@ import { Phone, Mail, MapPin, Linkedin, Instagram } from "lucide-react";
 import { brand } from "@/assets/content/shared/brand";
 import {
   footerBrand,
-  footerQuickLinks,
-  footerCompanyLinks,
-  footerContact,
+  footerColumns,
   footerSocial,
   footerLegal,
-  footerSections,
 } from "@/assets/content/shared/footer";
+
+const contactIcon = {
+  phone: Phone,
+  email: Mail,
+  address: MapPin,
+};
 
 const Footer = () => {
   const location = useLocation();
@@ -57,71 +60,87 @@ const Footer = () => {
             </div>
           </div>
 
-          <div id="user-footer-quick-links" className="flex flex-col items-left">
-            <h4 id="user-footer-quick-links-title" className="font-semibold text-lg mb-4">{footerSections.quickTitle}</h4>
-            <ul id="user-footer-quick-links-list" className="space-y-3 text-white/80 flex flex-col items-left">
-              {footerQuickLinks.map((item) => (
-                <li key={item.to}>
-                  <Link to={item.to} id={`user-footer-quick-links-link-${item.label}`} className="hover:text-white transition-colors">
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {footerColumns.map((col) => (
+            <div
+              key={col.id}
+              id={`user-footer-${col.id}`}
+              className={`flex flex-col ${col.id === "quick-links" ? "items-left" : "items-start"}`}
+            >
+              <h4 id={`user-footer-${col.id}-title`} className="font-semibold text-lg mb-4">
+                {col.title}
+              </h4>
 
-          <div id="user-footer-company" className="flex flex-col items-start">
-            <h4 id="user-footer-company-title" className="font-semibold text-lg mb-4">{footerSections.companyTitle}</h4>
-            <ul id="user-footer-company-list" className="space-y-3 text-white/80">
-              {footerCompanyLinks.map((item) =>
-                item.type === "promo" ? (
-                  <li key={item.label}>
-                    <button
-                      type="button"
-                      id={`user-footer-company-button-${item.label}`}
-                      onClick={() =>
-                        window.dispatchEvent(new CustomEvent("openPromoModal"))
-                      }
-                      className="hover:text-white transition-colors cursor-pointer"
-                    >
-                      {item.label}
-                    </button>
-                  </li>
-                ) : (
-                  <li key={item.to}>
-                    <Link to={item.to} id={`user-footer-company-link-${item.label}`} className="hover:text-white transition-colors">
-                      {item.label}
-                    </Link>
-                  </li>
-                )
+              {col.type === "links" && (
+                <ul
+                  id={`user-footer-${col.id}-list`}
+                  className={`space-y-3 text-white/80 flex flex-col ${col.id === "quick-links" ? "items-left" : ""}`}
+                >
+                  {col.links.map((item) =>
+                    item.type === "promo" ? (
+                      <li key={item.label}>
+                        <button
+                          type="button"
+                          id={`user-footer-${col.id}-button-${item.label}`}
+                          onClick={() => window.dispatchEvent(new CustomEvent("openPromoModal"))}
+                          className="hover:text-white transition-colors cursor-pointer"
+                        >
+                          {item.label}
+                        </button>
+                      </li>
+                    ) : (
+                      <li key={item.to}>
+                        <Link
+                          to={item.to}
+                          id={`user-footer-${col.id}-link-${item.label}`}
+                          className="hover:text-white transition-colors"
+                        >
+                          {item.label}
+                        </Link>
+                      </li>
+                    )
+                  )}
+                </ul>
               )}
-            </ul>
-          </div>
 
-          <div id="user-footer-contact" className="flex flex-col items-start">
-            <h4 id="user-footer-contact-title" className="font-semibold text-lg mb-4">{footerSections.contactTitle}</h4>
-            <ul id="user-footer-contact-list" className="space-y-3 text-white/80">
-              <li id="user-footer-contact-phone" className="flex items-center justify-start gap-2">
-                <Phone id="user-footer-contact-phone-icon" className="w-4 h-4" />
-                <span>{footerContact.phone}</span>
-              </li>
-              <li id="user-footer-contact-email" className="flex items-center justify-start gap-2">
-                <Mail id="user-footer-contact-email-icon" className="w-4 h-4" />
-                <span>{footerContact.email}</span>
-              </li>
-              <li id="user-footer-contact-address" className="flex items-start justify-start gap-2">
-                <MapPin className="w-4 h-4 mt-1" />
-                <span>{footerContact.address}</span>
-              </li>
-            </ul>
-          </div>
+              {col.type === "contact" && (
+                <ul id={`user-footer-${col.id}-list`} className="space-y-3 text-white/80">
+                  {col.lines.map((line) => {
+                    const Icon = contactIcon[line.key];
+                    const isAddress = line.key === "address";
+                    return (
+                      <li
+                        key={line.key}
+                        id={`user-footer-${col.id}-${line.key}`}
+                        className={`flex ${isAddress ? "items-start" : "items-center"} justify-start gap-2`}
+                      >
+                        {Icon && (
+                          <Icon
+                            id={`user-footer-${col.id}-${line.key}-icon`}
+                            className={`w-4 h-4 ${isAddress ? "mt-1" : ""}`}
+                          />
+                        )}
+                        <span>{line.text}</span>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </div>
+          ))}
         </div>
 
         <div id="user-footer-bottom" className="border-t border-white/20 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-white/60">
-          <p id="user-footer-bottom-copyright" className="text-white/60">© {new Date().getFullYear()} {brand.name}. All rights reserved.</p>
+          <p id="user-footer-bottom-copyright" className="text-white/60">
+            © {new Date().getFullYear()} {brand.name}. All rights reserved.
+          </p>
           <div id="user-footer-legal-links" className="flex gap-4 mt-4 md:mt-0">
             {footerLegal.map((item) => (
-              <Link key={item.to} to={item.to} id={`user-footer-legal-link-${item.label}`} className="hover:text-white transition-colors">
+              <Link
+                key={item.to}
+                to={item.to}
+                id={`user-footer-legal-link-${item.label}`}
+                className="hover:text-white transition-colors"
+              >
                 {item.label}
               </Link>
             ))}
