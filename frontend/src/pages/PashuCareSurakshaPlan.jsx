@@ -106,7 +106,7 @@ const PashuCareSurakshaPlan = () => {
             <Shield className="w-5 h-5" />
             <span>PashuCare Suraksha Plan</span>
           </div>
-          <h1 className="heading-font text-4xl lg:text-5xl font-bold text-[#111111]">
+          <h1 className="heading-font text-4xl lg:text-5xl font-bold text-[#333]">
             Protect Your Pashu with
             <br />
             <span className="text-[#1F6559]">Unlimited AI Care</span>
@@ -136,12 +136,12 @@ const PashuCareSurakshaPlan = () => {
 
               <div className="text-center space-y-2">
                 <plan.icon className={`w-12 h-12 mx-auto ${plan.id === 'daily' ? 'text-yellow-600' : plan.id === 'monthly' ? 'text-[#1F6559]' : 'text-gray-500'}`} />
-                <h3 className="heading-font text-2xl font-bold text-[#111111]">{plan.name}</h3>
+                <h3 className="heading-font text-2xl font-bold text-[#333]">{plan.name}</h3>
                 <p className="text-sm text-[#6F6F6F]">{plan.nameHindi}</p>
               </div>
 
               <div className="text-center">
-                <span className="text-5xl font-bold text-[#111111]">{plan.price}</span>
+                <span className="text-5xl font-bold text-[#333]">{plan.price}</span>
                 <span className="text-[#6F6F6F] ml-2">{plan.period}</span>
               </div>
 
@@ -149,7 +149,7 @@ const PashuCareSurakshaPlan = () => {
 
               <ul className="space-y-3">
                 {plan.features.map((feature, idx) => (
-                  <li key={idx} className="flex items-center text-[#111111]">
+                  <li key={idx} className="flex items-center text-[#333]">
                     <Check className="w-5 h-5 text-[#1F6559] mr-3 flex-shrink-0" />
                     {feature}
                   </li>
@@ -175,29 +175,29 @@ const PashuCareSurakshaPlan = () => {
         </div>
 
         {/* How It Works */}
-        <div className="bg-white rounded-2xl border border-[#EAEAEA] p-8 mb-16">
-          <h2 className="heading-font text-2xl font-bold text-[#111111] text-center mb-8">
+        <div className="bg-teal-50 rounded-2xl border border-[#EAEAEA] p-8 mb-16">
+          <h2 className="heading-font text-2xl font-bold text-[#333] text-center mb-8">
             How Credit System Works
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
             <div className="text-center space-y-3">
               <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto text-green-600 font-bold text-xl">1</div>
-              <h4 className="font-semibold text-[#111111]">Start Free</h4>
+              <h4 className="font-semibold text-[#333]">Start Free</h4>
               <p className="text-sm text-[#6F6F6F]">Get 10 free messages every day to try Gopu.AI</p>
             </div>
             <div className="text-center space-y-3">
               <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mx-auto text-yellow-600 font-bold text-xl">2</div>
-              <h4 className="font-semibold text-[#111111]">Get Warnings</h4>
+              <h4 className="font-semibold text-[#333]">Get Warnings</h4>
               <p className="text-sm text-[#6F6F6F]">At 8 & 9 messages, you'll see remaining count</p>
             </div>
             <div className="text-center space-y-3">
               <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto text-red-600 font-bold text-xl">3</div>
-              <h4 className="font-semibold text-[#111111]">Limit Reached</h4>
+              <h4 className="font-semibold text-[#333]">Limit Reached</h4>
               <p className="text-sm text-[#6F6F6F]">After 10 messages, purchase credits to continue</p>
             </div>
             <div className="text-center space-y-3">
               <div className="w-12 h-12 bg-[#1F6559]/20 rounded-full flex items-center justify-center mx-auto text-[#1F6559] font-bold text-xl">4</div>
-              <h4 className="font-semibold text-[#111111]">Unlimited Care</h4>
+              <h4 className="font-semibold text-[#333]">Unlimited Care</h4>
               <p className="text-sm text-[#6F6F6F]">Buy a plan and get unlimited guidance</p>
             </div>
           </div>
@@ -213,7 +213,7 @@ const PashuCareSurakshaPlan = () => {
           </p>
           <Button
             onClick={handleNavigateToGopu}
-            className="rounded-full bg-white text-[#1F6559] hover:bg-white/90 px-8 py-6 text-lg font-semibold"
+            className="rounded-full bg-teal-50 text-[#1F6559] hover:bg-teal-50/90 px-8 py-6 text-lg font-semibold"
           >
             Try Gopu.AI Now
           </Button>

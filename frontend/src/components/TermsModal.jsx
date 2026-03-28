@@ -68,10 +68,10 @@ export default function TermsModal() {
 
   return (
     <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-0 sm:p-6">
-      <div className="bg-white rounded-t-2xl sm:rounded-2xl shadow-xl w-full max-w-[600px] max-h-[95vh] sm:max-h-[90vh] h-full sm:h-auto flex flex-col overflow-hidden animate-in slide-in-from-bottom-8 sm:slide-in-from-bottom-0 sm:fade-in sm:zoom-in-95 duration-200">
+      <div className="bg-teal-50 rounded-t-2xl sm:rounded-2xl shadow-xl w-full max-w-[600px] max-h-[95vh] sm:max-h-[90vh] h-full sm:h-auto flex flex-col overflow-hidden animate-in slide-in-from-bottom-8 sm:slide-in-from-bottom-0 sm:fade-in sm:zoom-in-95 duration-200">
         
         {/* Sticky Header */}
-        <div className="px-6 py-5 border-b border-gray-100 bg-white flex-shrink-0 z-10">
+        <div className="px-6 py-5 border-b border-gray-100 bg-teal-50 flex-shrink-0 z-10">
           <h2 className="text-2xl font-bold text-gray-900 text-center">Terms & Conditions</h2>
           <p className="text-center text-sm text-gray-500 mt-1">Please read carefully before continuing</p>
         </div>
@@ -160,7 +160,7 @@ export default function TermsModal() {
         </div>
 
         {/* Sticky Footer Area */}
-        <div className="bg-white px-6 py-5 border-t border-gray-100 flex-shrink-0 z-10 shadow-[0_-10px_15px_-3px_rgba(0,0,0,0.05)]">
+        <div className="bg-teal-50 px-6 py-5 border-t border-gray-100 flex-shrink-0 z-10 shadow-[0_-10px_15px_-3px_rgba(0,0,0,0.05)]">
           {!hasScrolledToBottom && (
              <div className="mb-4 text-sm text-[#D38B22] font-medium text-center animate-pulse">
                Please scroll to the bottom of the terms to continue.

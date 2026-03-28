@@ -2,7 +2,7 @@ import React from 'react';
 
 const Header = () => {
   return (
-    <header className="h-20 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center px-8 justify-between sticky top-0 z-10 shrink-0">
+    <header className="h-20 bg-teal-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center px-8 justify-between sticky top-0 z-10 shrink-0">
       
       {/* Global Search */}
       <div className="relative w-96 max-w-md hidden md:block">

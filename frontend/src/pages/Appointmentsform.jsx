@@ -68,7 +68,7 @@ const Appointments = () => {
     <div className="min-h-screen bg-[#FAFAFA] py-12" data-testid="appointment-page">
       <div className="max-w-3xl mx-auto px-6">
         <div className="text-center mb-12">
-          <h1 className="heading-font text-4xl font-bold text-[#111111] mb-4" data-testid="appointment-heading">Book Appointment</h1>
+          <h1 className="heading-font text-4xl font-bold text-[#333] mb-4" data-testid="appointment-heading">Book Appointment</h1>
           <p className="text-[#6F6F6F]">Schedule a consultation for your pet</p>
         </div>
 

@@ -154,7 +154,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="w-72 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 h-screen flex flex-col z-20 sticky top-0">
+    <div className="w-72 bg-teal-50 dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 h-screen flex flex-col z-20 sticky top-0">
       <div className="p-6 flex items-center gap-3 border-b border-slate-100 dark:border-slate-800/50">
         <div className="bg-brand-primary text-white p-2 rounded-xl shadow-lg shadow-brand-primary/30">
           <span className="material-symbols-outlined font-bold">pets</span>

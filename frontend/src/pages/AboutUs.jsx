@@ -6,7 +6,7 @@ const AboutUs = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-teal-50">
       {/* Hero Section */}
       <section className="py-16 md:py-24 bg-gradient-to-r from-[#1FA7A6] via-[#38C2B4] to-[#78D65C]" data-testid="AboutUs-section">        <div className="max-w-4xl mx-auto px-6 text-center space-y-4 md:space-y-6">
         <h1 className="heading-font text-3xl md:text-4xl lg:text-5xl font-bold text-white">
@@ -46,19 +46,19 @@ const AboutUs = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 py-8">
             <div className="p-6 rounded-2xl bg-[#1F6559]/5 border border-[#1F6559]/20 space-y-3">
               <Sparkles className="w-10 h-10 text-[#1F6559]" />
-              <h3 className="heading-font font-semibold text-[#111111]">Artificial Intelligence</h3>
+              <h3 className="heading-font font-semibold text-[#333]">Artificial Intelligence</h3>
             </div>
             <div className="p-6 rounded-2xl bg-[#1F6559]/5 border border-[#1F6559]/20 space-y-3">
               <Heart className="w-10 h-10 text-[#1F6559]" />
-              <h3 className="heading-font font-semibold text-[#111111]">Veterinary Expertise</h3>
+              <h3 className="heading-font font-semibold text-[#333]">Veterinary Expertise</h3>
             </div>
             <div className="p-6 rounded-2xl bg-[#1F6559]/5 border border-[#1F6559]/20 space-y-3">
               <Zap className="w-10 h-10 text-[#1F6559]" />
-              <h3 className="heading-font font-semibold text-[#111111]">Data Intelligence</h3>
+              <h3 className="heading-font font-semibold text-[#333]">Data Intelligence</h3>
             </div>
             <div className="p-6 rounded-2xl bg-[#1F6559]/5 border border-[#1F6559]/20 space-y-3">
               <Shield className="w-10 h-10 text-[#1F6559]" />
-              <h3 className="heading-font font-semibold text-[#111111]">Compassionate Design</h3>
+              <h3 className="heading-font font-semibold text-[#333]">Compassionate Design</h3>
             </div>
           </div>
 
@@ -90,7 +90,7 @@ const AboutUs = () => {
             </div>
             <div className="order-1 lg:order-2 space-y-6">
               <div className="space-y-3">
-                <h2 className="heading-font text-4xl font-bold text-[#000000]">
+                <h2 className="heading-font text-4xl font-bold text-[#333]">
                   Meet Gopu
                 </h2>
                 <p className="text-lg font-semibold text-[#FFFFFF]">The Heart of PashuVaani</p>
@@ -119,7 +119,7 @@ const AboutUs = () => {
       {/* Powered by Advanced AI */}
       <section className="py-20">
         <div className="max-w-5xl mx-auto px-6 space-y-8">
-          <h2 className="heading-font text-4xl font-bold text-[#111111] text-center">
+          <h2 className="heading-font text-4xl font-bold text-[#333] text-center">
             Powered by Advanced AI
           </h2>
           <p className="text-lg text-[#6F6F6F] leading-relaxed text-center">
@@ -163,7 +163,7 @@ const AboutUs = () => {
           <div className="max-w-3xl mb-16">
             <div className="w-16 h-1 bg-gradient-to-r from-[#1F6559] to-[#4DB6AC] mb-6 rounded-full"></div>
 
-            <h2 className="text-4xl md:text-5xl font-bold text-[#111111] leading-tight">
+            <h2 className="text-4xl md:text-5xl font-bold text-[#333] leading-tight">
               The Story Behind PashuVaani
             </h2>
 
@@ -236,10 +236,10 @@ const AboutUs = () => {
 
                 <div
                   key={index}
-                  className="p-6 bg-white border border-[#EAEAEA] rounded-2xl shadow-sm hover:shadow-lg transition duration-300"
+                  className="p-6 bg-teal-50 border border-[#EAEAEA] rounded-2xl shadow-sm hover:shadow-lg transition duration-300"
                 >
 
-                  <h3 className="text-lg font-semibold text-[#111111] mb-2">
+                  <h3 className="text-lg font-semibold text-[#333] mb-2">
                     {card.title}
                   </h3>
 
@@ -260,7 +260,7 @@ const AboutUs = () => {
       {/* Long-Term Vision */}
       <section className="py-20">
         <div className="max-w-5xl mx-auto px-6 space-y-8">
-          <h2 className="heading-font text-4xl font-bold text-[#111111] text-center">
+          <h2 className="heading-font text-4xl font-bold text-[#333] text-center">
             Our Mission
           </h2>
           <p className="text-lg text-[#6F6F6F] leading-relaxed">
@@ -278,7 +278,7 @@ const AboutUs = () => {
             ].map((item, idx) => (
               <div key={idx} className="p-6 rounded-2xl bg-[#1F6559]/5 border border-[#1F6559]/20 space-y-3 text-center">
                 <item.icon className="w-10 h-10 text-[#1F6559] mx-auto" />
-                <p className="heading-font font-semibold text-[#111111]">{item.text}</p>
+                <p className="heading-font font-semibold text-[#333]">{item.text}</p>
               </div>
             ))}
           </div>
@@ -289,9 +289,9 @@ const AboutUs = () => {
       </section>
 
       {/* Why PashuVaani */}
-      <section className="py-20 bg-gradient-to-b from-[#1FA7A6] via-[#38C2B4] to-[#78D65C]/10">
+      <section className="py-20 bg-gradient-to-b from-[#1FA7A6]/80 via-[#38C2B4]/80 to-[#78D65C]/10">
         <div className="max-w-5xl mx-auto px-6 space-y-8">
-          <h2 className="heading-font text-4xl font-bold text-[#111111] text-center">
+          <h2 className="heading-font text-4xl font-bold text-[#333] text-center">
             Why PashuVaani?
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -303,7 +303,7 @@ const AboutUs = () => {
               "AI-driven health intelligence",
               "Emotionally connected brand (Gopu)"
             ].map((item, idx) => (
-              <div key={idx} className="flex items-center space-x-3 p-4 bg-white rounded-xl border border-[#EAEAEA]">
+              <div key={idx} className="flex items-center space-x-3 p-4 bg-teal-50 rounded-xl border border-[#EAEAEA]">
                 <div className="w-6 h-6 text-[#1F6559] font-bold text-xl flex-shrink-0">✓</div>
                 <p className="text-lg text-[#6F6F6F]">{item}</p>
               </div>
@@ -315,7 +315,7 @@ const AboutUs = () => {
       {/* Our Philosophy */}
       <section className="py-20">
         <div className="max-w-4xl mx-auto px-6 text-center space-y-8">
-          <h2 className="heading-font text-4xl font-bold text-[#111111]">
+          <h2 className="heading-font text-4xl font-bold text-[#333]">
             Our Philosophy
           </h2>
           <p className="text-2xl text-[#6F6F6F] leading-relaxed">
@@ -336,7 +336,7 @@ const AboutUs = () => {
       {/* Who We Serve */}
       <section className="py-20 bg-gradient-to-b from-[#1FA7A6] via-[#38C2B4] to-[#78D65C]/10">
         <div className="max-w-5xl mx-auto px-6 space-y-8">
-          <h2 className="heading-font text-4xl font-bold text-[#111111] text-center">
+          <h2 className="heading-font text-4xl font-bold text-[#333] text-center">
             Who We Serve
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -346,9 +346,9 @@ const AboutUs = () => {
               { icon: Users, text: "Animal health partners" },
               { icon: Globe, text: "Future livestock & dairy ecosystems" },
             ].map((item, idx) => (
-              <div key={idx} className="p-6 rounded-2xl bg-white border border-[#EAEAEA] space-y-3 text-center">
+              <div key={idx} className="p-6 rounded-2xl bg-teal-50 border border-[#EAEAEA] space-y-3 text-center">
                 <item.icon className="w-10 h-10 text-[#1F6559] mx-auto" />
-                <p className="heading-font font-semibold text-[#111111]">{item.text}</p>
+                <p className="heading-font font-semibold text-[#333]">{item.text}</p>
               </div>
             ))}
           </div>
@@ -368,7 +368,7 @@ const AboutUs = () => {
           </div>
           <Button
             onClick={() => navigate('/gopu')}
-            className="rounded-full bg-white text-[#1F6559] hover:bg-white/90 px-8 py-6 text-lg font-semibold"
+            className="rounded-full bg-teal-50 text-[#1F6559] hover:bg-teal-50/90 px-8 py-6 text-lg font-semibold"
           >
             Get Started with Gopu AI
           </Button>

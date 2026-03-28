@@ -15,7 +15,7 @@ export default function AdminDashboard() {
 
       {/* Top Navbar */}
 
-      <header className="h-16 border-b bg-white px-8 flex items-center justify-between">
+      <header className="h-16 border-b bg-teal-50 px-8 flex items-center justify-between">
 
         <input
           type="text"
@@ -63,11 +63,11 @@ export default function AdminDashboard() {
 
           <div className="flex gap-3">
 
-            <button className="bg-white border px-4 py-2 rounded-lg text-sm">
+            <button className="bg-teal-50 border px-4 py-2 rounded-lg text-sm">
               Last 30 Days
             </button>
 
-            <button className="bg-white border px-4 py-2 rounded-lg text-sm">
+            <button className="bg-teal-50 border px-4 py-2 rounded-lg text-sm">
               Export
             </button>
 
@@ -80,22 +80,22 @@ export default function AdminDashboard() {
 
         <div className="grid grid-cols-4 gap-6 mb-8">
 
-          <div className="bg-white p-6 rounded-xl shadow-sm">
+          <div className="bg-teal-50 p-6 rounded-xl shadow-sm">
             <p className="text-gray-500 text-sm">Total Animals</p>
             <h2 className="text-2xl font-bold">12,840</h2>
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow-sm">
+          <div className="bg-teal-50 p-6 rounded-xl shadow-sm">
             <p className="text-gray-500 text-sm">Active Alerts</p>
             <h2 className="text-2xl font-bold">24</h2>
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow-sm">
+          <div className="bg-teal-50 p-6 rounded-xl shadow-sm">
             <p className="text-gray-500 text-sm">Recent Consultations</p>
             <h2 className="text-2xl font-bold">156</h2>
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow-sm">
+          <div className="bg-teal-50 p-6 rounded-xl shadow-sm">
             <p className="text-gray-500 text-sm">Verified Farmers</p>
             <h2 className="text-2xl font-bold">3420</h2>
           </div>
@@ -109,7 +109,7 @@ export default function AdminDashboard() {
 
           {/* Chart */}
 
-          <div className="col-span-2 bg-white p-8 rounded-xl shadow-sm">
+          <div className="col-span-2 bg-teal-50 p-8 rounded-xl shadow-sm">
 
             <h3 className="font-bold mb-6">
               Health Trends & AI Insights
@@ -135,7 +135,7 @@ export default function AdminDashboard() {
 
           {/* Alerts Panel */}
 
-          <div className="bg-white p-8 rounded-xl shadow-sm">
+          <div className="bg-teal-50 p-8 rounded-xl shadow-sm">
 
             <h3 className="font-bold mb-6">
               Critical AI Alerts
@@ -202,7 +202,7 @@ export default function AdminDashboard() {
 
         {/* Table */}
 
-        <div className="bg-white rounded-xl shadow-sm">
+        <div className="bg-teal-50 rounded-xl shadow-sm">
 
           <div className="p-6 border-b flex justify-between">
 

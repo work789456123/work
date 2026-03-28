@@ -25,7 +25,7 @@ const Doctors = () => {
     <div className="min-h-screen bg-[#FAFAFA] py-12" data-testid="doctors-page">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-12 space-y-4">
-          <h1 className="heading-font text-4xl lg:text-5xl font-bold text-[#111111]" data-testid="doctors-heading"></h1>
+          <h1 className="heading-font text-4xl lg:text-5xl font-bold text-[#333]" data-testid="doctors-heading"></h1>
           <p className="text-lg text-[#6F6F6F]">Verified veterinary professionals ready to help your animals</p>
         </div>
 
@@ -40,7 +40,7 @@ const Doctors = () => {
                 />
               </div>
               <div>
-                <h3 className="heading-font text-xl font-semibold text-[#111111]" data-testid="doctor-name">{doctor.name}</h3>
+                <h3 className="heading-font text-xl font-semibold text-[#333]" data-testid="doctor-name">{doctor.name}</h3>
                 <p className="text-sm text-[#6F6F6F]">{doctor.specialization}</p>
               </div>
               <div className="space-y-2 text-sm">

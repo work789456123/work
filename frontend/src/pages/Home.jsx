@@ -26,12 +26,12 @@ const Home = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section with Fixed Tagline Structure */}
-      <section className="relative bg-white py-12 md:py-24" data-testid="hero-section">
+      <section className="relative bg-teal-50 py-12 md:py-24" data-testid="hero-section">
         <div className="max-w-[110rem] mx-auto px-4 md:px-6">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 items-center">
             <div className="space-y-0 lg:col-span-5 text-center lg:text-left">
               {/* Main Heading */}
-              <h1 className="heading-font text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-[#111111] leading-tight mb-0" data-testid="main-heading">
+              <h1 className="heading-font text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-[#333] leading-tight mb-0" data-testid="main-heading">
                 PashuVaani
               </h1>
 
@@ -60,14 +60,14 @@ const Home = () => {
 
                   <img
                     src={slides[currentSlide].image}
-                    className="w-full h-auto max-h-[400px] sm:max-h-[500px] lg:max-h-[700px] object-contain transition-all duration-700 bg-white"
+                    className="w-full h-auto max-h-[400px] sm:max-h-[500px] lg:max-h-[700px] object-contain transition-all duration-700 bg-teal-50"
                   />
 
                   {/* Slider Controls */}
                   <div className="absolute inset-y-0 left-0 flex items-center pl-4 opacity-0 group-hover:opacity-100 transition-opacity z-10">
                     <button 
                       onClick={() => setCurrentSlide(prev => (prev === 0 ? slides.length - 1 : prev - 1))}
-                      className="p-2 rounded-full bg-white/90 hover:bg-white text-[#1F6559] shadow-lg transition-transform hover:scale-110"
+                      className="p-2 rounded-full bg-teal-50/90 hover:bg-teal-50 text-[#1F6559] shadow-lg transition-transform hover:scale-110"
                     >
                       <ChevronLeft className="w-6 h-6" />
                     </button>
@@ -75,7 +75,7 @@ const Home = () => {
                   <div className="absolute inset-y-0 right-0 flex items-center pr-4 opacity-0 group-hover:opacity-100 transition-opacity z-10">
                     <button 
                       onClick={() => setCurrentSlide(prev => (prev + 1) % slides.length)}
-                      className="p-2 rounded-full bg-white/90 hover:bg-white text-[#1F6559] shadow-lg transition-transform hover:scale-110"
+                      className="p-2 rounded-full bg-teal-50/90 hover:bg-teal-50 text-[#1F6559] shadow-lg transition-transform hover:scale-110"
                     >
                       <ChevronRight className="w-6 h-6" />
                     </button>
@@ -93,7 +93,7 @@ const Home = () => {
 
                       <Button
                         onClick={() => navigate("/about")}
-                        className="rounded-full bg-white text-[#1F6559] hover:bg-gray-50 px-4 py-2 sm:px-6 sm:py-3 shadow-lg text-sm sm:text-base w-full sm:w-auto"
+                        className="rounded-full bg-teal-50 text-[#1F6559] hover:bg-gray-50 px-4 py-2 sm:px-6 sm:py-3 shadow-lg text-sm sm:text-base w-full sm:w-auto"
                       >
                         Learn More
                       </Button>
@@ -143,25 +143,25 @@ const Home = () => {
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 pt-12">
             <div className="space-y-3">
-              <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mx-auto backdrop-blur-sm">
+              <div className="w-12 h-12 bg-teal-50/20 rounded-xl flex items-center justify-center mx-auto backdrop-blur-sm">
                 <Sparkles className="w-6 h-6 text-white" />
               </div>
               <h3 className="heading-font font-semibold text-white">Artificial Intelligence</h3>
             </div>
             <div className="space-y-3">
-              <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mx-auto backdrop-blur-sm">
+              <div className="w-12 h-12 bg-teal-50/20 rounded-xl flex items-center justify-center mx-auto backdrop-blur-sm">
                 <Heart className="w-6 h-6 text-white" />
               </div>
               <h3 className="heading-font font-semibold text-white">Veterinary Expertise</h3>
             </div>
             <div className="space-y-3">
-              <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mx-auto backdrop-blur-sm">
+              <div className="w-12 h-12 bg-teal-50/20 rounded-xl flex items-center justify-center mx-auto backdrop-blur-sm">
                 <Zap className="w-6 h-6 text-white" />
               </div>
               <h3 className="heading-font font-semibold text-white">Data Intelligence</h3>
             </div>
             <div className="space-y-3">
-              <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mx-auto backdrop-blur-sm">
+              <div className="w-12 h-12 bg-teal-50/20 rounded-xl flex items-center justify-center mx-auto backdrop-blur-sm">
                 <Shield className="w-6 h-6 text-white" />
               </div>
               <h3 className="heading-font font-semibold text-white">Compassionate Design</h3>
@@ -171,7 +171,7 @@ const Home = () => {
       </section>
 
       {/* Meet Gopu */}
-      <section className="py-24 bg-white" data-testid="meet-gopu-section">
+      <section className="py-24 bg-teal-50" data-testid="meet-gopu-section">
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="order-2 lg:order-1">
@@ -185,7 +185,7 @@ const Home = () => {
               />
             </div>
             <div className="order-1 lg:order-2 space-y-6">
-              <h2 className="heading-font text-4xl lg:text-5xl font-bold text-[#111111]">
+              <h2 className="heading-font text-4xl lg:text-5xl font-bold text-[#333]">
                 Meet Gopu
               </h2>
               <p className="text-sm font-medium text-[#1F6559]">The Heart of PashuVaani</p>
@@ -219,7 +219,7 @@ const Home = () => {
               { title: "Urban and rural ecosystems", icon: Globe },
               { title: "Trusted and secure", icon: Shield },
             ].map((item, idx) => (
-              <div key={idx} className="p-8 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 space-y-4 hover:bg-white/20 transition-colors">
+              <div key={idx} className="p-8 bg-teal-50/10 backdrop-blur-md rounded-2xl border border-white/20 space-y-4 hover:bg-teal-50/20 transition-colors">
                 <item.icon className="w-8 h-8 text-white" />
                 <h3 className="heading-font text-lg font-semibold text-white">{item.title}</h3>
               </div>
@@ -229,12 +229,12 @@ const Home = () => {
       </section>
 
       {/* Our Philosophy */}
-      <section className="py-24 bg-white">
+      <section className="py-24 bg-teal-50">
         <div className="max-w-4xl mx-auto px-6 text-center space-y-8">
-          <h2 className="heading-font text-4xl lg:text-5xl font-bold text-[#111111]">
+          <h2 className="heading-font text-4xl lg:text-5xl font-bold text-[#333]">
             Our Philosophy
           </h2>
-          <p className="text-2xl text-[#6F6F6F] leading-relaxed">
+          <p className="text-2xl text-[rgba(111,111,111,0.75)] leading-relaxed">
             Technology should not replace care — it should enhance it.
           </p>
           <p className="text-lg text-[#6F6F6F] leading-relaxed">

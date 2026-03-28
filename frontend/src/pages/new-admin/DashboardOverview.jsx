@@ -14,11 +14,11 @@ const DashboardOverview = () => {
                     <p className="text-slate-500 mt-1">Real-time health monitoring and analytics powered by Gopu AI.</p>
                 </div>
                 <div className="flex items-center gap-2">
-                    <button className="px-4 py-2 bg-white dark:bg-slate-800 border border-brand-primary/10 rounded-lg text-sm font-medium flex items-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-sm text-slate-700 dark:text-slate-200">
+                    <button className="px-4 py-2 bg-teal-50 dark:bg-slate-800 border border-brand-primary/10 rounded-lg text-sm font-medium flex items-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-sm text-slate-700 dark:text-slate-200">
                         <span className="material-symbols-outlined text-sm">calendar_today</span>
                         Last 30 Days
                     </button>
-                    <button className="px-4 py-2 bg-white dark:bg-slate-800 border border-brand-primary/10 rounded-lg text-sm font-medium flex items-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-sm text-slate-700 dark:text-slate-200">
+                    <button className="px-4 py-2 bg-teal-50 dark:bg-slate-800 border border-brand-primary/10 rounded-lg text-sm font-medium flex items-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-sm text-slate-700 dark:text-slate-200">
                         <span className="material-symbols-outlined text-sm">file_download</span>
                         Export
                     </button>

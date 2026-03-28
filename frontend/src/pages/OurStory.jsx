@@ -35,7 +35,7 @@ const OurStory = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-teal-50">
 
       {/* Hero Section */}
       <section className="py-16 md:py-20 bg-gradient-to-b from-[#1FA7A6] via-[#38C2B4] to-[#78D65C]/10">
@@ -53,7 +53,7 @@ const OurStory = () => {
       {/* Why We Built PashuVaani */}
       {/*<section className="py-20 bg-gradient-to-b from-[#1FA7A6]/10 via-[#38C2B4]/10 to-[#78D65C]/10">
         <div className="max-w-5xl mx-auto px-6 space-y-8">
-          <h2 className="heading-font text-4xl font-bold text-[#111111] text-center mb-12">
+          <h2 className="heading-font text-4xl font-bold text-[#333] text-center mb-12">
             The Beginning of PashuVaani
           </h2>
           <div className="space-y-6">
@@ -80,7 +80,7 @@ const OurStory = () => {
       {/* Founders Section */}
       <section className="py-20 bg-[#FAFAFA]">
         <div className="max-w-6xl mx-auto px-6">
-          <h2 className="heading-font text-3xl md:text-4xl font-bold text-[#111111] text-center mb-10 md:mb-16">
+          <h2 className="heading-font text-3xl md:text-4xl font-bold text-[#333] text-center mb-10 md:mb-16">
             Where the Idea Began
           </h2>
 
@@ -104,7 +104,7 @@ const OurStory = () => {
 
                   <div className={`space-y-6 ${idx % 2 === 0 ? "lg:order-2" : "lg:order-1"}`}>
                     <div className="space-y-2 text-center lg:text-left">
-                      <h3 className="heading-font text-2xl md:text-3xl font-bold text-[#111111]">
+                      <h3 className="heading-font text-2xl md:text-3xl font-bold text-[#333]">
                         {founder.name}
                       </h3>
                       <p className="text-base md:text-lg font-semibold text-[#1F6559]">
@@ -126,7 +126,7 @@ const OurStory = () => {
                 {idx === 0 && (
                   <div className="mt-16 md:mt-32 mb-8 md:mb-16 py-10 md:py-16 bg-gradient-to-b from-[#1FA7A6]/10 via-[#38C2B4]/10 to-[#78D65C]/10 rounded-[2rem]">
                     <div className="max-w-5xl mx-auto px-6 space-y-6 md:space-y-8">
-                      <h2 className="heading-font text-2xl md:text-4xl font-bold text-[#111111] text-center mb-6 md:mb-8">
+                      <h2 className="heading-font text-2xl md:text-4xl font-bold text-[#333] text-center mb-6 md:mb-8">
                         A Question That Sparked PashuVaani
                       </h2>
                       <div className="space-y-6 text-center">
@@ -151,7 +151,7 @@ const OurStory = () => {
       {/* The Journey Ahead */}
       <section className="py-20 bg-gradient-to-b from-[#1FA7A6]/10 via-[#38C2B4]/10 to-[#78D65C]/10">
         <div className="max-w-5xl mx-auto px-6 space-y-8 text-center">
-          <h2 className="heading-font text-4xl font-bold text-[#111111]">
+          <h2 className="heading-font text-4xl font-bold text-[#333]">
             The Journey Ahead
           </h2>
           <div className="space-y-6">
@@ -178,7 +178,7 @@ const OurStory = () => {
           <div className="relative">
             <button
               onClick={() => setZoomedImage(null)}
-              className="absolute -top-12 md:-top-10 right-0 bg-white/90 hover:bg-white text-gray-900 rounded-full p-2 z-50"
+              className="absolute -top-12 md:-top-10 right-0 bg-teal-50/90 hover:bg-teal-50 text-gray-900 rounded-full p-2 z-50"
             >
               <X className="w-6 h-6" />
             </button>

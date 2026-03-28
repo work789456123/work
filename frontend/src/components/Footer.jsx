@@ -10,11 +10,11 @@ const Footer = () => {
   }
 
   return (
-    <footer className="bg-[#1F6559] text-white py-6" data-testid="footer">
+    <footer className="bg-[#1F6559] text-white py-6 pt-12" data-testid="footer">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-left">
           {/* Brand */}
-          <div className="space-y-4 col-span-1 sm:col-span-2 lg:col-span-1 flex flex-col items-center">
+          <div className="space-y-4 col-span-1 sm:col-span-2 lg:col-span-1 flex flex-col items-start">
             <Link to="/" className="flex items-center" data-testid="footer-logo-link">
               <img
                 src="/pvhalflogo.png"
@@ -39,9 +39,9 @@ const Footer = () => {
           </div>
 
           {/* Quick Links */}
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-left">
             <h4 className="font-semibold text-lg mb-4">Quick Links</h4>
-            <ul className="space-y-3 text-white/80 flex flex-col items-center">
+            <ul className="space-y-3 text-white/80 flex flex-col items-left">
               <li><Link to="/" className="hover:text-white transition-colors">Home</Link></li>
               <li><Link to="/pashucare-suraksha-plan" className="hover:text-white transition-colors">PashuCare Suraksha Plan</Link></li>
               <li><Link to="/blogs" className="hover:text-white transition-colors">Blog</Link></li>
@@ -49,7 +49,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-start">
             <h4 className="font-semibold text-lg mb-4">Company</h4>
             <ul className="space-y-3 text-white/80">
               <li><Link to="/about" className="hover:text-white transition-colors">About Us</Link></li>
@@ -68,18 +68,18 @@ const Footer = () => {
           </div>
 
           {/* Contact Info */}
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-start">
             <h4 className="font-semibold text-lg mb-4">Contact</h4>
             <ul className="space-y-3 text-white/80">
-              <li className="flex items-center justify-center gap-2">
+              <li className="flex items-center justify-start gap-2">
                 <Phone className="w-4 h-4" />
                 <span>+91 70730 41236</span>
               </li>
-              <li className="flex items-center justify-center gap-2">
+              <li className="flex items-center justify-start gap-2">
                 <Mail className="w-4 h-4" />
                 <span>contact@pashuvaani.com</span>
               </li>
-              <li className="flex items-start justify-center gap-2">
+              <li className="flex items-start justify-start gap-2">
                 <MapPin className="w-4 h-4 mt-1" />
                 <span>Mumbai, India</span>
               </li>

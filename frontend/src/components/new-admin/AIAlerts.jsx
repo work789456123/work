@@ -45,7 +45,7 @@ const AIAlerts = () => {
     ];
 
     return (
-        <div className="bg-white dark:bg-slate-800 p-8 rounded-xl shadow-sm border border-brand-primary/5 flex flex-col h-full">
+        <div className="bg-teal-50 dark:bg-slate-800 p-8 rounded-xl shadow-sm border border-brand-primary/5 flex flex-col h-full">
             <h3 className="font-bold text-lg mb-6 text-slate-900 dark:text-slate-100">Critical AI Alerts</h3>
             <div className="space-y-6 flex-1 overflow-y-auto">
                 {alerts.map((alert, index) => (

@@ -273,7 +273,7 @@ const GopuChat = () => {
   return (
     <div className="flex flex-col lg:flex-row min-h-screen bg-[#FAFAFA]" data-testid="gopu-chat-page">
       {/* Sidebar - Desktop */}
-      <div className="hidden lg:flex w-80 bg-white border-r border-[#EAEAEA] flex-col p-6 space-y-6">
+      <div className="hidden lg:flex w-80 bg-teal-50 border-r border-[#EAEAEA] flex-col p-6 space-y-6">
         <Button 
           onClick={startNewSession}
           className="w-full rounded-full bg-[#1F6559] text-white hover:bg-[#184F46] flex items-center justify-center gap-2 py-6"
@@ -320,23 +320,23 @@ const GopuChat = () => {
 
       {/* Main Chat Area */}
       <div className="flex-1 flex flex-col items-center py-8 px-4 lg:py-12 lg:px-6 overflow-hidden">
-        <div className="w-full max-w-3xl flex flex-col h-full bg-white rounded-3xl shadow-sm border border-[#EAEAEA] overflow-hidden">
+        <div className="w-full max-w-3xl flex flex-col h-full bg-teal-50 rounded-3xl shadow-sm border border-[#EAEAEA] overflow-hidden">
           
           {/* Header */}
-          <div className="p-4 lg:p-6 border-b border-[#EAEAEA] flex items-center justify-between bg-white sticky top-0 z-10">
+          <div className="p-4 lg:p-6 border-b border-[#EAEAEA] flex items-center justify-between bg-teal-50 sticky top-0 z-10">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-[#1F6559]/20">
                 <video src="/gopuhivideo2.mp4" autoPlay loop muted playsInline className="w-full h-full object-cover" />
               </div>
               <div>
-                <h2 className="font-bold text-[#111111]">Gopu.AI</h2>
+                <h2 className="font-bold text-[#333]">Gopu.AI</h2>
                 <p className="text-xs text-[#6F6F6F]">Pet Health Companion</p>
               </div>
             </div>
 
             {credits && (
               <div className={`hidden sm:flex items-center space-x-2 px-3 py-1.5 rounded-full border text-xs font-medium ${
-                credits.has_subscription ? 'bg-green-50 border-green-200 text-green-700' : 'bg-gray-50 border-gray-200 text-[#111111]'
+                credits.has_subscription ? 'bg-green-50 border-green-200 text-green-700' : 'bg-gray-50 border-gray-200 text-[#333]'
               }`}>
                 <CreditCard className="w-3.5 h-3.5" />
                 <span>{credits.has_subscription ? "Unlimited" : `${remainingMessages} Left`}</span>
@@ -352,7 +352,7 @@ const GopuChat = () => {
                   <MessageSquare className="w-10 h-10 text-[#1F6559]" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-[#111111]">Start a conversation</h3>
+                  <h3 className="text-lg font-bold text-[#333]">Start a conversation</h3>
                   <p className="text-sm text-[#6F6F6F] max-w-xs mx-auto">Ask anything about your pet's health or behavior.</p>
                 </div>
               </div>
@@ -364,10 +364,10 @@ const GopuChat = () => {
                   msg.role === 'user' 
                     ? 'bg-[#1F6559] text-white rounded-tr-sm' 
                     : msg.isBlocked
-                      ? 'bg-red-50 border-2 border-red-200 text-[#111111] rounded-tl-sm shadow-sm'
+                      ? 'bg-red-50 border-2 border-red-200 text-[#333] rounded-tl-sm shadow-sm'
                       : msg.isWarning
-                        ? 'bg-yellow-50 border-2 border-yellow-200 text-[#111111] rounded-tl-sm shadow-sm'
-                        : 'bg-[#FAFAFA] border border-[#EAEAEA] text-[#111111] rounded-tl-sm'
+                        ? 'bg-yellow-50 border-2 border-yellow-200 text-[#333] rounded-tl-sm shadow-sm'
+                        : 'bg-[#FAFAFA] border border-[#EAEAEA] text-[#333] rounded-tl-sm'
                 }`}>
                   {msg.image && (
                     <img src={msg.image} alt="Upload" className="rounded-lg mb-2 max-h-48" />
@@ -382,7 +382,7 @@ const GopuChat = () => {
                           ul: ({node, ...props}) => <ul className="list-disc ml-4 my-2" {...props} />,
                           ol: ({node, ...props}) => <ol className="list-decimal ml-4 my-2" {...props} />,
                           li: ({node, ...props}) => <li className="my-1" {...props} />,
-                          strong: ({node, ...props}) => <strong className="font-bold text-[#111111]" {...props} />,
+                          strong: ({node, ...props}) => <strong className="font-bold text-[#333]" {...props} />,
                         }}
                       >
                         {msg.content}
@@ -423,7 +423,7 @@ const GopuChat = () => {
           </div>
 
           {/* Footer Input */}
-          <div className="p-4 lg:p-6 border-t border-[#EAEAEA] bg-white">
+          <div className="p-4 lg:p-6 border-t border-[#EAEAEA] bg-teal-50">
             {uploadedImage && (
               <div className="mb-3 relative inline-block">
                 <img src={uploadedImage.preview} className="h-20 w-20 object-cover rounded-lg border" />

@@ -24,7 +24,7 @@ const PromoModal = () => {
           <div className="mx-auto w-16 h-16 bg-[#1FA7A6]/10 rounded-full flex items-center justify-center mb-4">
             <Heart className="w-8 h-8 text-[#1FA7A6]" fill="currentColor" />
           </div>
-          <DialogTitle className="text-2xl font-bold text-[#111111] mb-2 font-['Outfit',sans-serif]">
+          <DialogTitle className="text-2xl font-bold text-[#333] mb-2 font-['Outfit',sans-serif]">
             Protect Your Pet's Future
           </DialogTitle>
           <DialogDescription className="text-base text-[#6F6F6F] leading-relaxed">
@@ -35,15 +35,15 @@ const PromoModal = () => {
         <div className="py-2 space-y-6">
           <div className="bg-[#1F6559]/5 rounded-2xl p-4 border border-[#1F6559]/10 text-left">
             <ul className="space-y-3">
-              <li className="flex items-center space-x-3 text-sm text-[#111111]">
+              <li className="flex items-center space-x-3 text-sm text-[#333]">
                 <Sparkles className="w-4 h-4 text-amber-500" />
                 <span>Unlimited Gopu.AI Health Consultations</span>
               </li>
-              <li className="flex items-center space-x-3 text-sm text-[#111111]">
+              <li className="flex items-center space-x-3 text-sm text-[#333]">
                 <Sparkles className="w-4 h-4 text-amber-500" />
                 <span>Priority Emergency Support</span>
               </li>
-              <li className="flex items-center space-x-3 text-sm text-[#111111]">
+              <li className="flex items-center space-x-3 text-sm text-[#333]">
                 <Sparkles className="w-4 h-4 text-amber-500" />
                 <span>Comprehensive Health Records</span>
               </li>

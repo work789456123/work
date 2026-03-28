@@ -31,25 +31,88 @@ const Navbar = () => {
   const [formData, setFormData] = useState({
     full_name: "",
     phone_or_email: "",
-    password: ""
+    password: "",
   });
   const [petData, setPetData] = useState({
     name: "",
     pet_type: "",
     age: "",
     gender: "",
-    weight: ""
+    weight: "",
   });
-
+  const homeLinks = [
+    {
+      name: "Home",
+      link: "/",
+      spl: false,
+      children: [],
+    },
+    {
+      name: "Pashu Raksha",
+      link: null,
+      spl: false,
+      children: [
+        {
+          spl: false,
+          name: "Gopu.AI",
+          link: "/pashucare-suraksha-plan",
+        },
+        {
+          spl: false,
+          name: "Care Collection",
+        },
+      ],
+    },
+    {
+      spl: false,
+      name: "Consult with doctor",
+      link: "/appointments",
+      children: [],
+    },
+    {
+      spl: false,
+      name: "Blogs",
+      link: "/blogs",
+      children: [],
+    },
+    {
+      spl: false,
+      name: "About PashuVaani",
+      link: null,
+      children: [
+        {
+          spl: false,
+          name: "About Us",
+          link: "/about",
+        },
+        {
+          spl: false,
+          name: "Founders Stories",
+          link: "/our-story",
+        },
+        {
+          spl: false,
+          name: "Contact Us",
+          link: "/contact",
+        },
+      ],
+    },
+    {
+      name: "PashuCare Suraksha Plan",
+      link: "/pashucare-suraksha-plan",
+      spl: true,
+      children: [],
+    },
+  ];
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     setIsLoggedIn(!!token);
 
     const handleOpenAuth = () => setShowAuth(true);
-    window.addEventListener('openAuthModal', handleOpenAuth);
+    window.addEventListener("openAuthModal", handleOpenAuth);
 
     return () => {
-      window.removeEventListener('openAuthModal', handleOpenAuth);
+      window.removeEventListener("openAuthModal", handleOpenAuth);
     };
   }, []);
 
@@ -59,8 +122,8 @@ const Navbar = () => {
       const endpoint = authMode === "login" ? "/auth/login" : "/auth/register";
       const response = await api.post(endpoint, formData);
 
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user_name', response.data.full_name);
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("user_name", response.data.full_name);
       setIsLoggedIn(true);
       setShowAuth(false);
 
@@ -68,7 +131,7 @@ const Navbar = () => {
         setShowAddPet(true);
       }
 
-      toast.success(response.data.message);
+      toast.success("Logged in successfully");
     } catch (error) {
       toast.error(error.response?.data?.detail || "Authentication failed");
     }
@@ -87,10 +150,10 @@ const Navbar = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user_name');
+    localStorage.removeItem("token");
+    localStorage.removeItem("user_name");
     setIsLoggedIn(false);
-    navigate('/');
+    navigate("/");
     toast.success("Logged out successfully");
   };
 
@@ -98,90 +161,171 @@ const Navbar = () => {
     if (!isLoggedIn) {
       setShowAuth(true);
     } else {
-      window.dispatchEvent(new CustomEvent('openPromoModal'));
+      window.dispatchEvent(new CustomEvent("openPromoModal"));
     }
   };
 
-  if (location.pathname.startsWith('/admin')) {
+  if (location.pathname.startsWith("/admin")) {
     return null;
   }
 
   return (
     <>
       <nav className="sticky top-0 z-50 bg-[#1F6559] shadow-md">
-        <div className="max-w-[110rem] mx-auto px-4 lg:px-6">
+        <div className="max-w-[1400px] mx-auto  px-4 sm:px-6 lg:px-2">
           <div className="flex items-center justify-between h-20">
+            {/* Mobile Hamburger */}
+              <Button
+                variant="ghost"
+                size="icon"
+                className="max-lg:hidden xl:hidden text-white hover:bg-white/10"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                data-testid="mobile-menu-toggle"
+              >
+                {mobileMenuOpen ? (
+                  <X className="h-6 w-6" />
+                ) : (
+                  <Menu className="h-6 w-6" />
+                )}
+              </Button>
             {/* Logo */}
-            <Link to="/" className="flex items-center z-50 mr-auto shrink-0" data-testid="logo-link">
+            <Link
+              to="/"
+              className="flex items-center z-50 mr-auto shrink-0"
+              data-testid="logo-link"
+            >
               <img
                 src="/pvhalflogo.png"
                 alt="PashuVaani Logo"
                 className="h-10 sm:h-12 md:h-16 w-auto object-contain"
-                style={{ maxHeight: '150px' }}
+                style={{ maxHeight: "150px" }}
               />
-              <span className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight bg-gradient-to-r from-[#1FA7A6] via-[#38C2B4] to-[#78D65C] bg-clip-text text-transparent ml-1 sm:ml-2">
+              <span className="text-xl sm:text-[1.25rem] md:text-2xl font-bold tracking-tight bg-gradient-to-r from-[#1FA7A6] via-[#38C2B4] to-[#78D65C] bg-clip-text text-transparent ">
                 PashuVaani
               </span>
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center space-x-1">
-              <Link to="/" className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${location.pathname === "/" ? "text-white bg-white/20" : "text-white/90 hover:text-white hover:bg-white/10"}`}>
+            <div className="hidden xl:flex items-center space-x-1">
+              {homeLinks.map((link) => {
+                if (link.children.length > 0) {
+                  return (
+                    <DropdownMenu key={link.name}>
+                      <DropdownMenuTrigger className="px-4 py-2 text-sm font-medium rounded-lg transition-colors text-white/90 hover:text-white hover:bg-white/10 flex items-center">
+                        {link.name} <ChevronDown className="ml-1 h-4 w-4" />
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="bg-white border-gray-200">
+                        {link.children.map((child) => (
+                          <DropdownMenuItem
+                            key={child.name}
+                            onClick={() => navigate(child.link)}
+                            className="cursor-pointer"
+                          >
+                            {child.name}
+                          </DropdownMenuItem>
+                        ))}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  );
+                }
+                return (
+                  <Link
+                    key={link.name}
+                    to={link.link}
+                    className={link.spl?"px-4 py-2 text-sm font-medium rounded-lg bg-yellow-500 text-black hover:bg-yellow-400 transition-colors":`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${location.pathname === link.link ? "text-white bg-white/20" : "text-white/90 hover:text-white hover:bg-white/10"} `}
+                  >
+                    {link.name}
+                  </Link>
+                );
+              })}
+              {/* <Link
+                to="/"
+                className={`px-4 py-2 text-sm font-medium rounded-lg max-2xl:text-xs  transition-colors ${location.pathname === "/" ? "text-white bg-white/20" : "text-white/90 hover:text-white hover:bg-white/10"}`}
+              >
                 Home
-              </Link>
+              </Link> */}
 
               {/*<Link to="/doctors" className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${location.pathname === "/doctors" ? "text-white bg-white/20" : "text-white/90 hover:text-white hover:bg-white/10"}`}>
                 Our Doctors
               </Link>*/}
 
-              <DropdownMenu>
-                <DropdownMenuTrigger className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${location.pathname === "/pashucare-suraksha-plan" ? "text-white bg-white/20" : "text-white/90 hover:text-white hover:bg-white/10 flex items-center"}`}>
+              {/* <DropdownMenu>
+                <DropdownMenuTrigger
+                  className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${location.pathname === "/pashucare-suraksha-plan" ? "text-white bg-white/20" : "text-white/90 hover:text-white hover:bg-white/10 flex items-center"}`}
+                >
                   Pashu Raksha <ChevronDown className="ml-1 h-4 w-4" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="bg-white border-gray-200">
-                  <DropdownMenuItem onClick={() => navigate('/pashucare-suraksha-plan')} className="cursor-pointer">
+                  <DropdownMenuItem
+                    onClick={() => navigate("/pashucare-suraksha-plan")}
+                    className="cursor-pointer"
+                  >
                     Gopu.AI
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => toast.info('Care Collection is Coming Soon!', { closeButton: true })} className="cursor-pointer">
+                  <DropdownMenuItem
+                    onClick={() =>
+                      toast.info("Care Collection is Coming Soon!", {
+                        closeButton: true,
+                      })
+                    }
+                    className="cursor-pointer"
+                  >
                     Care Collection
                   </DropdownMenuItem>
                 </DropdownMenuContent>
-              </DropdownMenu>
+              </DropdownMenu> */}
 
               {/*<Link to="/appointmentsform" className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${location.pathname === "/appointmentsform" ? "text-white bg-white/20" : "text-white/90 hover:text-white hover:bg-white/10"}`}>
                 Consult with Doctor
               </Link>*/}
 
-              <Link to="/appointments" className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${location.pathname === "/appointments" ? "text-white bg-white/20" : "text-white/90 hover:text-white hover:bg-white/10"}`}
+              {/* <Link
+                to="/appointments"
+                className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${location.pathname === "/appointments" ? "text-white bg-white/20" : "text-white/90 hover:text-white hover:bg-white/10"}`}
               >
                 Consult with Doctor
               </Link>
 
-              <Link to="/blogs" className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${location.pathname === "/blogs" ? "text-white bg-white/20" : "text-white/90 hover:text-white hover:bg-white/10"}`}>
+              <Link
+                to="/blogs"
+                className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${location.pathname === "/blogs" ? "text-white bg-white/20" : "text-white/90 hover:text-white hover:bg-white/10"}`}
+              >
                 Blog
-              </Link>
+              </Link> */}
 
               {/* About PashuVaani Dropdown */}
-              <DropdownMenu>
+              {/* <DropdownMenu>
                 <DropdownMenuTrigger className="px-4 py-2 text-sm font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10 flex items-center">
                   About PashuVaani <ChevronDown className="ml-1 h-4 w-4" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="bg-white border-gray-200">
-                  <DropdownMenuItem onClick={() => navigate('/about')} className="cursor-pointer">
+                  <DropdownMenuItem
+                    onClick={() => navigate("/about")}
+                    className="cursor-pointer"
+                  >
                     About Us
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate('/our-story')} className="cursor-pointer">
+                  <DropdownMenuItem
+                    onClick={() => navigate("/our-story")}
+                    className="cursor-pointer"
+                  >
                     Founders Stories
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate('/contact')} className="cursor-pointer">
+                  <DropdownMenuItem
+                    onClick={() => navigate("/contact")}
+                    className="cursor-pointer"
+                  >
                     Contact Us
                   </DropdownMenuItem>
                 </DropdownMenuContent>
-              </DropdownMenu>
+              </DropdownMenu> */}
 
-              <Link to="/pashucare-suraksha-plan" className="px-4 py-2 text-sm font-medium rounded-lg bg-yellow-500 text-black hover:bg-yellow-400 transition-colors">
+              {/* <Link
+                to="/pashucare-suraksha-plan"
+                className="px-4 py-2 text-sm font-medium rounded-lg bg-yellow-500 text-black hover:bg-yellow-400 transition-colors"
+              >
                 PashuCare Suraksha Plan
-              </Link>
+              </Link> */}
             </div>
 
             {/* Right Side Actions */}
@@ -223,15 +367,23 @@ const Navbar = () => {
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 data-testid="mobile-menu-toggle"
               >
-                {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                {mobileMenuOpen ? (
+                  <X className="h-6 w-6" />
+                ) : (
+                  <Menu className="h-6 w-6" />
+                )}
               </Button>
             </div>
           </div>
 
           {/* Mobile Menu */}
           {mobileMenuOpen && (
-            <div className="lg:hidden pb-4 space-y-2" data-testid="mobile-menu">
-              <Link to="/" onClick={() => setMobileMenuOpen(false)} className="block px-4 py-3 text-sm font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10">
+            <div className="xl:hidden pb-4 space-y-2" data-testid="mobile-menu">
+              <Link
+                to="/"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-4 py-3 text-sm font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10"
+              >
                 Home
               </Link>
               <div className="space-y-1">
@@ -239,7 +391,10 @@ const Navbar = () => {
                   onClick={() => setRakshaOpen(!rakshaOpen)}
                   className="w-full flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10"
                 >
-                  Pashu Raksha <ChevronDown className={`ml-1 h-4 w-4 transition-transform ${rakshaOpen ? 'rotate-180' : ''}`} />
+                  Pashu Raksha{" "}
+                  <ChevronDown
+                    className={`ml-1 h-4 w-4 transition-transform ${rakshaOpen ? "rotate-180" : ""}`}
+                  />
                 </button>
                 {rakshaOpen && (
                   <div className="space-y-1 border-l-2 border-white/20 ml-4 py-1">
@@ -251,7 +406,12 @@ const Navbar = () => {
                       Gopu.AI
                     </Link>
                     <button
-                      onClick={() => { toast.info('Care Collection is Coming Soon!', { closeButton: true }); setMobileMenuOpen(false); }}
+                      onClick={() => {
+                        toast.info("Care Collection is Coming Soon!", {
+                          closeButton: true,
+                        });
+                        setMobileMenuOpen(false);
+                      }}
                       className="block w-full text-left px-4 py-2 text-sm font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10 opacity-70 ml-2"
                     >
                       Care Collection
@@ -259,22 +419,46 @@ const Navbar = () => {
                   </div>
                 )}
               </div>
-              <Link to="/appointments" onClick={() => setMobileMenuOpen(false)} className="block px-4 py-3 text-sm font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10">
+              <Link
+                to="/appointments"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-4 py-3 text-sm font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10"
+              >
                 Consult with Doctor
               </Link>
-              <Link to="/blogs" onClick={() => setMobileMenuOpen(false)} className="block px-4 py-3 text-sm font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10">
+              <Link
+                to="/blogs"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-4 py-3 text-sm font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10"
+              >
                 Blog
               </Link>
-              <Link to="/about" onClick={() => setMobileMenuOpen(false)} className="block px-4 py-3 text-sm font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10">
+              <Link
+                to="/about"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-4 py-3 text-sm font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10"
+              >
                 About Us
               </Link>
-              <Link to="/our-story" onClick={() => setMobileMenuOpen(false)} className="block px-4 py-3 text-sm font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10">
+              <Link
+                to="/our-story"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-4 py-3 text-sm font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10"
+              >
                 Founders Stories
               </Link>
-              <Link to="/contact" onClick={() => setMobileMenuOpen(false)} className="block px-4 py-3 text-sm font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10">
+              <Link
+                to="/contact"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-4 py-3 text-sm font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10"
+              >
                 Contact Us
               </Link>
-              <Link to="/pashucare-suraksha-plan" onClick={() => setMobileMenuOpen(false)} className="block px-4 py-3 text-sm font-medium rounded-lg bg-yellow-500 text-black hover:bg-yellow-400">
+              <Link
+                to="/pashucare-suraksha-plan"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-4 py-3 text-sm font-medium rounded-lg bg-yellow-500 text-black hover:bg-yellow-400"
+              >
                 PashuCare Suraksha Plan
               </Link>
 
@@ -334,7 +518,9 @@ const Navbar = () => {
                   id="full_name"
                   data-testid="auth-fullname-input"
                   value={formData.full_name}
-                  onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, full_name: e.target.value })
+                  }
                   required
                   className="rounded-lg border-[#EAEAEA]"
                 />
@@ -346,7 +532,9 @@ const Navbar = () => {
                 id="phone_or_email"
                 data-testid="auth-phone-email-input"
                 value={formData.phone_or_email}
-                onChange={(e) => setFormData({ ...formData, phone_or_email: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, phone_or_email: e.target.value })
+                }
                 required
                 className="rounded-lg border-[#EAEAEA]"
               />
@@ -358,7 +546,9 @@ const Navbar = () => {
                 type="password"
                 data-testid="auth-password-input"
                 value={formData.password}
-                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, password: e.target.value })
+                }
                 required
                 className="rounded-lg border-[#EAEAEA]"
               />
@@ -371,10 +561,14 @@ const Navbar = () => {
               {authMode === "login" ? "Login" : "Sign Up"}
             </Button>
             <p className="text-center text-sm text-[#6F6F6F]">
-              {authMode === "login" ? "Don't have an account? " : "Already have an account? "}
+              {authMode === "login"
+                ? "Don't have an account? "
+                : "Already have an account? "}
               <button
                 type="button"
-                onClick={() => setAuthMode(authMode === "login" ? "register" : "login")}
+                onClick={() =>
+                  setAuthMode(authMode === "login" ? "register" : "login")
+                }
                 className="text-[#1F6559] font-medium hover:underline"
                 data-testid="auth-toggle-button"
               >
@@ -392,7 +586,9 @@ const Navbar = () => {
             <DialogTitle className="heading-font text-2xl">
               Add Your Pet/Animal
             </DialogTitle>
-            <p className="text-sm text-[#6F6F6F]">Meet your personal animal health AI agent</p>
+            <p className="text-sm text-[#6F6F6F]">
+              Meet your personal animal health AI agent
+            </p>
           </DialogHeader>
           <form onSubmit={handleAddPet} className="space-y-4">
             <div>
@@ -401,7 +597,9 @@ const Navbar = () => {
                 id="pet_name"
                 data-testid="pet-name-input"
                 value={petData.name}
-                onChange={(e) => setPetData({ ...petData, name: e.target.value })}
+                onChange={(e) =>
+                  setPetData({ ...petData, name: e.target.value })
+                }
                 required
                 className="rounded-lg border-[#EAEAEA]"
               />
@@ -413,7 +611,9 @@ const Navbar = () => {
                 data-testid="pet-type-input"
                 placeholder="Dog, Cat, etc."
                 value={petData.pet_type}
-                onChange={(e) => setPetData({ ...petData, pet_type: e.target.value })}
+                onChange={(e) =>
+                  setPetData({ ...petData, pet_type: e.target.value })
+                }
                 required
                 className="rounded-lg border-[#EAEAEA]"
               />
@@ -426,7 +626,9 @@ const Navbar = () => {
                   data-testid="pet-age-input"
                   placeholder="2 years"
                   value={petData.age}
-                  onChange={(e) => setPetData({ ...petData, age: e.target.value })}
+                  onChange={(e) =>
+                    setPetData({ ...petData, age: e.target.value })
+                  }
                   className="rounded-lg border-[#EAEAEA]"
                 />
               </div>
@@ -437,7 +639,9 @@ const Navbar = () => {
                   data-testid="pet-gender-input"
                   placeholder="Male/Female"
                   value={petData.gender}
-                  onChange={(e) => setPetData({ ...petData, gender: e.target.value })}
+                  onChange={(e) =>
+                    setPetData({ ...petData, gender: e.target.value })
+                  }
                   className="rounded-lg border-[#EAEAEA]"
                 />
               </div>
@@ -448,7 +652,9 @@ const Navbar = () => {
                   data-testid="pet-weight-input"
                   placeholder="10 kg"
                   value={petData.weight}
-                  onChange={(e) => setPetData({ ...petData, weight: e.target.value })}
+                  onChange={(e) =>
+                    setPetData({ ...petData, weight: e.target.value })
+                  }
                   className="rounded-lg border-[#EAEAEA]"
                 />
               </div>

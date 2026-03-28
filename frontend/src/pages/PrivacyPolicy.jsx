@@ -4,11 +4,11 @@ import { Link } from "react-router-dom";
 const PrivacyPolicy = () => {
   return (
     <div className="min-h-screen bg-gray-50 flex justify-center py-10 px-4 mt-16 font-sans">
-      <div className="bg-white max-w-[900px] w-full p-10 shadow-lg rounded-xl relative border border-gray-100">
+      <div className="bg-teal-50 max-w-[900px] w-full p-10 shadow-lg rounded-xl relative border border-gray-100">
         
         {/* Header */}
         <div className="mb-10 text-center border-b pb-6">
-          <h1 className="text-[32px] font-bold text-[#111111]">Privacy Policy</h1>
+          <h1 className="text-[32px] font-bold text-[#333]">Privacy Policy</h1>
           <p className="text-[#6F6F6F] mt-2">Regulatory Compliance & Risk Management Policy</p>
         </div>
 

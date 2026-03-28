@@ -47,7 +47,7 @@ const DoctorRegistration = () => {
           <div className="w-20 h-20 bg-[#1F6559]/10 rounded-full flex items-center justify-center mx-auto">
             <span className="text-4xl">✓</span>
           </div>
-          <h2 className="heading-font text-3xl font-bold text-[#111111]">Thank You!</h2>
+          <h2 className="heading-font text-3xl font-bold text-[#333]">Thank You!</h2>
           <p className="text-[#6F6F6F]">PashuVaani team will contact you shortly.</p>
           <Button onClick={() => setShowSuccess(false)} className="rounded-full bg-[#1F6559] text-white">
             Close
@@ -61,7 +61,7 @@ const DoctorRegistration = () => {
     <div className="min-h-screen bg-[#FAFAFA] py-12" data-testid="doctor-registration-page">
       <div className="max-w-3xl mx-auto px-6">
         <div className="text-center mb-12">
-          <h1 className="heading-font text-4xl font-bold text-[#111111] mb-4" data-testid="registration-heading">Doctor Registration</h1>
+          <h1 className="heading-font text-4xl font-bold text-[#333] mb-4" data-testid="registration-heading">Doctor Registration</h1>
           <p className="text-[#6F6F6F]">Join the PashuVaani network of verified professionals</p>
         </div>
 

@@ -5,7 +5,7 @@ const HealthTrendsChart = () => {
     const bars = [40, 60, 45, 70, 85, 55, 30, 65, 40, 80, 50, 55];
 
     return (
-        <div className="bg-white dark:bg-slate-800 p-8 rounded-xl shadow-sm border border-brand-primary/5 h-full">
+        <div className="bg-teal-50 dark:bg-slate-800 p-8 rounded-xl shadow-sm border border-brand-primary/5 h-full">
             <div className="flex items-center justify-between mb-8">
                 <h3 className="font-bold text-lg text-slate-900 dark:text-slate-100">Health Trends & AI Insights</h3>
                 <div className="flex gap-2">

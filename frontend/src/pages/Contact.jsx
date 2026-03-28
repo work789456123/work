@@ -30,7 +30,7 @@ const Contact = () => {
     <div className="min-h-screen bg-[#FAFAFA] py-12" data-testid="contact-page">
       <div className="max-w-6xl mx-auto px-6">
         <div className="text-center mb-12">
-          <h1 className="heading-font text-4xl lg:text-5xl font-bold text-[#111111] mb-4" data-testid="contact-heading">Contact Us</h1>
+          <h1 className="heading-font text-4xl lg:text-5xl font-bold text-[#333] mb-4" data-testid="contact-heading">Contact Us</h1>
           <p className="text-lg text-[#6F6F6F]">We'd love to hear from you</p>
         </div>
 
@@ -41,7 +41,7 @@ const Contact = () => {
                 <Phone className="w-6 h-6 text-[#1F6559]" />
               </div>
               <div>
-                <h3 className="heading-font text-lg font-semibold text-[#111111] mb-2">Phone</h3>
+                <h3 className="heading-font text-lg font-semibold text-[#333] mb-2">Phone</h3>
                 <p className="text-[#6F6F6F]" data-testid="contact-phone">+91 70730 41236</p>
               </div>
             </div>
@@ -51,7 +51,7 @@ const Contact = () => {
                 <Mail className="w-6 h-6 text-[#1F6559]" />
               </div>
               <div>
-                <h3 className="heading-font text-lg font-semibold text-[#111111] mb-2">Email</h3>
+                <h3 className="heading-font text-lg font-semibold text-[#333] mb-2">Email</h3>
                 <p className="text-[#6F6F6F]" data-testid="contact-email">contact@pashuvaani.com</p>
               </div>
             </div>
@@ -61,7 +61,7 @@ const Contact = () => {
                 <MapPin className="w-6 h-6 text-[#1F6559]" />
               </div>
               <div>
-                <h3 className="heading-font text-lg font-semibold text-[#111111] mb-2">Address</h3>
+                <h3 className="heading-font text-lg font-semibold text-[#333] mb-2">Address</h3>
                 <p className="text-[#6F6F6F]" data-testid="contact-address">India Remote</p>
               </div>
             </div>

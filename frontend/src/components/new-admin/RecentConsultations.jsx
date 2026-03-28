@@ -38,7 +38,7 @@ const RecentConsultations = () => {
     ];
 
     return (
-        <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-brand-primary/5 overflow-hidden">
+        <div className="bg-teal-50 dark:bg-slate-800 rounded-xl shadow-sm border border-brand-primary/5 overflow-hidden">
             <div className="px-8 py-6 border-b border-brand-primary/5 flex items-center justify-between">
                 <h3 className="font-bold text-lg text-slate-900 dark:text-slate-100">Recent Consultations</h3>
                 <button className="text-brand-primary text-sm font-bold hover:underline">View History</button>

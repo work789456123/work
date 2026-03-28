@@ -74,7 +74,7 @@ const Careers = () => {
       <div className="max-w-6xl mx-auto px-6">
         {/* Hero Section */}
         <div className="text-center mb-16 space-y-4">
-          <h1 className="heading-font text-4xl lg:text-5xl font-bold text-[#111111]" data-testid="careers-heading">
+          <h1 className="heading-font text-4xl lg:text-5xl font-bold text-[#333]" data-testid="careers-heading">
             Join the PashuVaani Family
           </h1>
           <p className="text-lg text-[#6F6F6F] max-w-2xl mx-auto">
@@ -88,28 +88,28 @@ const Careers = () => {
             <div className="w-16 h-16 bg-[#1F6559]/10 rounded-2xl flex items-center justify-center mx-auto">
               <Heart className="w-8 h-8 text-[#1F6559]" />
             </div>
-            <h3 className="heading-font text-xl font-semibold text-[#111111]">Meaningful Work</h3>
+            <h3 className="heading-font text-xl font-semibold text-[#333]">Meaningful Work</h3>
             <p className="text-[#6F6F6F]">Make a real difference in the lives of animals and their families across India.</p>
           </Card>
           <Card className="p-8 rounded-2xl border-[#EAEAEA] text-center space-y-4">
             <div className="w-16 h-16 bg-[#1F6559]/10 rounded-2xl flex items-center justify-center mx-auto">
               <Users className="w-8 h-8 text-[#1F6559]" />
             </div>
-            <h3 className="heading-font text-xl font-semibold text-[#111111]">Amazing Team</h3>
+            <h3 className="heading-font text-xl font-semibold text-[#333]">Amazing Team</h3>
             <p className="text-[#6F6F6F]">Work with passionate veterinarians, technologists, and animal lovers.</p>
           </Card>
           <Card className="p-8 rounded-2xl border-[#EAEAEA] text-center space-y-4">
             <div className="w-16 h-16 bg-[#1F6559]/10 rounded-2xl flex items-center justify-center mx-auto">
               <Briefcase className="w-8 h-8 text-[#1F6559]" />
             </div>
-            <h3 className="heading-font text-xl font-semibold text-[#111111]">Growth Opportunities</h3>
+            <h3 className="heading-font text-xl font-semibold text-[#333]">Growth Opportunities</h3>
             <p className="text-[#6F6F6F]">Learn, grow, and advance your career in a fast-growing startup.</p>
           </Card>
         </div>
 
         {/* Application Form */}
         <Card className="max-w-2xl mx-auto p-8 rounded-2xl border-[#EAEAEA]">
-          <h2 className="heading-font text-2xl font-bold text-[#111111] text-center mb-2">Apply Now</h2>
+          <h2 className="heading-font text-2xl font-bold text-[#333] text-center mb-2">Apply Now</h2>
           <p className="text-[#6F6F6F] text-center mb-8">Send us your details and we'll get back to you</p>
 
           <form onSubmit={handleSubmit} className="space-y-6">

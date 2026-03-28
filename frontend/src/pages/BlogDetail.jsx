@@ -118,7 +118,7 @@ const BlogDetails = () => {
 
       {/* BLOG CONTENT */}
 
-      <div className="max-w-4xl mx-auto px-6 mt-16 bg-white p-10 rounded-xl shadow">
+      <div className="max-w-4xl mx-auto px-6 mt-16 bg-teal-50 p-10 rounded-xl shadow">
 
         {/* INTRO */}
 

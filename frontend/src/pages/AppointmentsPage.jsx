@@ -254,7 +254,7 @@ function AppointmentsPage() {
 
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40">
 
-          <div className="bg-white p-8 rounded-xl shadow-lg text-center w-80">
+          <div className="bg-teal-50 p-8 rounded-xl shadow-lg text-center w-80">
 
             <h2 className="text-2xl font-bold text-green-600 mb-3">
               ✅ Success

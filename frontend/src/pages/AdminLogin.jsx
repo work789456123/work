@@ -63,7 +63,7 @@ export default function AdminLogin() {
 
       {/* Right Section */}
 
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-6 bg-white">
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-6 bg-teal-50">
 
         <div className="w-full max-w-md">
 

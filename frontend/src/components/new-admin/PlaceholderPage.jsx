@@ -10,7 +10,7 @@ const PlaceholderPage = ({ title, description }) => {
         </div>
       </div>
       
-      <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-brand-primary/5 p-8 flex flex-col items-center justify-center min-h-[400px]">
+      <div className="bg-teal-50 dark:bg-slate-800 rounded-xl shadow-sm border border-brand-primary/5 p-8 flex flex-col items-center justify-center min-h-[400px]">
         <div className="bg-brand-primary/10 text-brand-primary p-4 rounded-full mb-4">
           <span className="material-symbols-outlined text-4xl">construction</span>
         </div>

@@ -53,7 +53,7 @@ export default function TermsAndConditions() {
 
   return (
     <div className="bg-gray-100 min-h-screen py-10 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-[900px] mx-auto bg-white rounded-2xl shadow-sm p-6 sm:p-10">
+      <div className="max-w-[900px] mx-auto bg-teal-50 rounded-2xl shadow-sm p-6 sm:p-10">
         <h1 className="text-[32px] font-bold text-gray-900 mb-8 text-center border-b pb-6">
           Terms & Conditions
         </h1>

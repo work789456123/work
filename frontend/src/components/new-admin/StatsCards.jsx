@@ -2,7 +2,7 @@ import React from 'react';
 
 const StatsCard = ({ icon, label, value, trend, trendUp, colorClass, bgColorClass }) => {
     return (
-        <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-brand-primary/5">
+        <div className="bg-teal-50 dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-brand-primary/5">
             <div className="flex items-center justify-between mb-4">
                 <div className={`size-10 ${bgColorClass} rounded-lg flex items-center justify-center ${colorClass}`}>
                     <span className="material-symbols-outlined">{icon}</span>
