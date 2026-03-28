@@ -1,8 +1,9 @@
-import { whatsapp } from "@/assets/home";
+import { whatsapp } from "@/assets/content/home";
 
 export default function HomeWhatsappFloatingButton() {
   return (
     <a
+      id="home-whatsapp-fab"
       href={whatsapp.href}
       target="_blank"
       rel="noopener noreferrer"

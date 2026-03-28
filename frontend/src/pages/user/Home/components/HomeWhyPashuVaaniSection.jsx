@@ -1,5 +1,5 @@
 import { Sparkles, Heart, Globe, Users, Shield, Zap } from "lucide-react";
-import { whyPashuVaani } from "@/assets/home";
+import { whyPashuVaani } from "@/assets/content/home";
 
 const iconMap = {
   sparkles: Sparkles,
@@ -13,6 +13,7 @@ const iconMap = {
 export default function HomeWhyPashuVaaniSection() {
   return (
     <section
+      id="home-why-pashuvaani"
       className="py-24 bg-gradient-to-r from-[#1FA7A6] via-[#38C2B4] to-[#78D65C]"
       data-testid="why-section"
     >

@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
-import { privacyLiability } from "@/assets/privacy";
+import { privacyLiability } from "@/assets/content/privacy";
 
 export default function PrivacyLiabilitySection() {
   return (
-    <section id="s13">
+    <section id="privacy-liability">
       <h2 className="text-[22px] font-semibold text-gray-900 mb-4">{privacyLiability.sectionTitle}</h2>
       <p>{privacyLiability.body}</p>
       <div className="mt-8 pt-6 border-t border-gray-200">

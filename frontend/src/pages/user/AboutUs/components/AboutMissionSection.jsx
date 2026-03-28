@@ -1,11 +1,11 @@
 import { Globe, Award, Target, Shield, Zap } from "lucide-react";
-import { aboutMission } from "@/assets/about";
+import { aboutMission } from "@/assets/content/about";
 
 const missionIcons = { globe: Globe, award: Award, target: Target, shield: Shield, zap: Zap };
 
 export default function AboutMissionSection() {
   return (
-    <section className="py-20">
+    <section id="about-mission" className="py-20">
       <div className="max-w-5xl mx-auto px-6 space-y-8">
         <h2 className="heading-font text-4xl font-bold text-[#333] text-center">{aboutMission.title}</h2>
         <p className="text-lg text-[#6F6F6F] leading-relaxed">

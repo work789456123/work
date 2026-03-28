@@ -1,8 +1,8 @@
-import { aboutStory } from "@/assets/about";
+import { aboutStory } from "@/assets/content/about";
 
 export default function AboutStorySection() {
   return (
-    <section className="py-20 bg-gradient-to-b from-[#1FA7A6] via-[#38C2B4] to-[#78D65C]/10">
+    <section id="about-story" className="py-20 bg-gradient-to-b from-[#1FA7A6] via-[#38C2B4] to-[#78D65C]/10">
       <div className="max-w-7xl mx-auto px-6">
         <div className="max-w-3xl mb-16">
           <div className="w-16 h-1 bg-gradient-to-r from-[#1F6559] to-[#4DB6AC] mb-6 rounded-full" />

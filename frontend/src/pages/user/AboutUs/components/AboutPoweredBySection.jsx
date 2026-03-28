@@ -1,11 +1,11 @@
 import { Target, Zap, Shield, Users, Heart } from "lucide-react";
-import { aboutPoweredBy } from "@/assets/about";
+import { aboutPoweredBy } from "@/assets/content/about";
 
 const capIcons = { target: Target, zap: Zap, shield: Shield, users: Users, heart: Heart };
 
 export default function AboutPoweredBySection() {
   return (
-    <section className="py-20">
+    <section id="about-powered-by" className="py-20">
       <div className="max-w-5xl mx-auto px-6 space-y-8">
         <h2 className="heading-font text-4xl font-bold text-[#333] text-center">{aboutPoweredBy.title}</h2>
         <p className="text-lg text-[#6F6F6F] leading-relaxed text-center">{aboutPoweredBy.intro}</p>

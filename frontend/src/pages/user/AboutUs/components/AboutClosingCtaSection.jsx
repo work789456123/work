@@ -1,11 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { aboutCta } from "@/assets/about";
+import { aboutCta } from "@/assets/content/about";
 
 export default function AboutClosingCtaSection() {
   const navigate = useNavigate();
   return (
-    <section className="py-20 bg-[#1F6559] text-white">
+    <section id="about-closing-cta" className="py-20 bg-[#1F6559] text-white">
       <div className="max-w-4xl mx-auto px-6 text-center space-y-8">
         <h2 className="heading-font text-4xl font-bold">{aboutCta.title}</h2>
         <div className="space-y-2">

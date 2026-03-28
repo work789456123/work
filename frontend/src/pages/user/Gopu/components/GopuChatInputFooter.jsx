@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Upload, Mic, Send, X, MicOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { gopuChat } from "@/assets/gopu";
+import { gopuChat } from "@/assets/content/gopu";
 
 export default function GopuChatInputFooter({
   input,
@@ -21,7 +21,7 @@ export default function GopuChatInputFooter({
   const c = gopuChat;
 
   return (
-    <div className="p-4 lg:p-6 border-t border-[#EAEAEA] bg-teal-50">
+    <div id="gopu-chat-input-footer" className="p-4 lg:p-6 border-t border-[#EAEAEA] bg-teal-50">
       {uploadedImage && (
         <div className="mb-3 relative inline-block">
           <img src={uploadedImage.preview} alt="" className="h-20 w-20 object-cover rounded-lg border" />
@@ -64,6 +64,7 @@ export default function GopuChatInputFooter({
         />
         <div className="absolute right-2 bottom-2 flex items-center gap-1">
           <input
+            id="gopu-chat-file-input"
             type="file"
             ref={fileInputRef}
             className="hidden"

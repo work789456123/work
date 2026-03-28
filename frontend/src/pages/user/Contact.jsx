@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import api from "@/utils/api";
 import { Mail, Phone, MapPin } from "lucide-react";
-import { contactPage, contactChannels, contactForm } from "@/assets/contact";
+import { contactPage, contactChannels, contactForm } from "@/assets/content/contact";
 
 const iconFor = { phone: Phone, email: Mail, address: MapPin };
 
@@ -28,16 +28,20 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA] py-12" data-testid="contact-page">
-      <div className="max-w-6xl mx-auto px-6">
-        <div className="text-center mb-12">
-          <h1 className="heading-font text-4xl lg:text-5xl font-bold text-[#333] mb-4" data-testid="contact-heading">
+    <div id="page-contact" className="min-h-screen bg-[#FAFAFA] py-12" data-testid="contact-page">
+      <div id="contact-inner" className="max-w-6xl mx-auto px-6">
+        <div id="contact-intro" className="text-center mb-12">
+          <h1
+            id="contact-page-title"
+            className="heading-font text-4xl lg:text-5xl font-bold text-[#333] mb-4"
+            data-testid="contact-heading"
+          >
             {p.title}
           </h1>
           <p className="text-lg text-[#6F6F6F]">{p.subtitle}</p>
         </div>
-        <div className="grid lg:grid-cols-2 gap-12">
-          <div className="space-y-8">
+        <div id="contact-layout" className="grid lg:grid-cols-2 gap-12">
+          <div id="contact-channels" className="space-y-8">
             {contactChannels.map((ch) => {
               const Icon = iconFor[ch.key];
               return (
@@ -55,12 +59,12 @@ const Contact = () => {
               );
             })}
           </div>
-          <Card className="p-8 rounded-2xl border-[#EAEAEA]">
-            <form onSubmit={handleSubmit} className="space-y-6">
+          <Card id="contact-form-card" className="p-8 rounded-2xl border-[#EAEAEA]">
+            <form id="contact-message-form" onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <Label htmlFor="name">{f.labels.name}</Label>
+                <Label htmlFor="contact-form-name">{f.labels.name}</Label>
                 <Input
-                  id="name"
+                  id="contact-form-name"
                   data-testid="contact-name-input"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -69,10 +73,10 @@ const Contact = () => {
                 />
               </div>
               <div>
-                <Label htmlFor="email">{f.labels.email}</Label>
+                <Label htmlFor="contact-form-email">{f.labels.email}</Label>
                 <Input
                   type="email"
-                  id="email"
+                  id="contact-form-email"
                   data-testid="contact-email-input"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -81,9 +85,9 @@ const Contact = () => {
                 />
               </div>
               <div>
-                <Label htmlFor="message">{f.labels.message}</Label>
+                <Label htmlFor="contact-form-message">{f.labels.message}</Label>
                 <Textarea
-                  id="message"
+                  id="contact-form-message"
                   data-testid="contact-message-input"
                   rows={6}
                   value={formData.message}
@@ -93,6 +97,7 @@ const Contact = () => {
                 />
               </div>
               <Button
+                id="contact-form-submit"
                 type="submit"
                 data-testid="contact-submit-button"
                 className="w-full rounded-full bg-[#1F6559] text-white hover:bg-[#1F6559]/90 py-6 text-lg"

@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { MessageSquare, Loader2, Plus, AlertTriangle } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { useNavigate } from "react-router-dom";
-import { gopuChat } from "@/assets/gopu";
+import { gopuChat } from "@/assets/content/gopu";
 
 export default function GopuChatMessageList({
   messages,
@@ -13,7 +13,7 @@ export default function GopuChatMessageList({
   const copy = gopuChat;
 
   return (
-    <div className="flex-1 overflow-y-auto p-4 lg:p-6 space-y-6">
+    <div id="gopu-chat-messages" className="flex-1 overflow-y-auto p-4 lg:p-6 space-y-6">
       {messages.length === 0 && !isLoading && (
         <div className="h-full flex flex-col items-center justify-center text-center space-y-4 py-20">
           <div className="w-20 h-20 bg-[#1F6559]/5 rounded-3xl flex items-center justify-center transform rotate-12">
@@ -29,15 +29,14 @@ export default function GopuChatMessageList({
       {messages.map((msg, idx) => (
         <div key={idx} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
           <div
-            className={`max-w-[85%] p-4 rounded-2xl ${
-              msg.role === "user"
+            className={`max-w-[85%] p-4 rounded-2xl ${msg.role === "user"
                 ? "bg-[#1F6559] text-white rounded-tr-sm"
                 : msg.isBlocked
                   ? "bg-red-50 border-2 border-red-200 text-[#333] rounded-tl-sm shadow-sm"
                   : msg.isWarning
                     ? "bg-yellow-50 border-2 border-yellow-200 text-[#333] rounded-tl-sm shadow-sm"
                     : "bg-[#FAFAFA] border border-[#EAEAEA] text-[#333] rounded-tl-sm"
-            }`}
+              }`}
           >
             {msg.image && (
               <img src={msg.image} alt="Upload" className="rounded-lg mb-2 max-h-48" />

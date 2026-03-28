@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { toast } from "sonner";
 import api from "@/utils/api";
-import { brand } from "@/assets/shared/brand";
-import { primaryNav } from "@/assets/shared/navigation";
+import { brand } from "@/assets/content/shared/brand";
+import { primaryNav } from "@/assets/content/shared/navigation";
 import { navbarReducer, initialNavbarState } from "@/components/user/Navbar/navbarReducer";
 import NavbarDesktopNav from "@/components/user/Navbar/components/NavbarDesktopNav";
 import NavbarMobileMenu from "@/components/user/Navbar/components/NavbarMobileMenu";
@@ -78,9 +78,9 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="sticky top-0 z-50 bg-[#1F6559] shadow-md">
-        <div className="max-w-[1400px] mx-auto  px-4 sm:px-6 lg:px-2">
-          <div className="flex items-center justify-between h-20">
+      <nav id="user-navbar" className="sticky top-0 z-50 bg-[#1F6559] shadow-md">
+        <div id="user-navbar-inner" className="max-w-[1400px] mx-auto  px-4 sm:px-6 lg:px-2">
+          <div id="user-navbar-bar" className="flex items-center justify-between h-20">
             <Button
               variant="ghost"
               size="icon"
@@ -95,6 +95,7 @@ const Navbar = () => {
               )}
             </Button>
             <Link
+              id="user-navbar-brand"
               to="/"
               className="flex items-center z-50 mr-auto shrink-0"
               data-testid="logo-link"

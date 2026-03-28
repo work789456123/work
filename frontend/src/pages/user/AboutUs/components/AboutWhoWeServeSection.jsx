@@ -1,11 +1,11 @@
 import { Heart, Shield, Users, Globe } from "lucide-react";
-import { aboutWhoWeServe } from "@/assets/about";
+import { aboutWhoWeServe } from "@/assets/content/about";
 
 const whoIcons = { heart: Heart, shield: Shield, users: Users, globe: Globe };
 
 export default function AboutWhoWeServeSection() {
   return (
-    <section className="py-20 bg-gradient-to-b from-[#1FA7A6] via-[#38C2B4] to-[#78D65C]/10">
+    <section id="about-who-we-serve" className="py-20 bg-gradient-to-b from-[#1FA7A6] via-[#38C2B4] to-[#78D65C]/10">
       <div className="max-w-5xl mx-auto px-6 space-y-8">
         <h2 className="heading-font text-4xl font-bold text-[#333] text-center">{aboutWhoWeServe.title}</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

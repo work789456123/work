@@ -1,7 +1,7 @@
 import { useEffect, useReducer } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { appointmentsPage } from "@/assets/appointments";
+import { appointmentsPage } from "@/assets/content/appointments";
 import AppointmentsFormBody from "./components/AppointmentsFormBody";
 import { appointmentsReducer, initialAppointmentState } from "./appointmentsReducer";
 
@@ -33,8 +33,13 @@ function AppointmentsPage() {
   const c = appointmentsPage;
 
   return (
-    <div className="container mx-auto p-6 py-20 bg-gradient-to-b from-[#1FA7A6] via-[#38C2B4] to-[#78D65C]/10 min-h-screen">
-      <h1 className="text-3xl font-bold text-center text-white mb-10">{c.pageTitle}</h1>
+    <div
+      id="page-appointments"
+      className="container mx-auto p-6 py-20 bg-gradient-to-b from-[#1FA7A6] via-[#38C2B4] to-[#78D65C]/10 min-h-screen"
+    >
+      <h1 id="appointments-page-title" className="text-3xl font-bold text-center text-white mb-10">
+        {c.pageTitle}
+      </h1>
 
       <AppointmentsFormBody
         form={state.form}
@@ -43,8 +48,11 @@ function AppointmentsPage() {
       />
 
       {state.showPopup && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40">
-          <div className="bg-teal-50 p-8 rounded-xl shadow-lg text-center w-80">
+        <div
+          id="appointments-success-overlay"
+          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40"
+        >
+          <div id="appointments-success-dialog" className="bg-teal-50 p-8 rounded-xl shadow-lg text-center w-80">
             <h2 className="text-2xl font-bold text-green-600 mb-3">{c.successPopup.title}</h2>
             <p className="text-gray-600 mb-6">{c.successPopup.message}</p>
             <button

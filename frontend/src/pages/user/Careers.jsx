@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Upload, Briefcase, Users, Heart } from "lucide-react";
 import api from "@/utils/api";
-import { careersPage } from "@/assets/careers";
+import { careersPage } from "@/assets/content/careers";
 
 const valueIcons = { heart: Heart, users: Users, briefcase: Briefcase };
 
@@ -82,16 +82,20 @@ const Careers = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA] py-12" data-testid="careers-page">
-      <div className="max-w-6xl mx-auto px-6">
-        <div className="text-center mb-16 space-y-4">
-          <h1 className="heading-font text-4xl lg:text-5xl font-bold text-[#333]" data-testid="careers-heading">
+    <div id="page-careers" className="min-h-screen bg-[#FAFAFA] py-12" data-testid="careers-page">
+      <div id="careers-inner" className="max-w-6xl mx-auto px-6">
+        <div id="careers-hero" className="text-center mb-16 space-y-4">
+          <h1
+            id="careers-page-title"
+            className="heading-font text-4xl lg:text-5xl font-bold text-[#333]"
+            data-testid="careers-heading"
+          >
             {p.hero.title}
           </h1>
           <p className="text-lg text-[#6F6F6F] max-w-2xl mx-auto">{p.hero.subtitle}</p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 mb-16">
+        <div id="careers-values" className="grid md:grid-cols-3 gap-8 mb-16">
           {p.valueCards.map((card) => {
             const Icon = valueIcons[card.icon];
             return (
@@ -106,15 +110,19 @@ const Careers = () => {
           })}
         </div>
 
-        <Card className="max-w-2xl mx-auto p-8 rounded-2xl border-[#EAEAEA]">
-          <h2 className="heading-font text-2xl font-bold text-[#333] text-center mb-2">{f.title}</h2>
-          <p className="text-[#6F6F6F] text-center mb-8">{f.subtitle}</p>
+        <Card id="careers-application-card" className="max-w-2xl mx-auto p-8 rounded-2xl border-[#EAEAEA]">
+          <h2 id="careers-form-title" className="heading-font text-2xl font-bold text-[#333] text-center mb-2">
+            {f.title}
+          </h2>
+          <p id="careers-form-subtitle" className="text-[#6F6F6F] text-center mb-8">
+            {f.subtitle}
+          </p>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form id="careers-application-form" onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <Label htmlFor="name">{f.labels.name}</Label>
+              <Label htmlFor="careers-form-name">{f.labels.name}</Label>
               <Input
-                id="name"
+                id="careers-form-name"
                 data-testid="career-name-input"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -124,9 +132,9 @@ const Careers = () => {
               />
             </div>
             <div>
-              <Label htmlFor="phone">{f.labels.phone}</Label>
+              <Label htmlFor="careers-form-phone">{f.labels.phone}</Label>
               <Input
-                id="phone"
+                id="careers-form-phone"
                 type="tel"
                 data-testid="career-phone-input"
                 value={formData.phone}
@@ -137,9 +145,9 @@ const Careers = () => {
               />
             </div>
             <div>
-              <Label htmlFor="email">{f.labels.email}</Label>
+              <Label htmlFor="careers-form-email">{f.labels.email}</Label>
               <Input
-                id="email"
+                id="careers-form-email"
                 type="email"
                 data-testid="career-email-input"
                 value={formData.email}
@@ -150,9 +158,10 @@ const Careers = () => {
               />
             </div>
             <div>
-              <Label htmlFor="resume">{f.labels.resume}</Label>
+              <Label htmlFor="careers-form-resume">{f.labels.resume}</Label>
               <div className="mt-2">
                 <input
+                  id="careers-form-resume"
                   type="file"
                   ref={fileInputRef}
                   accept=".pdf,.doc,.docx"
@@ -182,6 +191,7 @@ const Careers = () => {
               </div>
             </div>
             <Button
+              id="careers-form-submit"
               type="submit"
               disabled={isSubmitting}
               data-testid="career-submit-button"

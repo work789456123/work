@@ -1,8 +1,8 @@
-import { aboutMeetGopu } from "@/assets/about";
+import { aboutMeetGopu } from "@/assets/content/about";
 
 export default function AboutMeetGopuSection() {
   return (
-    <section className="py-20 bg-gradient-to-b from-[#1FA7A6] via-[#38C2B4] to-[#78D65C]/10">
+    <section id="about-meet-gopu" className="py-20 bg-gradient-to-b from-[#1FA7A6] via-[#38C2B4] to-[#78D65C]/10">
       <div className="max-w-6xl mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="order-2 lg:order-1">

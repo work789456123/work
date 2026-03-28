@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { hero, heroSlides, slideOverlayActions } from "@/assets/home";
+import { hero, heroSlides, slideOverlayActions } from "@/assets/content/home";
 
 export default function HomeHeroCarouselSection({
   currentSlide,
@@ -12,7 +12,7 @@ export default function HomeHeroCarouselSection({
   const go = (i) => setCurrentSlide(i);
 
   return (
-    <section className="relative bg-teal-50 py-12 md:py-24" data-testid="hero-section">
+    <section id="home-hero" className="relative bg-teal-50 py-12 md:py-24" data-testid="hero-section">
       <div className="max-w-[110rem] mx-auto px-4 md:px-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 items-center">
           <div className="space-y-0 lg:col-span-5 text-center lg:text-left">

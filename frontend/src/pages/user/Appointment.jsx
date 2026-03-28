@@ -40,21 +40,18 @@ const AppointmentsPage = () => {
 
   if (selectedDoctor) {
     return (
-      <div className="min-h-screen bg-[#FAFAFA] py-12">
-
-        <div className="max-w-3xl mx-auto px-6">
-
-          <h1 className="text-3xl font-bold text-center mb-8">
+      <div id="page-legacy-appointment-booking" className="min-h-screen bg-[#FAFAFA] py-12">
+        <div id="legacy-appointment-booking-inner" className="max-w-3xl mx-auto px-6">
+          <h1 id="legacy-appointment-booking-title" className="text-3xl font-bold text-center mb-8">
             Appointment with {selectedDoctor.name}
           </h1>
 
-          <Card className="p-8 rounded-2xl">
-
-            <form onSubmit={handleSubmit} className="space-y-6">
-
+          <Card id="legacy-appointment-form-card" className="p-8 rounded-2xl">
+            <form id="legacy-appointment-booking-form" onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <Label>Pet Name</Label>
+                <Label htmlFor="legacy-appointment-pet_name">Pet Name</Label>
                 <Input
+                  id="legacy-appointment-pet_name"
                   value={formData.pet_name}
                   onChange={(e) =>
                     setFormData({ ...formData, pet_name: e.target.value })
@@ -63,8 +60,9 @@ const AppointmentsPage = () => {
               </div>
 
               <div>
-                <Label>Pet Type</Label>
+                <Label htmlFor="legacy-appointment-pet_type">Pet Type</Label>
                 <Input
+                  id="legacy-appointment-pet_type"
                   placeholder="Dog, Cat, Cow"
                   value={formData.pet_type}
                   onChange={(e) =>
@@ -74,8 +72,9 @@ const AppointmentsPage = () => {
               </div>
 
               <div>
-                <Label>Owner Name</Label>
+                <Label htmlFor="legacy-appointment-owner_name">Owner Name</Label>
                 <Input
+                  id="legacy-appointment-owner_name"
                   value={formData.owner_name}
                   onChange={(e) =>
                     setFormData({ ...formData, owner_name: e.target.value })
@@ -84,8 +83,9 @@ const AppointmentsPage = () => {
               </div>
 
               <div>
-                <Label>Owner Number</Label>
+                <Label htmlFor="legacy-appointment-owner_number">Owner Number</Label>
                 <Input
+                  id="legacy-appointment-owner_number"
                   value={formData.owner_number}
                   onChange={(e) =>
                     setFormData({ ...formData, owner_number: e.target.value })
@@ -93,11 +93,12 @@ const AppointmentsPage = () => {
                 />
               </div>
 
-              <Button className="w-full bg-[#1F6559] text-white">
+              <Button id="legacy-appointment-submit" className="w-full bg-[#1F6559] text-white">
                 Book Appointment
               </Button>
 
               <Button
+                id="legacy-appointment-back"
                 type="button"
                 variant="outline"
                 className="w-full"
@@ -117,18 +118,19 @@ const AppointmentsPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA] py-12">
-
-      <div className="max-w-5xl mx-auto px-6">
-
-        <h1 className="text-4xl font-bold text-center mb-12">
+    <div id="page-legacy-appointment-pick-doctor" className="min-h-screen bg-[#FAFAFA] py-12">
+      <div id="legacy-appointment-pick-inner" className="max-w-5xl mx-auto px-6">
+        <h1 id="legacy-appointment-pick-title" className="text-4xl font-bold text-center mb-12">
           Choose Your Doctor
         </h1>
 
-        <div className="grid md:grid-cols-2 gap-8">
-
+        <div id="legacy-appointment-doctors-grid" className="grid md:grid-cols-2 gap-8">
           {doctors.map((doctor) => (
-            <Card key={doctor.id} className="p-6 text-center rounded-2xl">
+            <Card
+              id={`legacy-appointment-doctor-card-${doctor.id}`}
+              key={doctor.id}
+              className="p-6 text-center rounded-2xl"
+            >
 
               <img
                 src={doctor.image}

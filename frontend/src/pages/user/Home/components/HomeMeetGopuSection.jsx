@@ -1,8 +1,8 @@
-import { meetGopu } from "@/assets/home";
+import { meetGopu } from "@/assets/content/home";
 
 export default function HomeMeetGopuSection() {
   return (
-    <section className="py-24 bg-teal-50" data-testid="meet-gopu-section">
+    <section id="home-meet-gopu" className="py-24 bg-teal-50" data-testid="meet-gopu-section">
       <div className="max-w-6xl mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="order-2 lg:order-1">

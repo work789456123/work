@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Plus, Clock, MessageSquare } from "lucide-react";
-import { gopuChat } from "@/assets/gopu";
+import { gopuChat } from "@/assets/content/gopu";
 
 export default function GopuChatSidebar({
   sessions,
@@ -10,7 +10,10 @@ export default function GopuChatSidebar({
 }) {
   const c = gopuChat.sidebar;
   return (
-    <div className="hidden lg:flex w-80 bg-teal-50 border-r border-[#EAEAEA] flex-col p-6 space-y-6">
+    <div
+      id="gopu-chat-sidebar"
+      className="hidden lg:flex w-80 bg-teal-50 border-r border-[#EAEAEA] flex-col p-6 space-y-6"
+    >
       <Button
         onClick={onNewChat}
         className="w-full rounded-full bg-[#1F6559] text-white hover:bg-[#184F46] flex items-center justify-center gap-2 py-6"
@@ -32,11 +35,10 @@ export default function GopuChatSidebar({
                 key={session.id}
                 type="button"
                 onClick={() => onSelectSession(session.id)}
-                className={`w-full text-left p-3 rounded-xl transition-all flex items-start gap-3 ${
-                  sessionId === session.id
+                className={`w-full text-left p-3 rounded-xl transition-all flex items-start gap-3 ${sessionId === session.id
                     ? "bg-[#1F6559]/5 border border-[#1F6559]/20 text-[#1F6559]"
                     : "hover:bg-gray-50 text-[#6F6F6F]"
-                }`}
+                  }`}
               >
                 <MessageSquare
                   className={`w-4 h-4 mt-1 ${sessionId === session.id ? "text-[#1F6559]" : "text-[#9F9F9F]"}`}

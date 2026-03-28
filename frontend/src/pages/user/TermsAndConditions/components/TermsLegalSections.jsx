@@ -1,6 +1,6 @@
 export default function TermsLegalSections() {
   return (
-            <div className="space-y-8">
+            <div id="terms-legal-sections" className="space-y-8">
               <section id="s1">
                 <h2 className="text-[22px] font-semibold text-gray-900 mb-4">1. Acceptance of Terms</h2>
                 <p>By accessing or using the PashuVaani platform, you confirm that:</p>

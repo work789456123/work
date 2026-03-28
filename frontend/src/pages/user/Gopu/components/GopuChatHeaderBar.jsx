@@ -1,10 +1,13 @@
 import { CreditCard } from "lucide-react";
-import { gopuChat } from "@/assets/gopu";
+import { gopuChat } from "@/assets/content/gopu";
 
 export default function GopuChatHeaderBar({ credits, remainingMessages }) {
   const hc = gopuChat.header;
   return (
-    <div className="p-4 lg:p-6 border-b border-[#EAEAEA] flex items-center justify-between bg-teal-50 sticky top-0 z-10">
+    <div
+      id="gopu-chat-header"
+      className="p-4 lg:p-6 border-b border-[#EAEAEA] flex items-center justify-between bg-teal-50 sticky top-0 z-10"
+    >
       <div className="flex items-center gap-3">
         <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-[#1F6559]/20">
           <video
@@ -23,11 +26,10 @@ export default function GopuChatHeaderBar({ credits, remainingMessages }) {
       </div>
       {credits && (
         <div
-          className={`hidden sm:flex items-center space-x-2 px-3 py-1.5 rounded-full border text-xs font-medium ${
-            credits.has_subscription
+          className={`hidden sm:flex items-center space-x-2 px-3 py-1.5 rounded-full border text-xs font-medium ${credits.has_subscription
               ? "bg-green-50 border-green-200 text-green-700"
               : "bg-gray-50 border-gray-200 text-[#333]"
-          }`}
+            }`}
         >
           <CreditCard className="w-3.5 h-3.5" />
           <span>

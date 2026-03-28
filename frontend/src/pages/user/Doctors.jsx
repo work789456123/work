@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import api from "@/utils/api";
-import { doctorsPage } from "@/assets/doctors";
+import { doctorsPage } from "@/assets/content/doctors";
 
 const Doctors = () => {
   const navigate = useNavigate();
@@ -22,17 +22,22 @@ const Doctors = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA] py-12" data-testid="doctors-page">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center mb-12 space-y-4">
-          <h1 className="heading-font text-4xl lg:text-5xl font-bold text-[#333]" data-testid="doctors-heading">
+    <div id="page-doctors" className="min-h-screen bg-[#FAFAFA] py-12" data-testid="doctors-page">
+      <div id="doctors-inner" className="max-w-7xl mx-auto px-6">
+        <div id="doctors-intro" className="text-center mb-12 space-y-4">
+          <h1
+            id="doctors-page-title"
+            className="heading-font text-4xl lg:text-5xl font-bold text-[#333]"
+            data-testid="doctors-heading"
+          >
             {c.title}
           </h1>
           <p className="text-lg text-[#6F6F6F]">{c.subtitle}</p>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div id="doctors-grid" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {doctors.map((doctor) => (
             <Card
+              id={`doctors-card-${doctor.id}`}
               key={doctor.id}
               className="p-6 rounded-2xl border-[#EAEAEA] space-y-4 hover:shadow-lg hover:border-[#1F6559] transition-all"
               data-testid="doctor-card"

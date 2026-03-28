@@ -1,6 +1,6 @@
 export default function PrivacyLegalSections() {
   return (
-    <div className="text-[16px] text-gray-700 leading-[1.7] space-y-8">
+    <div id="privacy-legal-sections" className="text-[16px] text-gray-700 leading-[1.7] space-y-8">
             <section id="s1">
               <h2 className="text-[22px] font-semibold text-gray-900 mb-4">1. Purpose and Scope</h2>
               <p>This Regulatory Compliance and Risk Management Policy ("Policy") outlines the legal and operational framework governing consultations facilitated through the PashuVaani platform ("Platform").</p>

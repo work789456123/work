@@ -7,15 +7,15 @@ import {
   founders,
   ourStoryQuestion,
   ourStoryJourney,
-} from "@/assets/our_story";
+} from "@/assets/content/our_story";
 
 const OurStory = () => {
   const [zoomedImage, setZoomedImage] = useState(null);
   const q = ourStoryQuestion;
 
   return (
-    <div className="min-h-screen bg-teal-50">
-      <section className="py-16 md:py-20 bg-gradient-to-b from-[#1FA7A6] via-[#38C2B4] to-[#78D65C]/10">
+    <div id="page-our-story" className="min-h-screen bg-teal-50">
+      <section id="our-story-hero" className="py-16 md:py-20 bg-gradient-to-b from-[#1FA7A6] via-[#38C2B4] to-[#78D65C]/10">
         <div className="max-w-2xl mx-auto px-4 text-center space-y-4">
           <h1 className="heading-font text-3xl md:text-4xl lg:text-5xl font-bold text-white">
             {ourStoryHero.title}
@@ -24,7 +24,7 @@ const OurStory = () => {
         </div>
       </section>
 
-      <section className="py-20 bg-[#FAFAFA]">
+      <section id="our-story-founders" className="py-20 bg-[#FAFAFA]">
         <div className="max-w-6xl mx-auto px-6">
           <h2 className="heading-font text-3xl md:text-4xl font-bold text-[#333] text-center mb-10 md:mb-16">
             {foundersSectionTitle}
@@ -87,7 +87,7 @@ const OurStory = () => {
         </div>
       </section>
 
-      <section className="py-20 bg-gradient-to-b from-[#1FA7A6]/10 via-[#38C2B4]/10 to-[#78D65C]/10">
+      <section id="our-story-journey" className="py-20 bg-gradient-to-b from-[#1FA7A6]/10 via-[#38C2B4]/10 to-[#78D65C]/10">
         <div className="max-w-5xl mx-auto px-6 space-y-8 text-center">
           <h2 className="heading-font text-4xl font-bold text-[#333]">{ourStoryJourney.title}</h2>
           <div className="space-y-6">
@@ -102,7 +102,10 @@ const OurStory = () => {
       </section>
 
       <Dialog open={!!zoomedImage} onOpenChange={() => setZoomedImage(null)}>
-        <DialogContent className="max-w-[95vw] md:max-w-4xl p-0 bg-transparent border-0 outline-none shadow-none">
+        <DialogContent
+          id="our-story-image-dialog"
+          className="max-w-[95vw] md:max-w-4xl p-0 bg-transparent border-0 outline-none shadow-none"
+        >
           <div className="relative">
             <button
               type="button"

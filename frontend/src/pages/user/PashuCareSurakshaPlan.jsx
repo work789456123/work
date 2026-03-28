@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Check, Star, Zap, Crown, Shield, MessageCircle } from "lucide-react";
 import { toast } from "sonner";
-import { surakshaPage, surakshaPlans } from "@/assets/pashucare_suraksha_plan";
+import { surakshaPage, surakshaPlans } from "@/assets/content/pashucare_suraksha_plan";
 
 const planIcons = {
   message: MessageCircle,
@@ -26,9 +26,14 @@ const PashuCareSurakshaPlan = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA] py-12" data-testid="suraksha-plan-page">
-      <div className="max-w-6xl mx-auto px-6 relative">
+    <div
+      id="page-pashucare-suraksha-plan"
+      className="min-h-screen bg-[#FAFAFA] py-12"
+      data-testid="suraksha-plan-page"
+    >
+      <div id="suraksha-inner" className="max-w-6xl mx-auto px-6 relative">
         <Button
+          id="suraksha-close-button"
           variant="ghost"
           size="icon"
           className="absolute right-6 top-0 text-gray-500 hover:bg-gray-200 rounded-full"
@@ -53,12 +58,12 @@ const PashuCareSurakshaPlan = () => {
           </svg>
         </Button>
 
-        <div className="text-center mb-16 space-y-4 pt-8">
+        <div id="suraksha-hero" className="text-center mb-16 space-y-4 pt-8">
           <div className="inline-flex items-center space-x-2 px-4 py-2 bg-yellow-100 rounded-full text-yellow-800 font-medium">
             <Shield className="w-5 h-5" />
             <span>{page.badge}</span>
           </div>
-          <h1 className="heading-font text-4xl lg:text-5xl font-bold text-[#333]">
+          <h1 id="suraksha-page-title" className="heading-font text-4xl lg:text-5xl font-bold text-[#333]">
             {page.hero.line1}
             <br />
             <span className="text-[#1F6559]">{page.hero.line2}</span>
@@ -70,15 +75,15 @@ const PashuCareSurakshaPlan = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+        <div id="suraksha-plans-grid" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
           {surakshaPlans.map((plan) => {
             const PlanIcon = planIcons[plan.iconId];
             return (
               <Card
+                id={`suraksha-plan-card-${plan.id}`}
                 key={plan.id}
-                className={`relative p-8 rounded-2xl ${plan.color} ${plan.borderColor} border-2 space-y-6 ${
-                  plan.popular ? "ring-2 ring-yellow-400 ring-offset-2" : ""
-                }`}
+                className={`relative p-8 rounded-2xl ${plan.color} ${plan.borderColor} border-2 space-y-6 ${plan.popular ? "ring-2 ring-yellow-400 ring-offset-2" : ""
+                  }`}
                 data-testid={`plan-card-${plan.id}`}
               >
                 {plan.popular && (
@@ -90,13 +95,12 @@ const PashuCareSurakshaPlan = () => {
                 )}
                 <div className="text-center space-y-2">
                   <PlanIcon
-                    className={`w-12 h-12 mx-auto ${
-                      plan.id === "daily"
+                    className={`w-12 h-12 mx-auto ${plan.id === "daily"
                         ? "text-yellow-600"
                         : plan.id === "monthly"
                           ? "text-[#1F6559]"
                           : "text-gray-500"
-                    }`}
+                      }`}
                   />
                   <h3 className="heading-font text-2xl font-bold text-[#333]">{plan.name}</h3>
                   <p className="text-sm text-[#6F6F6F]">{plan.nameHindi}</p>
@@ -133,8 +137,8 @@ const PashuCareSurakshaPlan = () => {
           })}
         </div>
 
-        <div className="bg-teal-50 rounded-2xl border border-[#EAEAEA] p-8 mb-16">
-          <h2 className="heading-font text-2xl font-bold text-[#333] text-center mb-8">
+        <div id="suraksha-how-it-works" className="bg-teal-50 rounded-2xl border border-[#EAEAEA] p-8 mb-16">
+          <h2 id="suraksha-how-it-works-title" className="heading-font text-2xl font-bold text-[#333] text-center mb-8">
             {page.howItWorks.title}
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
@@ -160,7 +164,7 @@ const PashuCareSurakshaPlan = () => {
           </div>
         </div>
 
-        <div className="bg-gradient-to-r from-[#1F6559] to-[#2ba896] rounded-2xl p-8 text-white text-center space-y-4">
+        <div id="suraksha-promo-cta" className="bg-gradient-to-r from-[#1F6559] to-[#2ba896] rounded-2xl p-8 text-white text-center space-y-4">
           <h3 className="heading-font text-2xl font-bold">{page.promo.quote}</h3>
           <p className="opacity-90">{page.promo.description}</p>
           <Button

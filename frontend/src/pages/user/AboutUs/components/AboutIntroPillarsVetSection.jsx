@@ -1,12 +1,12 @@
 import { Sparkles, Heart, Shield, Zap } from "lucide-react";
-import { aboutIntro, aboutPillars, aboutVetSupport } from "@/assets/about";
+import { aboutIntro, aboutPillars, aboutVetSupport } from "@/assets/content/about";
 
 const pillarIcons = { sparkles: Sparkles, heart: Heart, zap: Zap, shield: Shield };
 
 export default function AboutIntroPillarsVetSection() {
   const hi = aboutIntro.highlightPhrases;
   return (
-    <section className="py-20">
+    <section id="about-intro-pillars-vet" className="py-20">
       <div className="max-w-7xl mx-auto px-12 space-y-8">
         <div className="space-y-6">
           <p className="text-lg text-[#6F6F6F] leading-relaxed">{aboutIntro.paragraphs[0]}</p>

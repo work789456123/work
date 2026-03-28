@@ -1,8 +1,9 @@
-import { aboutHero } from "@/assets/about";
+import { aboutHero } from "@/assets/content/about";
 
 export default function AboutHeroSection() {
   return (
     <section
+      id="about-hero"
       className="py-16 md:py-24 bg-gradient-to-r from-[#1FA7A6] via-[#38C2B4] to-[#78D65C]"
       data-testid="AboutUs-section"
     >

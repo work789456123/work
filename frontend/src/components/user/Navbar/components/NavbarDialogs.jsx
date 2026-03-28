@@ -7,7 +7,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { authDialog, petDialog, navbarActions } from "@/assets/shared/auth_ui";
+import { authDialog, petDialog, navbarActions } from "@/assets/content/shared/auth_ui";
 
 export function NavbarAuthDialog({
   open,
@@ -20,18 +20,18 @@ export function NavbarAuthDialog({
 }) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md" data-testid="auth-dialog">
+      <DialogContent id="navbar-dialog-auth" className="sm:max-w-md" data-testid="auth-dialog">
         <DialogHeader>
           <DialogTitle className="heading-font text-2xl">
             {authMode === "login" ? authDialog.loginTitle : authDialog.registerTitle}
           </DialogTitle>
         </DialogHeader>
-        <form onSubmit={onSubmit} className="space-y-4">
+        <form id="navbar-form-auth" onSubmit={onSubmit} className="space-y-4">
           {authMode === "register" && (
             <div>
-              <Label htmlFor="full_name">{authDialog.labels.fullName}</Label>
+              <Label htmlFor="navbar-auth-full_name">{authDialog.labels.fullName}</Label>
               <Input
-                id="full_name"
+                id="navbar-auth-full_name"
                 data-testid="auth-fullname-input"
                 value={formData.full_name}
                 onChange={(e) => onFieldChange("full_name", e.target.value)}
@@ -41,9 +41,9 @@ export function NavbarAuthDialog({
             </div>
           )}
           <div>
-            <Label htmlFor="phone_or_email">{authDialog.labels.phoneOrEmail}</Label>
+            <Label htmlFor="navbar-auth-phone_or_email">{authDialog.labels.phoneOrEmail}</Label>
             <Input
-              id="phone_or_email"
+              id="navbar-auth-phone_or_email"
               data-testid="auth-phone-email-input"
               value={formData.phone_or_email}
               onChange={(e) => onFieldChange("phone_or_email", e.target.value)}
@@ -52,9 +52,9 @@ export function NavbarAuthDialog({
             />
           </div>
           <div>
-            <Label htmlFor="password">{authDialog.labels.password}</Label>
+            <Label htmlFor="navbar-auth-password">{authDialog.labels.password}</Label>
             <Input
-              id="password"
+              id="navbar-auth-password"
               type="password"
               data-testid="auth-password-input"
               value={formData.password}
@@ -97,16 +97,16 @@ export function NavbarPetDialog({
 }) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md" data-testid="add-pet-dialog">
+      <DialogContent id="navbar-dialog-pet" className="sm:max-w-md" data-testid="add-pet-dialog">
         <DialogHeader>
           <DialogTitle className="heading-font text-2xl">{petDialog.title}</DialogTitle>
           <p className="text-sm text-[#6F6F6F]">{petDialog.subtitle}</p>
         </DialogHeader>
-        <form onSubmit={onSubmit} className="space-y-4">
+        <form id="navbar-form-pet" onSubmit={onSubmit} className="space-y-4">
           <div>
-            <Label htmlFor="pet_name">{petDialog.labels.name}</Label>
+            <Label htmlFor="navbar-pet-name">{petDialog.labels.name}</Label>
             <Input
-              id="pet_name"
+              id="navbar-pet-name"
               data-testid="pet-name-input"
               value={petData.name}
               onChange={(e) => onFieldChange("name", e.target.value)}
@@ -115,9 +115,9 @@ export function NavbarPetDialog({
             />
           </div>
           <div>
-            <Label htmlFor="pet_type">{petDialog.labels.type}</Label>
+            <Label htmlFor="navbar-pet-type">{petDialog.labels.type}</Label>
             <Input
-              id="pet_type"
+              id="navbar-pet-type"
               data-testid="pet-type-input"
               placeholder={petDialog.labels.typePlaceholder}
               value={petData.pet_type}
@@ -128,9 +128,9 @@ export function NavbarPetDialog({
           </div>
           <div className="grid grid-cols-3 gap-3">
             <div>
-              <Label htmlFor="age">{petDialog.labels.age}</Label>
+              <Label htmlFor="navbar-pet-age">{petDialog.labels.age}</Label>
               <Input
-                id="age"
+                id="navbar-pet-age"
                 data-testid="pet-age-input"
                 placeholder={petDialog.labels.agePlaceholder}
                 value={petData.age}
@@ -139,9 +139,9 @@ export function NavbarPetDialog({
               />
             </div>
             <div>
-              <Label htmlFor="gender">{petDialog.labels.gender}</Label>
+              <Label htmlFor="navbar-pet-gender">{petDialog.labels.gender}</Label>
               <Input
-                id="gender"
+                id="navbar-pet-gender"
                 data-testid="pet-gender-input"
                 placeholder={petDialog.labels.genderPlaceholder}
                 value={petData.gender}
@@ -150,9 +150,9 @@ export function NavbarPetDialog({
               />
             </div>
             <div>
-              <Label htmlFor="weight">{petDialog.labels.weight}</Label>
+              <Label htmlFor="navbar-pet-weight">{petDialog.labels.weight}</Label>
               <Input
-                id="weight"
+                id="navbar-pet-weight"
                 data-testid="pet-weight-input"
                 placeholder={petDialog.labels.weightPlaceholder}
                 value={petData.weight}

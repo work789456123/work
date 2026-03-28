@@ -19,15 +19,15 @@ export default function AdminAppointments(){
 
  return(
 
-  <div className="flex">
+  <div id="page-appointment-management-panel" className="flex">
 
   <Sidebar/>
 
-  <div className="ml-64 p-10 w-full">
+  <div id="appointment-management-main" className="ml-64 p-10 w-full">
 
-   <h1 className="text-2xl mb-6">Appointments</h1>
+   <h1 id="appointment-management-title" className="text-2xl mb-6">Appointments</h1>
 
-   <table className="w-full border">
+   <table id="appointment-management-table" className="w-full border">
 
    <thead>
     <tr>

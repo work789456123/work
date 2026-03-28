@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { heroSlides } from "@/assets/home";
+import { heroSlides } from "@/assets/content/home";
 import HomeHeroCarouselSection from "./components/HomeHeroCarouselSection";
 import HomeAboutPillarsSection from "./components/HomeAboutPillarsSection";
 import HomeMeetGopuSection from "./components/HomeMeetGopuSection";
@@ -23,7 +23,7 @@ const Home = () => {
   const onPromo = () => window.dispatchEvent(new CustomEvent("openPromoModal"));
 
   return (
-    <div className="min-h-screen">
+    <div id="page-home" className="min-h-screen">
       <HomeHeroCarouselSection
         currentSlide={currentSlide}
         setCurrentSlide={setCurrentSlide}

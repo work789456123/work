@@ -21,7 +21,7 @@ export default function NavbarDesktopNav({ primaryNav }) {
   };
 
   return (
-    <div className="hidden xl:flex items-center space-x-1">
+    <div id="user-navbar-desktop" className="hidden xl:flex items-center space-x-1">
       {primaryNav.map((link) => {
         if (link.children?.length > 0) {
           return (

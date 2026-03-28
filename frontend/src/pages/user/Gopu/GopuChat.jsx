@@ -19,15 +19,25 @@ const GopuChat = () => {
   } = useGopuChatController();
 
   return (
-    <div className="flex flex-col lg:flex-row min-h-screen bg-[#FAFAFA]" data-testid="gopu-chat-page">
+    <div
+      id="page-gopu-chat"
+      className="flex flex-col lg:flex-row min-h-screen bg-[#FAFAFA]"
+      data-testid="gopu-chat-page"
+    >
       <GopuChatSidebar
         sessions={state.sessions}
         sessionId={state.sessionId}
         onNewChat={startNewSession}
         onSelectSession={loadSessionHistory}
       />
-      <div className="flex-1 flex flex-col items-center py-8 px-4 lg:py-12 lg:px-6 overflow-hidden">
-        <div className="w-full max-w-3xl flex flex-col h-full bg-teal-50 rounded-3xl shadow-sm border border-[#EAEAEA] overflow-hidden">
+      <div
+        id="gopu-chat-main"
+        className="flex-1 flex flex-col items-center py-8 px-4 lg:py-12 lg:px-6 overflow-hidden"
+      >
+        <div
+          id="gopu-chat-panel"
+          className="w-full max-w-3xl flex flex-col h-full bg-teal-50 rounded-3xl shadow-sm border border-[#EAEAEA] overflow-hidden"
+        >
           <GopuChatHeaderBar credits={state.credits} remainingMessages={state.remainingMessages} />
           <GopuChatMessageList
             messages={state.messages}

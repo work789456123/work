@@ -10,7 +10,7 @@ import AboutWhoWeServeSection from "./components/AboutWhoWeServeSection";
 import AboutClosingCtaSection from "./components/AboutClosingCtaSection";
 
 const AboutUs = () => (
-  <div className="min-h-screen bg-teal-50">
+  <div id="page-about-us" className="min-h-screen bg-teal-50">
     <AboutHeroSection />
     <AboutIntroPillarsVetSection />
     <AboutMeetGopuSection />

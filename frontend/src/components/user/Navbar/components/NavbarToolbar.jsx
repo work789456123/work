@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
-import { navbarActions } from "@/assets/shared/auth_ui";
+import { navbarActions } from "@/assets/content/shared/auth_ui";
 
 export default function NavbarToolbar({
   mobileMenuOpen,
@@ -11,7 +11,7 @@ export default function NavbarToolbar({
   onOpenAuth,
 }) {
   return (
-    <div className="flex items-center space-x-3 ml-4 lg:ml-8">
+    <div id="user-navbar-toolbar" className="flex items-center space-x-3 ml-4 lg:ml-8">
       <Button
         onClick={onGopuClick}
         className="hidden lg:flex rounded-full bg-white text-[#1F6559] hover:bg-white/90 font-semibold mr-3"

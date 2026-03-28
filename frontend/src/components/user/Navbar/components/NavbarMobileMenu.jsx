@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { navbarActions } from "@/assets/shared/auth_ui";
+import { navbarActions } from "@/assets/content/shared/auth_ui";
 
 export default function NavbarMobileMenu({
   open,
@@ -17,7 +17,7 @@ export default function NavbarMobileMenu({
   if (!open) return null;
 
   return (
-    <div className="xl:hidden pb-4 space-y-2" data-testid="mobile-menu">
+    <div id="user-navbar-mobile" className="xl:hidden pb-4 space-y-2" data-testid="mobile-menu">
       <Link
         to="/"
         onClick={() => onClose()}

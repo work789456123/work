@@ -21,8 +21,8 @@ const About = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA]" data-testid="about-page">
-      <section className="py-24 bg-teal-50">
+    <div id="page-legacy-about" className="min-h-screen bg-[#FAFAFA]" data-testid="about-page">
+      <section id="legacy-about-hero" className="py-24 bg-teal-50">
         <div className="max-w-4xl mx-auto px-6 text-center space-y-6">
           <h1 className="heading-font text-4xl lg:text-5xl font-bold text-[#333]" data-testid="about-heading">Our Story</h1>
           <p className="text-xl text-[#6F6F6F] leading-relaxed">
@@ -35,7 +35,7 @@ const About = () => {
         </div>
       </section>
 
-      <section className="py-24 bg-[#FAFAFA]">
+      <section id="legacy-about-founders" className="py-24 bg-[#FAFAFA]">
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="heading-font text-3xl lg:text-4xl font-bold text-[#333] text-center mb-16">From the Desk of the Founders</h2>
           <div className="grid md:grid-cols-3 gap-8">
@@ -53,10 +53,10 @@ const About = () => {
         </div>
       </section>
 
-      <section className="py-24 bg-teal-50">
+      <section id="legacy-about-gopu" className="py-24 bg-teal-50">
         <div className="max-w-4xl mx-auto px-6 space-y-12">
           <div className="space-y-6">
-            <h2 className="heading-font text-3xl font-bold text-[#333]">The Birth of Gopu</h2>
+            <h2 id="legacy-about-gopu-title" className="heading-font text-3xl font-bold text-[#333]">The Birth of Gopu</h2>
             <p className="text-lg text-[#6F6F6F] leading-relaxed">
               As we built the platform, we realized something important: People do not connect with algorithms. 
               They connect with warmth. That is how Gopu was born — not just as a mascot, but as a symbol of protection, 

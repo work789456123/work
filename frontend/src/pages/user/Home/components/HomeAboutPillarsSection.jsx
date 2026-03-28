@@ -1,5 +1,5 @@
 import { Sparkles, Heart, Globe, Users, Shield, Zap } from "lucide-react";
-import { aboutSection, aboutPillars } from "@/assets/home";
+import { aboutSection, aboutPillars } from "@/assets/content/home";
 
 const iconMap = {
   sparkles: Sparkles,
@@ -13,6 +13,7 @@ const iconMap = {
 export default function HomeAboutPillarsSection() {
   return (
     <section
+      id="home-about-pillars"
       className="py-24 bg-gradient-to-r from-[#1FA7A6] via-[#38C2B4] to-[#78D65C]"
       data-testid="about-section"
     >

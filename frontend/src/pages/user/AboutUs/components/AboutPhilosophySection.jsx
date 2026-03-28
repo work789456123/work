@@ -1,8 +1,8 @@
-import { aboutPhilosophy } from "@/assets/about";
+import { aboutPhilosophy } from "@/assets/content/about";
 
 export default function AboutPhilosophySection() {
   return (
-    <section className="py-20">
+    <section id="about-philosophy" className="py-20">
       <div className="max-w-4xl mx-auto px-6 text-center space-y-8">
         <h2 className="heading-font text-4xl font-bold text-[#333]">{aboutPhilosophy.title}</h2>
         <p className="text-2xl text-[#6F6F6F] leading-relaxed">{aboutPhilosophy.lead}</p>

@@ -65,30 +65,36 @@ const Appointments = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA] py-12" data-testid="appointment-page">
-      <div className="max-w-3xl mx-auto px-6">
-        <div className="text-center mb-12">
-          <h1 className="heading-font text-4xl font-bold text-[#333] mb-4" data-testid="appointment-heading">Book Appointment</h1>
+    <div id="page-legacy-appointments-form" className="min-h-screen bg-[#FAFAFA] py-12" data-testid="appointment-page">
+      <div id="legacy-appt-inner" className="max-w-3xl mx-auto px-6">
+        <div id="legacy-appt-intro" className="text-center mb-12">
+          <h1
+            id="legacy-appt-page-title"
+            className="heading-font text-4xl font-bold text-[#333] mb-4"
+            data-testid="appointment-heading"
+          >
+            Book Appointment
+          </h1>
           <p className="text-[#6F6F6F]">Schedule a consultation for your pet</p>
         </div>
 
-        <Card className="p-8 rounded-2xl border-[#EAEAEA]">
-          <form onSubmit={handleSubmit} className="space-y-6">
+        <Card id="legacy-appt-form-card" className="p-8 rounded-2xl border-[#EAEAEA]">
+          <form id="legacy-appt-form" onSubmit={handleSubmit} className="space-y-6">
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <Label htmlFor="pet_name">Pet Name *</Label>
-                <Input id="pet_name" data-testid="appointment-pet-name" value={formData.pet_name} onChange={(e) => setFormData({...formData, pet_name: e.target.value})} required className="rounded-lg border-[#EAEAEA]" />
+                <Label htmlFor="legacy-appt-pet_name">Pet Name *</Label>
+                <Input id="legacy-appt-pet_name" data-testid="appointment-pet-name" value={formData.pet_name} onChange={(e) => setFormData({...formData, pet_name: e.target.value})} required className="rounded-lg border-[#EAEAEA]" />
               </div>
               <div>
-                <Label htmlFor="pet_type">Pet Type *</Label>
-                <Input id="pet_type" data-testid="appointment-pet-type" placeholder="Dog, Cat, Cow, etc." value={formData.pet_type} onChange={(e) => setFormData({...formData, pet_type: e.target.value})} required className="rounded-lg border-[#EAEAEA]" />
+                <Label htmlFor="legacy-appt-pet_type">Pet Type *</Label>
+                <Input id="legacy-appt-pet_type" data-testid="appointment-pet-type" placeholder="Dog, Cat, Cow, etc." value={formData.pet_type} onChange={(e) => setFormData({...formData, pet_type: e.target.value})} required className="rounded-lg border-[#EAEAEA]" />
               </div>
             </div>
             <div className="grid md:grid-cols-3 gap-6">
               <div>
-                <Label htmlFor="gender">Gender *</Label>
+                <Label htmlFor="legacy-appt-gender">Gender *</Label>
                 <Select value={formData.gender} onValueChange={(value) => setFormData({...formData, gender: value})}>
-                  <SelectTrigger data-testid="appointment-gender"><SelectValue placeholder="Select" /></SelectTrigger>
+                  <SelectTrigger id="legacy-appt-gender" data-testid="appointment-gender"><SelectValue placeholder="Select" /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="Male">Male</SelectItem>
                     <SelectItem value="Female">Female</SelectItem>
@@ -96,14 +102,14 @@ const Appointments = () => {
                 </Select>
               </div>
               <div>
-                <Label htmlFor="age">Age</Label>
-                <Input id="age" data-testid="appointment-age" placeholder="NA" value={formData.age} onChange={(e) => setFormData({...formData, age: e.target.value})} className="rounded-lg border-[#EAEAEA]" />
+                <Label htmlFor="legacy-appt-age">Age</Label>
+                <Input id="legacy-appt-age" data-testid="appointment-age" placeholder="NA" value={formData.age} onChange={(e) => setFormData({...formData, age: e.target.value})} className="rounded-lg border-[#EAEAEA]" />
               </div>
               <div>
-                <Label htmlFor="weight">Weight</Label>
+                <Label htmlFor="legacy-appt-weight">Weight</Label>
                 <div className="flex gap-2">
                   <Input 
-                    id="weight" 
+                    id="legacy-appt-weight" 
                     data-testid="appointment-weight" 
                     placeholder="Enter weight" 
                     value={formData.weight} 
@@ -111,7 +117,7 @@ const Appointments = () => {
                     className="rounded-lg border-[#EAEAEA] flex-1" 
                   />
                   <Select value={formData.weight_unit} onValueChange={(value) => setFormData({...formData, weight_unit: value})}>
-                    <SelectTrigger data-testid="appointment-weight-unit" className="w-24"><SelectValue /></SelectTrigger>
+                    <SelectTrigger id="legacy-appt-weight_unit" data-testid="appointment-weight-unit" className="w-24"><SelectValue /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="KG">KG</SelectItem>
                       <SelectItem value="LBS">LBS</SelectItem>
@@ -122,18 +128,18 @@ const Appointments = () => {
             </div>
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <Label htmlFor="owner_name">Owner Name *</Label>
-                <Input id="owner_name" data-testid="appointment-owner-name" value={formData.owner_name} onChange={(e) => setFormData({...formData, owner_name: e.target.value})} required className="rounded-lg border-[#EAEAEA]" />
+                <Label htmlFor="legacy-appt-owner_name">Owner Name *</Label>
+                <Input id="legacy-appt-owner_name" data-testid="appointment-owner-name" value={formData.owner_name} onChange={(e) => setFormData({...formData, owner_name: e.target.value})} required className="rounded-lg border-[#EAEAEA]" />
               </div>
               <div>
-                <Label htmlFor="owner_number">Owner Number *</Label>
-                <Input id="owner_number" data-testid="appointment-owner-number" value={formData.owner_number} onChange={(e) => setFormData({...formData, owner_number: e.target.value})} required className="rounded-lg border-[#EAEAEA]" />
+                <Label htmlFor="legacy-appt-owner_number">Owner Number *</Label>
+                <Input id="legacy-appt-owner_number" data-testid="appointment-owner-number" value={formData.owner_number} onChange={(e) => setFormData({...formData, owner_number: e.target.value})} required className="rounded-lg border-[#EAEAEA]" />
               </div>
             </div>
             <div>
-              <Label htmlFor="time_slot">Time Slot *</Label>
+              <Label htmlFor="legacy-appt-time_slot">Time Slot *</Label>
               <Select value={formData.time_slot} onValueChange={(value) => setFormData({...formData, time_slot: value})}>
-                <SelectTrigger data-testid="appointment-time-slot"><SelectValue placeholder="Select time" /></SelectTrigger>
+                <SelectTrigger id="legacy-appt-time_slot" data-testid="appointment-time-slot"><SelectValue placeholder="Select time" /></SelectTrigger>
                 <SelectContent>
                   {timeSlots.map(slot => <SelectItem key={slot} value={slot}>{slot}</SelectItem>)}
                 </SelectContent>
@@ -141,24 +147,24 @@ const Appointments = () => {
             </div>
             
             {/* Checkboxes Section */}
-            <div className="space-y-4 bg-[#F5F5F5] p-4 rounded-xl">
+            <div id="legacy-appt-checkboxes" className="space-y-4 bg-[#F5F5F5] p-4 rounded-xl">
               <div className="flex items-center space-x-3">
                 <Checkbox 
-                  id="vaccination" 
+                  id="legacy-appt-vaccination" 
                   data-testid="appointment-vaccination" 
                   checked={formData.vaccination_status} 
                   onCheckedChange={(checked) => setFormData({...formData, vaccination_status: checked})}
                 />
-                <Label htmlFor="vaccination" className="cursor-pointer font-medium">Pet is vaccinated</Label>
+                <Label htmlFor="legacy-appt-vaccination" className="cursor-pointer font-medium">Pet is vaccinated</Label>
               </div>
               <div className="flex items-center space-x-3">
                 <Checkbox 
-                  id="medical_history_available" 
+                  id="legacy-appt-medical_history_available" 
                   data-testid="appointment-medical-history-checkbox" 
                   checked={formData.medical_history_available}
                   onCheckedChange={handleMedicalHistoryChange}
                 />
-                <Label htmlFor="medical_history_available" className="cursor-pointer font-medium">Medical history available</Label>
+                <Label htmlFor="legacy-appt-medical_history_available" className="cursor-pointer font-medium">Medical history available</Label>
               </div>
             </div>
 
@@ -169,7 +175,7 @@ const Appointments = () => {
               </div>
             )}
 
-            <Button type="submit" data-testid="submit-appointment" className="w-full rounded-full bg-[#1F6559] text-white hover:bg-[#1F6559]/90 py-6 text-lg">
+            <Button id="legacy-appt-submit" type="submit" data-testid="submit-appointment" className="w-full rounded-full bg-[#1F6559] text-white hover:bg-[#1F6559]/90 py-6 text-lg">
               Book Appointment
             </Button>
           </form>
@@ -178,12 +184,13 @@ const Appointments = () => {
 
       {/* Medical History Popup */}
       <Dialog open={showMedicalHistoryPopup} onOpenChange={setShowMedicalHistoryPopup}>
-        <DialogContent className="sm:max-w-lg" data-testid="medical-history-dialog">
+        <DialogContent id="legacy-appt-medical-dialog" className="sm:max-w-lg" data-testid="medical-history-dialog">
           <DialogHeader>
             <DialogTitle className="heading-font text-xl">Add Medical History</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <Textarea 
+              id="legacy-appt-medical_history"
               data-testid="medical-history-textarea"
               placeholder="Please describe your pet's medical history, including any previous conditions, surgeries, allergies, or ongoing treatments..."
               value={formData.medical_history}
@@ -192,6 +199,7 @@ const Appointments = () => {
             />
             <div className="flex gap-3">
               <Button
+                id="legacy-appt-medical-save"
                 onClick={() => {
                   setFormData({...formData, medical_history_available: true});
                   setShowMedicalHistoryPopup(false);
@@ -202,6 +210,7 @@ const Appointments = () => {
                 Save
               </Button>
               <Button
+                id="legacy-appt-medical-cancel"
                 variant="outline"
                 onClick={() => {
                   setFormData({...formData, medical_history_available: false, medical_history: ""});
