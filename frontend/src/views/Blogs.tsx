@@ -1,17 +1,14 @@
-"use client";
-
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { blogsHeader, blogList, readMoreLabel } from "@/assets/content/blogs";
-import UserPageShell from "@/motion/UserPageShell";
+import MotionPageShell from "@/components/layout/motion-page-shell";
 
 const Blogs = () => {
-  const router = useRouter();
   const h = blogsHeader;
 
   return (
-    <UserPageShell id="page-blogs" className="py-20 bg-gradient-to-b from-[#1FA7A6] via-[#38C2B4] to-[#78D65C]/10">
+    <MotionPageShell id="page-blogs" className="py-20 bg-gradient-to-b from-[#1FA7A6] via-[#38C2B4] to-[#78D65C]/10">
       <div id="blogs-inner" className="heading-font text-2xl lg:text-2xl font-bold text-white">
         <div id="blogs-header" className="text-center mb-12">
           <h1 id="blogs-page-title" className="text-4xl font-bold">
@@ -30,13 +27,15 @@ const Blogs = () => {
               <div className="content p-4 pt-2">
                 <h3 className="text-lg font-bold mb-2 text-[#333]">{blog.title}</h3>
                 <p className="text-gray-500 mb-4 text-sm">{blog.description}</p>
-                <Button onClick={() => router.push(`/blogs/${blog.id}`)}>{readMoreLabel}</Button>
+                <Button asChild>
+                  <Link href={`/blogs/${blog.id}`}>{readMoreLabel}</Link>
+                </Button>
               </div>
             </Card>
           ))}
         </div>
       </div>
-    </UserPageShell>
+    </MotionPageShell>
   );
 };
 

@@ -1,14 +1,13 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { aboutCta } from "@/assets/content/about";
 import ScrollReveal from "@/motion/ScrollReveal";
 import { staggerContainer, fadeUp, useScrollMotion, transitionMedium } from "@/motion/scrollMotion";
 
 export default function AboutClosingCtaSection() {
-  const router = useRouter();
   const { t, stagger, delayChildren } = useScrollMotion();
   const tr = t(transitionMedium);
   const fade = fadeUp(tr);
@@ -29,10 +28,10 @@ export default function AboutClosingCtaSection() {
         ))}
         <motion.div variants={fade}>
           <Button
-            onClick={() => router.push(aboutCta.path)}
+            asChild
             className="rounded-full bg-teal-50 text-[#1F6559] hover:bg-teal-50/90 px-8 py-6 text-lg font-semibold"
           >
-            {aboutCta.button}
+            <Link href={aboutCta.path}>{aboutCta.button}</Link>
           </Button>
         </motion.div>
       </ScrollReveal>

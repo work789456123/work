@@ -1,14 +1,13 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { isAxiosError } from "axios";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import api from "@/utils/api";
+import { submitContactMessage } from "@/app/actions/contact";
 import { Mail, Phone, MapPin } from "lucide-react";
 import { contactPage, contactChannels, contactForm } from "@/assets/content/contact";
 import UserPageShell from "@/motion/UserPageShell";
@@ -23,13 +22,12 @@ const Contact = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
-      const response = await api.post<{ message?: string }>("/contact", formData);
-      toast.success(response.data.message ?? "Message sent");
+    const result = await submitContactMessage(formData);
+    if (result.ok) {
+      toast.success(result.message);
       setFormData({ name: "", email: "", message: "" });
-    } catch (error: unknown) {
-      const detail = isAxiosError(error) ? error.response?.data?.detail : undefined;
-      toast.error(typeof detail === "string" ? detail : "Failed to send message");
+    } else {
+      toast.error(result.error);
     }
   };
 

@@ -1,11 +1,11 @@
 import PrivacyLegalSections from "./components/PrivacyLegalSections";
 import PrivacyLiabilitySection from "./components/PrivacyLiabilitySection";
 import { privacyPage } from "@/assets/content/privacy";
-import UserPageShell from "@/motion/UserPageShell";
+import { PageShell } from "@/components/layout/page-shell";
 
 const PrivacyPolicy = () => {
   return (
-    <UserPageShell id="page-privacy-policy" className="min-h-screen bg-gray-50 flex justify-center py-10 px-4 mt-16 font-sans">
+    <PageShell id="page-privacy-policy" className="min-h-screen bg-gray-50 flex justify-center py-10 px-4 mt-16 font-sans">
       <div id="privacy-shell" className="bg-teal-50 max-w-[900px] w-full p-10 shadow-lg rounded-xl relative border border-gray-100">
         <div id="privacy-header" className="mb-10 text-center border-b pb-6">
           <h1 id="privacy-page-title" className="text-[32px] font-bold text-[#333]">
@@ -21,7 +21,7 @@ const PrivacyPolicy = () => {
           <PrivacyLiabilitySection />
         </div>
       </div>
-    </UserPageShell>
+    </PageShell>
   );
 };
 
