@@ -11,7 +11,7 @@ import AboutClosingCtaSection from "./components/AboutClosingCtaSection";
 import { PageShell } from "@/components/layout/page-shell";
 
 const AboutUs = () => (
-  <PageShell id="page-about-us" className="min-h-screen bg-teal-50">
+  <PageShell id="page-about-us" className="min-h-screen bg-white">
     <AboutHeroSection />
     <AboutIntroPillarsVetSection />
     <AboutMeetGopuSection />

@@ -1,29 +1,62 @@
+"use client";
+
+import { motion } from "framer-motion";
 import { Heart, Shield, Users, Globe } from "lucide-react";
 import { aboutWhoWeServe } from "@/assets/content/about";
 import { lucideFromMap } from "@/lib/lucideFromMap";
+import { SplitHeading } from "@/motion/SplitHeading";
+import { useScrollMotion, transitionMedium, staggerContainer, scaleIn } from "@/motion/scrollMotion";
+import ScrollReveal from "@/motion/ScrollReveal";
 
 const whoIcons = { heart: Heart, shield: Shield, users: Users, globe: Globe };
 
+const cardGradients = [
+  "from-[#1FA7A6] to-[#38C2B4]",
+  "from-[#1F6559] to-[#1FA7A6]",
+  "from-[#38C2B4] to-[#78D65C]",
+  "from-[#78D65C] to-[#1F6559]",
+];
+
 export default function AboutWhoWeServeSection() {
+  const { t, stagger, delayChildren } = useScrollMotion();
+  const tr = t(transitionMedium);
+
   return (
-    <section id="about-who-we-serve" className="py-20 bg-gradient-to-b from-[#1FA7A6] via-[#38C2B4] to-[#78D65C]/10">
-      <div className="max-w-5xl mx-auto px-6 space-y-8">
-        <h2 className="heading-font text-4xl font-bold text-[#333] text-center">{aboutWhoWeServe.title}</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {aboutWhoWeServe.items.map((item) => {
+    <section id="about-who-we-serve" className="bg-[#FAFAFA] py-20 md:py-28">
+      <div className="mx-auto max-w-5xl px-6">
+        <div className="mb-14 text-center">
+          <SplitHeading
+            text={aboutWhoWeServe.title}
+            as="h2"
+            className="heading-font justify-center text-4xl font-bold text-[#333] md:text-5xl"
+            wordDelay={0.1}
+          />
+        </div>
+
+        <ScrollReveal
+          variants={staggerContainer(stagger * 1.3, delayChildren)}
+          className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4"
+        >
+          {aboutWhoWeServe.items.map((item, i) => {
             const Icon = lucideFromMap(whoIcons, item.icon);
             if (!Icon) return null;
+            const grad = cardGradients[i % cardGradients.length];
             return (
-              <div
+              <motion.div
                 key={item.text}
-                className="p-6 rounded-2xl bg-teal-50 border border-[#EAEAEA] space-y-3 text-center"
+                variants={scaleIn(tr)}
+                className="group flex flex-col items-center gap-4 rounded-2xl border border-[#E8EEEB] bg-white p-7 text-center shadow-sm transition-all hover:-translate-y-1 hover:border-[#1F6559]/20 hover:shadow-lg"
               >
-                <Icon className="w-10 h-10 text-[#1F6559] mx-auto" />
-                <p className="heading-font font-semibold text-[#333]">{item.text}</p>
-              </div>
+                <div
+                  className={`flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br ${grad} shadow-sm transition-transform group-hover:scale-105`}
+                >
+                  <Icon className="h-8 w-8 text-white" strokeWidth={1.75} />
+                </div>
+                <p className="heading-font font-semibold leading-snug text-[#333]">{item.text}</p>
+              </motion.div>
             );
           })}
-        </div>
+        </ScrollReveal>
       </div>
     </section>
   );

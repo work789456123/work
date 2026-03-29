@@ -50,7 +50,7 @@ function AppointmentsPage() {
     <UserPageShell id="page-appointments" className="min-h-screen bg-[#FAFAFA]">
       <section
         id="appointments-hero"
-        className="relative overflow-hidden bg-gradient-to-b from-[#1FA7A6] via-[#38C2B4] to-[#78D65C]/15 pb-16 pt-12 md:pb-20 md:pt-16"
+        className="relative overflow-hidden bg-gradient-to-b from-[#1FA7A6] via-[#38C2B4] to-[#78D65C]/10 pb-16 pt-12 md:pb-20 md:pt-16"
       >
         <div
           className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-white/10 blur-3xl md:h-96 md:w-96"

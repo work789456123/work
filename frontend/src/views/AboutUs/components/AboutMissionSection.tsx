@@ -1,36 +1,100 @@
+"use client";
+
+import { motion } from "framer-motion";
 import { Globe, Award, Target, Shield, Zap } from "lucide-react";
 import { aboutMission } from "@/assets/content/about";
 import { lucideFromMap } from "@/lib/lucideFromMap";
+import { SplitHeading } from "@/motion/SplitHeading";
+import { useScrollMotion, transitionMedium, staggerContainer, fadeUp, scaleIn } from "@/motion/scrollMotion";
+import ScrollReveal from "@/motion/ScrollReveal";
 
 const missionIcons = { globe: Globe, award: Award, target: Target, shield: Shield, zap: Zap };
 
+const pillarsGradients = [
+  "from-[#1FA7A6] to-[#38C2B4]",
+  "from-[#38C2B4] to-[#78D65C]",
+  "from-[#1F6559] to-[#1FA7A6]",
+  "from-[#78D65C] to-[#1F6559]",
+  "from-[#1FA7A6] to-[#1F6559]",
+];
+
 export default function AboutMissionSection() {
+  const { t, stagger, delayChildren } = useScrollMotion();
+  const tr = t(transitionMedium);
+
   return (
-    <section id="about-mission" className="py-20">
-      <div className="max-w-5xl mx-auto px-6 space-y-8">
-        <h2 className="heading-font text-4xl font-bold text-[#333] text-center">{aboutMission.title}</h2>
-        <p className="text-lg text-[#6F6F6F] leading-relaxed">
-          {aboutMission.leadPrefix}
-          <span className="font-semibold text-[#1F6559]">{aboutMission.leadHighlight}</span>
-          {aboutMission.leadSuffix}
-        </p>
-        <p className="text-lg text-[#6F6F6F] leading-relaxed text-center">{aboutMission.body}</p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {aboutMission.pillars.map((item) => {
+    <section id="about-mission" className="bg-[#1FA7A6]/[0.05] py-20 md:py-28">
+      <div className="mx-auto max-w-5xl px-6">
+        <div className="mb-14 text-center">
+          <SplitHeading
+            text={aboutMission.title}
+            as="h2"
+            className="heading-font mb-6 justify-center text-4xl font-bold text-[#333] md:text-5xl"
+            wordDelay={0.12}
+          />
+          <motion.p
+            className="mx-auto max-w-3xl text-xl leading-relaxed text-[#6F6F6F]"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "0px 0px -80px 0px" }}
+            transition={{ delay: 0.35, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+          >
+            {aboutMission.leadPrefix}
+            <span className="font-semibold text-[#1F6559]">{aboutMission.leadHighlight}</span>
+            {aboutMission.leadSuffix}
+          </motion.p>
+        </div>
+
+        <ScrollReveal
+          variants={staggerContainer(stagger, delayChildren)}
+          className="mb-10 text-center"
+        >
+          <motion.p
+            variants={fadeUp(tr)}
+            className="mx-auto max-w-3xl text-lg leading-relaxed text-[#6F6F6F]"
+          >
+            {aboutMission.body}
+          </motion.p>
+        </ScrollReveal>
+
+        <ScrollReveal
+          variants={staggerContainer(stagger * 1.2, delayChildren)}
+          className="mb-14 flex flex-wrap justify-center gap-4"
+        >
+          {aboutMission.pillars.map((item, i) => {
             const Icon = lucideFromMap(missionIcons, item.icon);
             if (!Icon) return null;
+            const grad = pillarsGradients[i % pillarsGradients.length];
             return (
-              <div
+              <motion.div
                 key={item.text}
-                className="p-6 rounded-2xl bg-[#1F6559]/5 border border-[#1F6559]/20 space-y-3 text-center"
+                variants={scaleIn(tr)}
+                className="group flex items-center gap-2.5 rounded-full border border-[#E8EEEB] bg-white px-5 py-3 shadow-sm transition-all hover:-translate-y-0.5 hover:border-[#1F6559]/30 hover:shadow-md"
               >
-                <Icon className="w-10 h-10 text-[#1F6559] mx-auto" />
-                <p className="heading-font font-semibold text-[#333]">{item.text}</p>
-              </div>
+                <div
+                  className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-br ${grad}`}
+                >
+                  <Icon className="h-4 w-4 text-white" strokeWidth={2} />
+                </div>
+                <span className="heading-font text-sm font-semibold text-[#333]">{item.text}</span>
+              </motion.div>
             );
           })}
-        </div>
-        <p className="text-xl text-[#1F6559] font-semibold text-center pt-6">{aboutMission.vision}</p>
+        </ScrollReveal>
+
+        <motion.div
+          className="overflow-hidden rounded-2xl bg-gradient-to-r from-[#1FA7A6] via-[#38C2B4] to-[#78D65C] p-px"
+          initial={{ opacity: 0, scale: 0.96 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true, margin: "0px 0px -80px 0px" }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <div className="rounded-2xl bg-white px-8 py-7 text-center">
+            <p className="heading-font text-xl font-semibold text-[#1F6559] md:text-2xl">
+              {aboutMission.vision}
+            </p>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

@@ -261,7 +261,7 @@ export default function AppointmentsFormBody({ form, onFieldChange, onSubmit }: 
             id="appointments-submit"
             type="submit"
             size="lg"
-            className="heading-font h-12 w-full rounded-xl bg-gradient-to-r from-[#1FA7A6] via-[#38C2B4] to-[#1F6559] text-base font-semibold text-white shadow-lg shadow-[#1F6559]/20 transition hover:opacity-[0.97] hover:shadow-xl"
+            className="heading-font h-12 w-full rounded-xl bg-[#1F6559] text-base font-semibold text-white shadow-lg shadow-[#1F6559]/20 transition hover:opacity-[0.97] hover:shadow-xl"
           >
             {c.submit}
           </Button>

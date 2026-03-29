@@ -1,36 +1,75 @@
+"use client";
+
+import { motion } from "framer-motion";
 import { Target, Zap, Shield, Users, Heart } from "lucide-react";
 import { aboutPoweredBy } from "@/assets/content/about";
 import { lucideFromMap } from "@/lib/lucideFromMap";
+import { SplitHeading } from "@/motion/SplitHeading";
+import { useScrollMotion, transitionMedium, staggerContainer, fadeUp, scaleIn } from "@/motion/scrollMotion";
+import ScrollReveal from "@/motion/ScrollReveal";
 
 const capIcons = { target: Target, zap: Zap, shield: Shield, users: Users, heart: Heart };
 
 export default function AboutPoweredBySection() {
+  const { t, stagger, delayChildren } = useScrollMotion();
+  const tr = t(transitionMedium);
+
   return (
-    <section id="about-powered-by" className="py-20">
-      <div className="max-w-5xl mx-auto px-6 space-y-8">
-        <h2 className="heading-font text-4xl font-bold text-[#333] text-center">{aboutPoweredBy.title}</h2>
-        <p className="text-lg text-[#6F6F6F] leading-relaxed text-center">{aboutPoweredBy.intro}</p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {aboutPoweredBy.capabilities.map((item) => {
+    <section id="about-powered-by" className="bg-[#FAFAFA] py-20 md:py-28">
+      <div className="mx-auto max-w-5xl px-6">
+        <div className="mb-12 text-center">
+          <SplitHeading
+            text={aboutPoweredBy.title}
+            as="h2"
+            className="heading-font mb-4 justify-center text-3xl font-bold text-[#333] md:text-4xl"
+            wordDelay={0.09}
+          />
+          <motion.p
+            className="mx-auto max-w-2xl text-lg text-[#6F6F6F]"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "0px 0px -80px 0px" }}
+            transition={{ delay: 0.4, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+          >
+            {aboutPoweredBy.intro}
+          </motion.p>
+        </div>
+
+        <ScrollReveal
+          variants={staggerContainer(stagger * 1.2, delayChildren)}
+          className="mb-12 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
+        >
+          {aboutPoweredBy.capabilities.map((item, i) => {
             const Icon = lucideFromMap(capIcons, item.icon);
             if (!Icon) return null;
             return (
-              <div key={item.text} className="flex items-start space-x-4 p-4">
-                <div className="w-12 h-12 bg-[#1F6559]/10 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <Icon className="w-6 h-6 text-[#1F6559]" />
+              <motion.div
+                key={item.text}
+                variants={scaleIn(tr)}
+                className="group flex items-center gap-4 rounded-2xl border border-[#E8EEEB] bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:border-[#1F6559]/30 hover:shadow-md"
+              >
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#1FA7A6]/15 to-[#1F6559]/10 transition-colors group-hover:from-[#1FA7A6]/25 group-hover:to-[#1F6559]/20">
+                  <Icon className="h-5 w-5 text-[#1F6559]" strokeWidth={1.75} />
                 </div>
-                <p className="text-lg text-[#6F6F6F] pt-2">{item.text}</p>
-              </div>
+                <div className="flex items-center gap-3">
+                  <span className="heading-font text-sm font-semibold text-[#1F6559]/50">0{i + 1}</span>
+                  <p className="font-medium text-[#333]">{item.text}</p>
+                </div>
+              </motion.div>
             );
           })}
-        </div>
-        <div className="space-y-6 pt-6">
-          {aboutPoweredBy.paragraphs.map((t, i) => (
-            <p key={i} className="text-lg text-[#6F6F6F] leading-relaxed">
-              {t}
-            </p>
+        </ScrollReveal>
+
+        <ScrollReveal
+          variants={staggerContainer(stagger, delayChildren)}
+          className="space-y-5 border-t border-[#E8EEEB] pt-10"
+        >
+          {aboutPoweredBy.paragraphs.map((para, i) => (
+            <motion.p key={i} variants={fadeUp(tr)} className="text-lg leading-relaxed text-[#6F6F6F]">
+              {para}
+            </motion.p>
           ))}
-        </div>
+        </ScrollReveal>
       </div>
     </section>
   );
