@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, Clock } from "lucide-react";
@@ -90,11 +91,13 @@ const Blogs = () => {
                 variants={scaleIn(trShort)}
                 className="group flex flex-col overflow-hidden rounded-2xl border border-[#E8EEEB] bg-white shadow-sm transition-all hover:-translate-y-1 hover:border-[#1F6559]/20 hover:shadow-xl"
               >
-                <div className="relative overflow-hidden">
-                  <img
+                <div className="relative aspect-[4/3] w-full overflow-hidden">
+                  <Image
                     src={blog.image}
                     alt={blog.title}
-                    className="aspect-[4/3] w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                   />
                   {"tag" in blog && blog.tag && (
                     <span className="heading-font absolute left-3 top-3 rounded-full bg-[#1F6559]/90 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-white shadow-sm backdrop-blur-sm">

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { MessageSquare, Loader2, Plus, AlertTriangle } from "lucide-react";
 import ReactMarkdown from "react-markdown";
@@ -47,7 +48,14 @@ export default function GopuChatMessageList({
               }`}
           >
             {msg.image && (
-              <img src={msg.image} alt="Upload" className="rounded-lg mb-2 max-h-48" />
+              <Image
+                src={msg.image}
+                alt="Upload"
+                width={400}
+                height={300}
+                unoptimized
+                className="mb-2 max-h-48 w-auto max-w-full rounded-lg object-contain"
+              />
             )}
             {msg.role === "user" ? (
               <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.content}</p>

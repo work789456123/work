@@ -1,4 +1,7 @@
+"use client";
+
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { hero, heroSlides, slideOverlayActions } from "@/assets/content/home";
@@ -48,7 +51,16 @@ export default function HomeHeroCarouselSection({
 
   return (
     <section id="home-hero" className="relative  py-12 md:py-24 bg-teal-50 flex min-h-[calc(100vh-5.5rem)] items-center" data-testid="hero-section">
-      <img src="/images/contact_bg.png" alt="Home Hero Background" className="absolute inset-0 w-full h-full object-cover block z-0 opacity-30" />
+      <div className="pointer-events-none absolute inset-0 z-0">
+        <Image
+          src="/images/contact_bg.png"
+          alt=""
+          fill
+          className="object-cover opacity-30"
+          sizes="100vw"
+          priority
+        />
+      </div>
       {/* <div id="home-hero-overlay" className=" absolute inset-0 bg-gradient-to-tr from-white/40 to-[#1F6559]/60 z-10 backdrop-blur-[3px]"></div> */}
       <div id="home-hero-inner" className="max-w-[110rem] mx-auto px-4 md:px-6">
         <div id="home-hero-grid" className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 items-center">
@@ -115,19 +127,26 @@ export default function HomeHeroCarouselSection({
                 className="relative w-full overflow-hidden rounded-[1.75rem] aspect-video min-h-[200px] sm:min-h-[280px]"
               >
                 <AnimatePresence mode="wait" initial={false} custom={slideDirection}>
-                  <motion.img
+                  <motion.div
                     id="home-hero-image-img"
                     key={currentSlide}
                     custom={slideDirection}
-                    src={slides[currentSlide].image}
-                    alt=""
-                    className="absolute inset-0 h-full w-full object-cover object-center bg-teal-50 rounded-[1.75rem]"
+                    className="absolute inset-0"
                     variants={slideVariants}
                     initial="enter"
                     animate="center"
                     exit="exit"
                     transition={slideTr}
-                  />
+                  >
+                    <Image
+                      src={slides[currentSlide].image}
+                      alt=""
+                      fill
+                      className="rounded-[1.75rem] bg-teal-50 object-cover object-center"
+                      sizes="(max-width: 1024px) 100vw, 58vw"
+                      priority={currentSlide === 0}
+                    />
+                  </motion.div>
                 </AnimatePresence>
                 <div
                   id="home-hero-image-prev-button"

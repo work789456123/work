@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { X, ZoomIn, Quote } from "lucide-react";
@@ -121,10 +122,12 @@ const OurStory = () => {
                           if (e.key === "Enter" || e.key === " ") setZoomedImage(founder.image);
                         }}
                       >
-                        <img
+                        <Image
                           src={founder.image}
                           alt={founder.name}
-                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                          fill
+                          className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                          sizes="(max-width: 1024px) 100vw, 40vw"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-[#1F6559]/50 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                         <div className="absolute bottom-4 right-4 flex items-center gap-1.5 rounded-full bg-white/90 px-3 py-1.5 text-xs font-semibold text-[#1F6559] opacity-0 shadow-md backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100">
@@ -283,10 +286,13 @@ const OurStory = () => {
                 >
                   <X className="h-5 w-5" />
                 </button>
-                <img
+                <Image
                   src={zoomedImage}
                   alt="Zoomed view"
-                  className="w-full h-auto rounded-2xl shadow-2xl"
+                  width={1200}
+                  height={1500}
+                  className="h-auto max-h-[85vh] w-full rounded-2xl object-contain shadow-2xl"
+                  sizes="90vw"
                 />
               </motion.div>
             )}

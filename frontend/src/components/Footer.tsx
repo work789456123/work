@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, useInView } from "framer-motion";
@@ -65,11 +66,13 @@ const Footer = () => {
         <div id="user-footer-grid" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-left">
           <div id="user-footer-brand" className="space-y-4 col-span-1 sm:col-span-2 lg:col-span-1 flex flex-col items-start">
             <Link href="/" id="user-footer-brand-logo" className="flex items-center" data-testid="footer-logo-link">
-              <img
+              <Image
                 id="user-footer-brand-logo-image"
                 src="/pvhalflogo.png"
                 alt={brand.logoAlt}
-                className="h-12 sm:h-16 w-auto object-contain"
+                width={200}
+                height={80}
+                className="h-12 w-auto object-contain sm:h-16"
               />
               <span id="user-footer-brand-logo-text" className="text-xl sm:text-2xl font-bold tracking-tight bg-gradient-to-r from-[#1FA7A6] via-[#38C2B4] to-[#78D65C] bg-clip-text text-transparent ml-2">
                 {footerBrand.name}

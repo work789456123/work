@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 import { motion, useInView, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import { Quote } from "lucide-react";
 import { meetGopu } from "@/assets/content/home";
@@ -50,12 +51,15 @@ export default function HomeMeetGopuSection() {
       data-testid="meet-gopu-section"
       className="relative overflow-hidden bg-teal-100 py-28 md:py-36"
     >
-      <img
-        src="/images/meet_gopu_bg_1.png"
-        alt=""
-        className="pointer-events-none absolute inset-0  block h-full w-full object-cover opacity-20"
-        aria-hidden
-      />
+      <div className="pointer-events-none absolute inset-0" aria-hidden>
+        <Image
+          src="/images/meet_gopu_bg_1.png"
+          alt=""
+          fill
+          className="object-cover opacity-20"
+          sizes="100vw"
+        />
+      </div>
       {/* Texture */}
       <div className="pointer-events-none absolute inset-0" aria-hidden>
         <div className="absolute -left-24 top-1/3 h-96 w-96 rounded-full bg-white/10 blur-3xl" />

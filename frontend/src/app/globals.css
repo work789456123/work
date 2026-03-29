@@ -3,6 +3,11 @@
 @tailwind utilities;
 
 @layer base {
+  /* Dark mode disabled — keep UA form controls and scrollbars in light scheme */
+  html {
+    color-scheme: light;
+  }
+
   :root {
     --background: 0 0% 98%;
     --foreground: 0 0% 6.7%;

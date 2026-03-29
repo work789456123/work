@@ -1,19 +1,16 @@
 "use client";
 
-import { ThemeProvider } from "next-themes";
 import { Toaster } from "sonner";
+import { ForceLightDocument } from "./ForceLightDocument";
+import { SiteLoadingScreen } from "./SiteLoadingScreen";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <ThemeProvider
-      attribute="class"
-      defaultTheme="light"
-      forcedTheme="light"
-      enableSystem={false}
-      disableTransitionOnChange
-    >
+    <>
+      <ForceLightDocument />
       {children}
       <Toaster position="top-right" richColors theme="light" />
-    </ThemeProvider>
+      <SiteLoadingScreen />
+    </>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -52,11 +53,13 @@ const Doctors = ({ initialFromServer }: DoctorsProps) => {
               className="p-6 rounded-2xl border-[#EAEAEA] space-y-4 hover:shadow-lg hover:border-[#1F6559] transition-all"
               data-testid="doctor-card"
             >
-              <div className="aspect-square rounded-xl overflow-hidden">
-                <img
+              <div className="relative aspect-square overflow-hidden rounded-xl">
+                <Image
                   src={doctor.image}
                   alt={doctor.name}
-                  className="w-full h-full object-cover"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 640px) 100vw, 25vw"
                 />
               </div>
               <div>

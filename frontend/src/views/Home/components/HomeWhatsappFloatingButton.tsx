@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import { whatsapp } from "@/assets/content/home";
 import { transitionSpring } from "@/motion/scrollMotion";
@@ -27,11 +28,13 @@ export default function HomeWhatsappFloatingButton() {
     >
       <div className="absolute inset-0 bg-[#25D366] rounded-full animate-ping opacity-20 group-hover:opacity-40 transition-opacity duration-300" />
       <div className="absolute inset-0 bg-[#25D366] rounded-full animate-pulse opacity-30 shadow-[0_0_15px_rgba(37,211,102,0.8)]" />
-      <img
+      <Image
         src={whatsapp.imageUrl}
         alt=""
+        width={56}
+        height={56}
+        className="relative h-14 w-14 drop-shadow-xl"
         aria-hidden
-        className="relative w-14 h-14 drop-shadow-xl"
       />
     </motion.a>
   );

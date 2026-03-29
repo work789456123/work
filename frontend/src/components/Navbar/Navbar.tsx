@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useReducer, type FormEvent } from "react";
@@ -120,11 +121,13 @@ const Navbar = () => {
               className="flex items-center z-50 shrink-0"
               data-testid="logo-link"
             >
-              <img
+              <Image
                 src="/pvhalflogo.png"
                 alt={brand.logoAlt}
-                className="h-10 sm:h-12 md:h-16 w-auto object-contain"
-                style={{ maxHeight: "150px" }}
+                width={200}
+                height={64}
+                className="h-10 w-auto max-h-[150px] object-contain sm:h-12 md:h-16"
+                priority
               />
               <span className="text-xl sm:text-[1.25rem] md:text-2xl font-bold tracking-tight bg-gradient-to-r from-[#1FA7A6] via-[#38C2B4] to-[#78D65C] bg-clip-text text-transparent ">
                 {brand.name}

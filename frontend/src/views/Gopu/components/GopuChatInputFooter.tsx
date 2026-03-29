@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Upload, Mic, Send, X, MicOff } from "lucide-react";
@@ -27,7 +28,14 @@ export default function GopuChatInputFooter({
     <div id="gopu-chat-input-footer" className="p-4 lg:p-6 border-t border-[#EAEAEA] bg-teal-50">
       {uploadedImage && (
         <div className="mb-3 relative inline-block">
-          <img src={uploadedImage.preview} alt="" className="h-20 w-20 object-cover rounded-lg border" />
+          <Image
+            src={uploadedImage.preview}
+            alt=""
+            width={80}
+            height={80}
+            unoptimized
+            className="h-20 w-20 rounded-lg border object-cover"
+          />
           <button
             type="button"
             onClick={onClearImage}

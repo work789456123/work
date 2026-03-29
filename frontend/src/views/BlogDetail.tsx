@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, ChevronDown, Globe } from "lucide-react";
 import { blogHero, blogArticle, blogFaqs } from "@/assets/content/blog_detail";
@@ -121,15 +122,18 @@ const BlogDetails = () => {
 
             {/* Image column — bleeds into section below */}
             <motion.div
-              className="order-2 overflow-hidden rounded-3xl shadow-2xl shadow-[#1F6559]/30"
+              className="relative order-2 aspect-[16/10] overflow-hidden rounded-3xl shadow-2xl shadow-[#1F6559]/30"
               initial={{ opacity: 0, y: 32 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.65, ease: EASE }}
             >
-              <img
+              <Image
                 src={blogHero.imageSrc}
                 alt={blogHero.imageAlt}
-                className="aspect-[16/10] w-full object-cover"
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 896px"
+                priority
               />
             </motion.div>
           </div>
