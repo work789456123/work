@@ -2,6 +2,7 @@
 export const blogsHeader = {
   title: "Blogs",
   subtitle: "Learn about animal health and care",
+  eyebrow: "PashuVaani Insights",
 };
 
 export const blogList = [
@@ -12,6 +13,8 @@ export const blogList = [
     description:
       "Discover how PashuVaani is using AI-powered early guidance to transform animal health in India.",
     image: "https://images.unsplash.com/photo-1583337130417-3346a1be7dee",
+    tag: "Animal Health",
+    readTime: "6 min read",
   },
 ];
 

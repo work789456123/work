@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { X } from "lucide-react";
+import { X, ZoomIn, Quote } from "lucide-react";
 import {
   ourStoryHero,
   foundersSectionTitle,
@@ -10,115 +11,286 @@ import {
   ourStoryQuestion,
   ourStoryJourney,
 } from "@/assets/content/our_story";
+import { brand } from "@/assets/content/shared/brand";
 import UserPageShell from "@/motion/UserPageShell";
+import { SplitHeading } from "@/motion/SplitHeading";
+import ScrollReveal from "@/motion/ScrollReveal";
+import {
+  useScrollMotion,
+  transitionMedium,
+  transitionShort,
+  staggerContainer,
+  fadeUp,
+  fadeIn,
+  slideInLeft,
+  slideInRight,
+  scaleIn,
+} from "@/motion/scrollMotion";
+
+const EASE = [0.22, 1, 0.36, 1] as const;
 
 const OurStory = () => {
   const [zoomedImage, setZoomedImage] = useState<string | null>(null);
+  const { t, stagger, delayChildren } = useScrollMotion();
+  const tr = t(transitionMedium);
+  const trShort = t(transitionShort);
   const q = ourStoryQuestion;
 
   return (
-    <UserPageShell id="page-our-story" className="min-h-screen bg-teal-50">
-      <section id="our-story-hero" className="py-16 md:py-20 bg-gradient-to-b from-[#1FA7A6] via-[#38C2B4] to-[#78D65C]/10">
-        <div className="max-w-2xl mx-auto px-4 text-center space-y-4">
-          <h1 className="heading-font text-3xl md:text-4xl lg:text-5xl font-bold text-white">
-            {ourStoryHero.title}
-          </h1>
-          <p className="heading-font text-xl lg:text-xl font-bold text-white">{ourStoryHero.subtitle}</p>
+    <UserPageShell id="page-our-story" className="min-h-screen bg-white">
+
+      {/* ── Hero ─────────────────────────────────────────────── */}
+      <section
+        id="our-story-hero"
+        className="relative overflow-hidden bg-gradient-to-r from-[#1FA7A6] via-[#38C2B4] to-[#78D65C] py-24 "
+      >
+        <div className="pointer-events-none absolute -left-24 -top-24 h-80 w-80 rounded-full bg-white/10 blur-3xl" aria-hidden />
+        <div className="pointer-events-none absolute -bottom-20 right-8 h-64 w-64 rounded-full bg-[#1F6559]/20 blur-3xl" aria-hidden />
+        <div className="pointer-events-none absolute right-1/3 top-6 h-48 w-48 rounded-full bg-white/[0.07] blur-2xl" aria-hidden />
+
+        <div className="relative mx-auto max-w-3xl px-6 text-center">
+          <motion.p
+            className="heading-font mb-4 text-xs font-semibold uppercase tracking-[0.25em] text-white/85"
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: EASE }}
+          >
+            {brand.name}
+          </motion.p>
+
+          <SplitHeading
+            text={ourStoryHero.title}
+            as="h1"
+            className="heading-font justify-center text-4xl font-bold text-white md:text-5xl lg:text-6xl"
+            wordDelay={0.13}
+          />
+
+          <motion.p
+            className="heading-font mx-auto mt-5 max-w-xl text-xl font-semibold text-white/90"
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6, duration: 0.55, ease: EASE }}
+          >
+            {ourStoryHero.subtitle}
+          </motion.p>
+
+          <motion.div
+            className="mt-8 flex justify-center"
+            initial={{ opacity: 0, scaleX: 0 }}
+            animate={{ opacity: 1, scaleX: 1 }}
+            transition={{ delay: 0.9, duration: 0.55, ease: EASE }}
+          >
+            <div className="h-0.5 w-14 rounded-full bg-white/60" />
+          </motion.div>
         </div>
       </section>
 
-      <section id="our-story-founders" className="py-20 bg-[#FAFAFA]">
-        <div className="max-w-6xl mx-auto px-6">
-          <h2 className="heading-font text-3xl md:text-4xl font-bold text-[#333] text-center mb-10 md:mb-16">
-            {foundersSectionTitle}
-          </h2>
-          <div className="space-y-24 md:space-y-40">
-            {founders.map((founder, idx) => (
-              <div key={founder.name} className="flex flex-col">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-                  <div className={`${idx % 2 === 0 ? "lg:order-1" : "lg:order-2"}`}>
-                    <div
-                      role="button"
-                      tabIndex={0}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" || e.key === " ") setZoomedImage(founder.image);
-                      }}
-                      className="relative group cursor-zoom-in overflow-hidden rounded-[2.5rem] shadow-xl hover:shadow-2xl transition-all duration-300 aspect-[4/5] w-full mx-auto"
-                      onClick={() => setZoomedImage(founder.image)}
+      {/* ── Founders ─────────────────────────────────────────── */}
+      <section id="our-story-founders" className="bg-[#FAFAFA] py-20 md:py-28">
+        <div className="mx-auto max-w-6xl px-6">
+
+          <div className="mb-16 text-center md:mb-20">
+            <SplitHeading
+              text={foundersSectionTitle}
+              as="h2"
+              className="heading-font justify-center text-3xl font-bold text-[#333] md:text-4xl"
+              wordDelay={0.09}
+            />
+          </div>
+
+          <div className="space-y-28 md:space-y-40">
+            {founders.map((founder, idx) => {
+              const isEven = idx % 2 === 0;
+              return (
+                <div key={founder.name}>
+                  <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16">
+
+                    {/* Image */}
+                    <ScrollReveal
+                      variants={{ hidden: {}, visible: { transition: { staggerChildren: stagger, delayChildren } } }}
+                      className={isEven ? "lg:order-1" : "lg:order-2"}
                     >
-                      <img
-                        src={founder.image}
-                        alt={founder.name}
-                        className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
-                      />
-                    </div>
-                  </div>
-                  <div className={`space-y-6 ${idx % 2 === 0 ? "lg:order-2" : "lg:order-1"}`}>
-                    <div className="space-y-2 text-center lg:text-left">
-                      <h3 className="heading-font text-2xl md:text-3xl font-bold text-[#333]">{founder.name}</h3>
-                      <p className="text-base md:text-lg font-semibold text-[#1F6559]">{founder.role}</p>
-                    </div>
-                    <div className="space-y-4">
-                      {founder.story.map((paragraph, pIdx) => (
-                        <p key={pIdx} className="text-lg text-[#6F6F6F] leading-relaxed">
-                          {paragraph}
-                        </p>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-                {idx === 0 && (
-                  <div className="mt-16 md:mt-32 mb-8 md:mb-16 py-10 md:py-16 bg-gradient-to-b from-[#1FA7A6]/10 via-[#38C2B4]/10 to-[#78D65C]/10 rounded-[2rem]">
-                    <div className="max-w-5xl mx-auto px-6 space-y-6 md:space-y-8">
-                      <h2 className="heading-font text-2xl md:text-4xl font-bold text-[#333] text-center mb-6 md:mb-8">
-                        {q.title}
-                      </h2>
-                      <div className="space-y-6 text-center">
-                        <p className="text-lg text-[#6F6F6F] leading-relaxed">{q.lead}</p>
-                        <p className="text-lg text-[#6F6F6F] leading-relaxed">
-                          {q.villageStory.before}
-                          <span className="font-semibold text-[#1F6559]">{q.villageStory.emphasis}</span>
-                          {q.villageStory.after}
-                        </p>
+                      <motion.div
+                        variants={isEven ? slideInLeft(tr) : slideInRight(tr)}
+                        className="group relative mx-auto aspect-[4/5] w-full max-w-base cursor-zoom-in overflow-hidden rounded-[2.5rem] shadow-xl transition-shadow hover:shadow-2xl"
+                        role="button"
+                        tabIndex={0}
+                        aria-label={`View photo of ${founder.name}`}
+                        onClick={() => setZoomedImage(founder.image)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") setZoomedImage(founder.image);
+                        }}
+                      >
+                        <img
+                          src={founder.image}
+                          alt={founder.name}
+                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#1F6559]/50 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                        <div className="absolute bottom-4 right-4 flex items-center gap-1.5 rounded-full bg-white/90 px-3 py-1.5 text-xs font-semibold text-[#1F6559] opacity-0 shadow-md backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100">
+                          <ZoomIn className="h-3.5 w-3.5" aria-hidden />
+                          View
+                        </div>
+                      </motion.div>
+                    </ScrollReveal>
+
+                    {/* Text */}
+                    <ScrollReveal
+                      variants={staggerContainer(stagger, delayChildren)}
+                      className={`space-y-5 ${isEven ? "lg:order-2" : "lg:order-1"}`}
+                    >
+                      <motion.div variants={fadeUp(tr)} className="space-y-1">
+                        <div className="mb-3 flex items-center gap-3">
+                          <div className="h-0.5 w-8 rounded-full bg-gradient-to-r from-[#1FA7A6] to-[#78D65C]" />
+                          <span className="heading-font text-xs font-semibold uppercase tracking-widest text-[#1F6559]/70">
+                            Founder
+                          </span>
+                        </div>
+                        <SplitHeading
+                          text={founder.name}
+                          as="h3"
+                          className="heading-font text-2xl font-bold text-[#333] md:text-3xl"
+                          wordDelay={0.09}
+                        />
+                        <p className="text-base font-semibold text-[#1FA7A6] md:text-lg">{founder.role}</p>
+                      </motion.div>
+
+                      <div className="space-y-4">
+                        {founder.story.map((para, pIdx) => (
+                          <motion.p
+                            key={pIdx}
+                            variants={fadeUp(tr)}
+                            className="text-[#6F6F6F] leading-relaxed"
+                          >
+                            {para}
+                          </motion.p>
+                        ))}
                       </div>
-                    </div>
+                    </ScrollReveal>
                   </div>
-                )}
+
+                  {/* Question interlude — after first founder */}
+                  {idx === 0 && (
+                    <motion.div
+                      className="relative mt-24 overflow-hidden rounded-3xl bg-[#1F6559] p-8 md:mt-32 md:p-14"
+                      initial={{ opacity: 0, y: 40, scale: 0.97 }}
+                      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                      viewport={{ once: true, margin: "0px 0px -100px 0px" }}
+                      transition={{ duration: 0.7, ease: EASE }}
+                    >
+                      <div className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-[#38C2B4]/20 blur-3xl" aria-hidden />
+                      <div className="pointer-events-none absolute -bottom-12 left-8 h-48 w-48 rounded-full bg-[#78D65C]/15 blur-3xl" aria-hidden />
+
+                      <div className="relative mx-auto max-w-4xl space-y-7 text-center">
+                        <SplitHeading
+                          text={q.title}
+                          as="h2"
+                          className="heading-font justify-center text-2xl font-bold text-white md:text-4xl"
+                          wordDelay={0.07}
+                        />
+
+                        <ScrollReveal
+                          variants={staggerContainer(stagger, delayChildren)}
+                          className="space-y-6"
+                        >
+                          <motion.p variants={fadeUp(tr)} className="text-lg leading-relaxed text-white/85">
+                            {q.lead}
+                          </motion.p>
+
+                          <motion.blockquote
+                            variants={scaleIn(tr)}
+                            className="relative overflow-hidden rounded-2xl bg-white/10 px-8 py-7 ring-1 ring-white/20 backdrop-blur-sm"
+                          >
+                            <Quote className="mb-3 h-6 w-6 text-[#78D65C]" aria-hidden strokeWidth={1.5} />
+                            <p className="text-lg leading-relaxed text-white/95">
+                              {q.villageStory.before}
+                              <span className="font-bold text-[#78D65C]">{q.villageStory.emphasis}</span>
+                              {q.villageStory.after}
+                            </p>
+                          </motion.blockquote>
+                        </ScrollReveal>
+                      </div>
+                    </motion.div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Journey ──────────────────────────────────────────── */}
+      <section
+        id="our-story-journey"
+        className="relative overflow-hidden bg-gradient-to-r from-[#1FA7A6] via-[#38C2B4] to-[#78D65C] py-20 md:py-28"
+      >
+        <div className="pointer-events-none absolute -left-16 top-0 h-72 w-72 rounded-full bg-white/10 blur-3xl" aria-hidden />
+        <div className="pointer-events-none absolute -bottom-16 right-0 h-64 w-64 rounded-full bg-[#1F6559]/20 blur-3xl" aria-hidden />
+
+        <div className="relative mx-auto max-w-4xl px-6 text-center">
+          <SplitHeading
+            text={ourStoryJourney.title}
+            as="h2"
+            className="heading-font mb-10 justify-center text-3xl font-bold text-white md:text-4xl lg:text-5xl"
+            wordDelay={0.1}
+          />
+
+          <ScrollReveal
+            variants={staggerContainer(stagger, delayChildren)}
+            className="space-y-6"
+          >
+            {ourStoryJourney.paragraphs.map((para, i) => (
+              <motion.p
+                key={i}
+                variants={fadeUp(tr)}
+                className="text-lg leading-relaxed text-white/90"
+              >
+                {para}
+              </motion.p>
+            ))}
+
+            <motion.div variants={scaleIn(tr)} className="pt-4">
+              <div className="inline-block overflow-hidden rounded-2xl bg-white/15 px-8 py-6 ring-1 ring-white/25 backdrop-blur-sm">
+                <p className="heading-font text-xl font-semibold italic text-white md:text-2xl">
+                  {ourStoryJourney.closing}
+                </p>
               </div>
-            ))}
-          </div>
+            </motion.div>
+          </ScrollReveal>
         </div>
       </section>
 
-      <section id="our-story-journey" className="py-20 bg-gradient-to-b from-[#1FA7A6]/10 via-[#38C2B4]/10 to-[#78D65C]/10">
-        <div className="max-w-5xl mx-auto px-6 space-y-8 text-center">
-          <h2 className="heading-font text-4xl font-bold text-[#333]">{ourStoryJourney.title}</h2>
-          <div className="space-y-6">
-            {ourStoryJourney.paragraphs.map((t, i) => (
-              <p key={i} className="text-lg text-[#6F6F6F] leading-relaxed">
-                {t}
-              </p>
-            ))}
-            <p className="text-xl text-[#1F6559] font-semibold leading-relaxed">{ourStoryJourney.closing}</p>
-          </div>
-        </div>
-      </section>
-
+      {/* ── Image Zoom Dialog ────────────────────────────────── */}
       <Dialog open={!!zoomedImage} onOpenChange={() => setZoomedImage(null)}>
         <DialogContent
           id="our-story-image-dialog"
-          className="max-w-[95vw] md:max-w-4xl p-0 bg-transparent border-0 outline-none shadow-none"
+          className="max-w-[95vw] border-0 bg-transparent p-0 shadow-none outline-none md:max-w-4xl"
         >
-          <div className="relative">
-            <button
-              type="button"
-              onClick={() => setZoomedImage(null)}
-              className="absolute -top-12 md:-top-10 right-0 bg-teal-50/90 hover:bg-teal-50 text-gray-900 rounded-full p-2 z-50"
-            >
-              <X className="w-6 h-6" />
-            </button>
-            <img src={zoomedImage ?? ""} alt="Zoomed view" className="w-full h-auto rounded-lg shadow-2xl" />
-          </div>
+          <AnimatePresence>
+            {zoomedImage && (
+              <motion.div
+                className="relative"
+                initial={{ opacity: 0, scale: 0.92 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.92 }}
+                transition={{ duration: 0.3, ease: EASE }}
+              >
+                <button
+                  type="button"
+                  onClick={() => setZoomedImage(null)}
+                  className="absolute -top-12 right-0 z-50 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-[#333] shadow-lg backdrop-blur-sm transition hover:bg-white hover:scale-110"
+                  aria-label="Close image"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+                <img
+                  src={zoomedImage}
+                  alt="Zoomed view"
+                  className="w-full h-auto rounded-2xl shadow-2xl"
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
         </DialogContent>
       </Dialog>
     </UserPageShell>
