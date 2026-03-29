@@ -1,3 +1,5 @@
+"use client";
+
 import { useRef, type ReactNode } from "react";
 import { motion, useInView } from "framer-motion";
 import type { HTMLMotionProps, Variants } from "framer-motion";

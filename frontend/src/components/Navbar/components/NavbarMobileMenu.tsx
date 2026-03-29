@@ -1,4 +1,6 @@
-import { Link } from "react-router-dom";
+"use client";
+
+import Link from "next/link";
 import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -20,7 +22,7 @@ export default function NavbarMobileMenu({
   return (
     <div id="user-navbar-mobile" className="xl:hidden pb-4 space-y-2" data-testid="mobile-menu">
       <Link
-        to="/"
+        href="/"
         onClick={() => onClose()}
         className="block px-4 py-3 text-sm font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10"
       >
@@ -40,7 +42,7 @@ export default function NavbarMobileMenu({
         {rakshaOpen && (
           <div className="space-y-1 border-l-2 border-white/20 ml-4 py-1">
             <Link
-              to="/pashucare-suraksha-plan"
+              href="/pashucare-suraksha-plan"
               onClick={() => onClose()}
               className="block w-full text-left px-4 py-2 text-sm font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10 ml-2"
             >
@@ -62,42 +64,42 @@ export default function NavbarMobileMenu({
         )}
       </div>
       <Link
-        to="/appointments"
+        href="/appointments"
         onClick={() => onClose()}
         className="block px-4 py-3 text-sm font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10"
       >
         Consult with Doctor
       </Link>
       <Link
-        to="/blogs"
+        href="/blogs"
         onClick={() => onClose()}
         className="block px-4 py-3 text-sm font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10"
       >
         Blog
       </Link>
       <Link
-        to="/about"
+        href="/about"
         onClick={() => onClose()}
         className="block px-4 py-3 text-sm font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10"
       >
         About Us
       </Link>
       <Link
-        to="/our-story"
+        href="/our-story"
         onClick={() => onClose()}
         className="block px-4 py-3 text-sm font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10"
       >
         Founders Stories
       </Link>
       <Link
-        to="/contact"
+        href="/contact"
         onClick={() => onClose()}
         className="block px-4 py-3 text-sm font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10"
       >
         Contact Us
       </Link>
       <Link
-        to="/pashucare-suraksha-plan"
+        href="/pashucare-suraksha-plan"
         onClick={() => onClose()}
         className="block px-4 py-3 text-sm font-medium rounded-lg bg-yellow-500 text-black hover:bg-yellow-400"
       >

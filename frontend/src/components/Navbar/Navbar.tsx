@@ -1,4 +1,7 @@
-import { Link, useNavigate, useLocation } from "react-router-dom";
+"use client";
+
+import Link from "next/link";
+import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useReducer, type FormEvent } from "react";
 import { isAxiosError } from "axios";
 import { motion } from "framer-motion";
@@ -16,8 +19,8 @@ import NavbarToolbar from "@/components/Navbar/components/NavbarToolbar";
 import { NavbarAuthDialog, NavbarPetDialog } from "@/components/Navbar/components/NavbarDialogs";
 
 const Navbar = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
+  const router = useRouter();
+  const pathname = usePathname();
   const [state, dispatch] = useReducer(navbarReducer, initialNavbarState);
   const { t } = useScrollMotion();
 
@@ -70,7 +73,7 @@ const Navbar = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user_name");
     dispatch({ type: "LOGOUT" });
-    navigate("/");
+    router.push("/");
     toast.success("Logged out successfully");
   };
 
@@ -82,7 +85,7 @@ const Navbar = () => {
     }
   };
 
-  if (location.pathname.startsWith("/admin")) {
+  if (pathname.startsWith("/admin")) {
     return null;
   }
 
@@ -90,7 +93,7 @@ const Navbar = () => {
     <>
       <nav id="user-navbar" className="sticky top-0 z-50 bg-[#1F6559] shadow-md">
         <motion.div
-          key={location.pathname}
+          key={pathname}
           id="user-navbar-inner"
           className="max-w-[1400px] mx-auto  px-4 sm:px-6 lg:px-2"
           initial={{ opacity: 0, y: -10 }}
@@ -113,7 +116,7 @@ const Navbar = () => {
             </Button>
             <Link
               id="user-navbar-brand"
-              to="/"
+              href="/"
               className="flex items-center z-50 mr-auto shrink-0"
               data-testid="logo-link"
             >

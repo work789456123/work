@@ -1,12 +1,14 @@
+"use client";
+
 import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from "next/navigation";
 import { Sparkles, Heart } from 'lucide-react';
 
 const PromoModal = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const navigate = useNavigate();
+  const router = useRouter();
 
   useEffect(() => {
     const handleOpen = () => setIsOpen(true);
@@ -24,8 +26,8 @@ const PromoModal = () => {
           <div className="mx-auto w-16 h-16 bg-[#1FA7A6]/10 rounded-full flex items-center justify-center mb-4">
             <Heart className="w-8 h-8 text-[#1FA7A6]" fill="currentColor" />
           </div>
-          <DialogTitle className="text-2xl font-bold text-[#333] mb-2 font-['Outfit',sans-serif]">
-            Protect Your Pet's Future
+          <DialogTitle className="heading-font text-2xl font-bold text-[#333] mb-2">
+            {"Protect Your Pet's Future"}
           </DialogTitle>
           <DialogDescription className="text-base text-[#6F6F6F] leading-relaxed">
             Discover our <span className="font-semibold text-[#1F6559]">PashuCare Suraksha Plan</span> for comprehensive protection and intelligent care.
@@ -53,7 +55,7 @@ const PromoModal = () => {
             <Button 
               onClick={() => {
                 setIsOpen(false);
-                navigate('/pashucare-suraksha-plan');
+                router.push('/pashucare-suraksha-plan');
               }}
               className="w-full rounded-full bg-amber-500 text-black hover:bg-amber-400 font-semibold py-6 text-lg transition-transform hover:scale-[1.02]"
             >
@@ -62,7 +64,7 @@ const PromoModal = () => {
             <Button 
               onClick={() => {
                 setIsOpen(false);
-                navigate('/gopu');
+                router.push('/gopu');
               }}
               variant="outline"
               className="w-full rounded-full border-[#1FA7A6] text-[#1FA7A6] hover:bg-[#1FA7A6]/5 font-semibold py-6 text-lg transition-colors"

@@ -4,7 +4,8 @@ Welcome to the PashuVaani repository! This guide provides comprehensive instruct
 
 ## Project Structure
 The repository consists of multiple components:
-- `frontend/`: The main React web application for end users.
+- `frontend/`: The main Next.js (App Router) web application for end users.
+- `frontend_old/`: Archived Vite + React Router build (reference only; remove after burn-in).
 - `frontend-admin/`: The React web application for administrators.
 - `backend/`: The legacy FastAPI backend API utilizing MongoDB.
 - `backend-new/`: The newer FastAPI backend architecture utilizing PostgreSQL, Alembic migrations, and Docker.
@@ -13,7 +14,7 @@ The repository consists of multiple components:
 
 ## 🏗️ 1. Frontend Setup (User Portal)
 
-The main frontend is a React application configured with Craco and Tailwind CSS.
+The main frontend is a **Next.js 15** application (App Router, Tailwind CSS). Copy `.env.example` to `.env.local` and set `NEXT_PUBLIC_BACKEND_URL` to your API origin (same host you used for `VITE_BACKEND_URL` in the old Vite app).
 
 1. **Navigate to the frontend directory:**
    ```bash
@@ -21,17 +22,15 @@ The main frontend is a React application configured with Craco and Tailwind CSS.
    ```
 2. **Install dependencies:**
    ```bash
-   yarn install
-   # or
    npm install
    ```
 3. **Run the development server:**
    ```bash
-   yarn start
-   # or
-   npm start
+   npm run dev
    ```
 The application will be accessible at `http://localhost:3000`.
+
+**Production Docker:** build with `docker build --build-arg NEXT_PUBLIC_BACKEND_URL=https://your-api.example.com -t pashuvaani-web .` and run exposing port **3000** (Node standalone server, not nginx).
 
 ---
 

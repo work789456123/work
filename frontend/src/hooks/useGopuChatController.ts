@@ -1,14 +1,14 @@
 import { useRef, useEffect, useReducer, type ChangeEvent } from "react";
 import { isAxiosError } from "axios";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
 import api from "@/utils/api";
-import { gopuReducer, initialGopuState } from "@/pages/Gopu/gopuChatReducer";
+import { gopuReducer, initialGopuState } from "@/views/Gopu/gopuChatReducer";
 import type { CreditsBalanceResponse } from "@/types/api";
 import type { GopuChatMessage } from "@/types/gopu";
 
 export function useGopuChatController() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [state, dispatch] = useReducer(gopuReducer, initialGopuState);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -74,7 +74,7 @@ export function useGopuChatController() {
     const token = localStorage.getItem("token");
     if (!token) {
       toast.error("To continue with this feature please log in");
-      navigate("/");
+      router.push("/");
       setTimeout(() => window.dispatchEvent(new CustomEvent("openAuthModal")), 100);
       return;
     }
@@ -86,7 +86,7 @@ export function useGopuChatController() {
     fetchData();
     window.addEventListener("authSuccess", fetchData);
     return () => window.removeEventListener("authSuccess", fetchData);
-  }, [navigate]);
+  }, [router]);
 
   const loadSessionHistory = async (sId: string) => {
     try {

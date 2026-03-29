@@ -2,7 +2,7 @@ import { useReducedMotion } from "framer-motion";
 import type { Transition, Variants } from "framer-motion";
 
 /** Shared easing (smooth ease-out). */
-export const homeEase = [0.22, 1, 0.36, 1];
+export const homeEase = [0.22, 1, 0.36, 1] as const;
 
 /** Fire animation only the first time the element enters the viewport. */
 export const viewportOnce = {
@@ -20,7 +20,7 @@ export const viewportRepeat = {
 
 export const transitionShort = { duration: 0.45, ease: homeEase };
 export const transitionMedium = { duration: 0.55, ease: homeEase };
-export const transitionSpring = { type: "spring", stiffness: 380, damping: 30 };
+export const transitionSpring = { type: "spring" as const, stiffness: 380, damping: 30 };
 
 export function useScrollMotion() {
   const reduced = useReducedMotion();

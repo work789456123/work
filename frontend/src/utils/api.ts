@@ -1,13 +1,13 @@
 import axios, { type InternalAxiosRequestConfig } from "axios";
 
-const BACKEND_URL =
-  import.meta.env.VITE_BACKEND_URL !== undefined
-    ? import.meta.env.VITE_BACKEND_URL
-    : import.meta.env.PROD
-      ? ""
-      : "http://localhost:8000";
+function getBackendUrl(): string {
+  const env = process.env.NEXT_PUBLIC_BACKEND_URL;
+  if (env !== undefined && env !== "") return env;
+  if (process.env.NODE_ENV === "production") return "";
+  return "http://localhost:8000";
+}
 
-export const API_BASE = `${BACKEND_URL}/api`;
+export const API_BASE = `${getBackendUrl()}/api`;
 
 const api = axios.create({
   baseURL: API_BASE,
@@ -17,6 +17,7 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
+  if (typeof window === "undefined") return config;
   const adminToken = localStorage.getItem("admin_token");
   const token = localStorage.getItem("token");
   const url = config.url ?? "";
