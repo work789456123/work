@@ -30,7 +30,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className="light">
       <body className={`${inter.variable} ${manrope.variable} App min-h-screen flex flex-col antialiased`}>
         <Providers>
           <RootChrome>{children}</RootChrome>

@@ -82,6 +82,8 @@ export type GopuChatMessageListProps = {
   messages: GopuChatMessage[];
   isLoading: boolean;
   messagesEndRef: RefObject<HTMLDivElement | null>;
+  /** Scrollable message list container — scroll this instead of using scrollIntoView (avoids scrolling the page). */
+  messagesScrollRef: RefObject<HTMLDivElement | null>;
 };
 
 export type GopuChatSidebarProps = {

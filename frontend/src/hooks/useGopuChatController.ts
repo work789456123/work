@@ -12,10 +12,18 @@ export function useGopuChatController() {
   const [state, dispatch] = useReducer(gopuReducer, initialGopuState);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesScrollRef = useRef<HTMLDivElement>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
 
+  /** Scroll only the chat list panel — `scrollIntoView` on the sentinel scrolls the whole document. */
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    const el = messagesScrollRef.current;
+    if (!el) return;
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
+      });
+    });
   };
 
   useEffect(() => {
@@ -329,6 +337,7 @@ export function useGopuChatController() {
     dispatch,
     fileInputRef,
     messagesEndRef,
+    messagesScrollRef,
     loadSessionHistory,
     startNewSession,
     handleImageUpload,

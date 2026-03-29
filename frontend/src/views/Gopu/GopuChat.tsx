@@ -12,6 +12,7 @@ const GopuChat = () => {
     dispatch,
     fileInputRef,
     messagesEndRef,
+    messagesScrollRef,
     loadSessionHistory,
     startNewSession,
     handleImageUpload,
@@ -45,6 +46,7 @@ const GopuChat = () => {
             messages={state.messages}
             isLoading={state.isLoading}
             messagesEndRef={messagesEndRef}
+            messagesScrollRef={messagesScrollRef}
           />
           <GopuChatInputFooter
             input={state.input}
