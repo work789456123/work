@@ -1,7 +1,10 @@
 /** Route: /contact */
 export const contactPage = {
-  title: "Contact Us",
-  subtitle: "We'd love to hear from you",
+  title: "Get in Touch",
+  eyebrow: "Contact Us",
+  subtitle:
+    "Have a question, feedback, or want to know more about PashuVaani? We'd love to hear from you.",
+  tagline: "Pashu Bhi Pariwar Hai",
 };
 
 export const contactChannels = [
@@ -11,6 +14,17 @@ export const contactChannels = [
 ];
 
 export const contactForm = {
-  labels: { name: "Name", email: "Email", message: "Message" },
+  title: "Send us a message",
+  description: "We typically respond within 24 hours.",
+  labels: {
+    name: "Your Name",
+    email: "Email Address",
+    message: "Message",
+  },
+  placeholders: {
+    name: "What should we call you?",
+    email: "you@example.com",
+    message: "Tell us how we can help…",
+  },
   submit: "Send Message",
 };
