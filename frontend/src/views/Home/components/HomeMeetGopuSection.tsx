@@ -126,7 +126,7 @@ export default function HomeMeetGopuSection() {
                 loop
                 muted
                 playsInline
-                className="relative h-auto w-full object-cover"
+                className="relative h-[575px] w-full object-cover"
               />
             </div>
           </motion.div>
