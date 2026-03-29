@@ -21,7 +21,7 @@ const GopuChat = () => {
   return (
     <div
       id="page-gopu-chat"
-      className="flex flex-col lg:flex-row min-h-screen bg-[#FAFAFA]"
+      className="flex flex-col lg:flex-row lg:justify-end min-h-screen bg-[#FAFAFA] relative"
       data-testid="gopu-chat-page"
     >
       <GopuChatSidebar
@@ -32,11 +32,11 @@ const GopuChat = () => {
       />
       <div
         id="gopu-chat-main"
-        className="flex-1 flex flex-col items-center py-8 px-4 lg:py-12 lg:px-6 overflow-hidden"
+        className=" flex flex-col items-center py-8 px-4 lg:py-6 lg:px-6 lg:w-[calc(100%-20rem)] overflow-hidden"
       >
         <div
           id="gopu-chat-panel"
-          className="w-full max-w-3xl flex flex-col h-full bg-teal-50 rounded-3xl shadow-sm border border-[#EAEAEA] overflow-hidden"
+          className="w-full max-w-3xl flex flex-col  bg-teal-50 rounded-3xl shadow-sm border border-[#EAEAEA] overflow-hidden"
         >
           <GopuChatHeaderBar credits={state.credits} remainingMessages={state.remainingMessages} />
           <GopuChatMessageList

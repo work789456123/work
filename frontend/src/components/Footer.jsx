@@ -33,7 +33,7 @@ const Footer = () => {
     <motion.footer
       ref={ref}
       id="user-footer"
-      className="bg-[#1F6559] text-white py-6 pt-12"
+      className="bg-[#1F6559] text-white py-6 pt-12 z-10"
       data-testid="footer"
       variants={footerMotion}
       initial="hidden"

@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom"
-import Navbar from "./components/user/Navbar/Navbar"
-import Footer from "./components/user/Footer"
+import Navbar from "./components/Navbar/Navbar"
+import Footer from "./components/Footer"
 import { Toaster } from "sonner"
 import TermsModal from "./components/TermsModal"
 import PromoModal from "./components/PromoModal"

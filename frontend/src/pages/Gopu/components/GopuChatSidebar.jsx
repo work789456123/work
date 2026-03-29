@@ -12,7 +12,7 @@ export default function GopuChatSidebar({
   return (
     <div
       id="gopu-chat-sidebar"
-      className="hidden lg:flex w-80 bg-teal-50 border-r border-[#EAEAEA] flex-col p-6 space-y-6"
+      className="hidden lg:flex fixed top-0 left-0 h-full w-80 mt-20 bg-teal-50 border-r border-[#EAEAEA] flex-col p-6 space-y-6"
     >
       <Button
         onClick={onNewChat}
@@ -36,8 +36,8 @@ export default function GopuChatSidebar({
                 type="button"
                 onClick={() => onSelectSession(session.id)}
                 className={`w-full text-left p-3 rounded-xl transition-all flex items-start gap-3 ${sessionId === session.id
-                    ? "bg-[#1F6559]/5 border border-[#1F6559]/20 text-[#1F6559]"
-                    : "hover:bg-gray-50 text-[#6F6F6F]"
+                  ? "bg-[#1F6559]/5 border border-[#1F6559]/20 text-[#1F6559]"
+                  : "hover:bg-gray-50 text-[#6F6F6F]"
                   }`}
               >
                 <MessageSquare

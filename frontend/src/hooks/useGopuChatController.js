@@ -2,7 +2,7 @@ import { useRef, useEffect, useReducer } from "react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import api from "@/utils/api";
-import { gopuReducer, initialGopuState } from "@/pages/user/Gopu/gopuChatReducer";
+import { gopuReducer, initialGopuState } from "@/pages/Gopu/gopuChatReducer";
 
 export function useGopuChatController() {
   const navigate = useNavigate();
@@ -250,11 +250,11 @@ export function useGopuChatController() {
         const dec =
           state.credits && !state.credits.has_subscription
             ? {
-                remainingMessages:
-                  typeof state.remainingMessages === "number"
-                    ? Math.max(0, state.remainingMessages - 1)
-                    : state.remainingMessages,
-              }
+              remainingMessages:
+                typeof state.remainingMessages === "number"
+                  ? Math.max(0, state.remainingMessages - 1)
+                  : state.remainingMessages,
+            }
             : {};
         dispatch({
           type: "MERGE",

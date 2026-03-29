@@ -8,11 +8,11 @@ import { toast } from "sonner";
 import api from "@/utils/api";
 import { brand } from "@/assets/content/shared/brand";
 import { primaryNav } from "@/assets/content/shared/navigation";
-import { navbarReducer, initialNavbarState } from "@/components/user/Navbar/navbarReducer";
-import NavbarDesktopNav from "@/components/user/Navbar/components/NavbarDesktopNav";
-import NavbarMobileMenu from "@/components/user/Navbar/components/NavbarMobileMenu";
-import NavbarToolbar from "@/components/user/Navbar/components/NavbarToolbar";
-import { NavbarAuthDialog, NavbarPetDialog } from "@/components/user/Navbar/components/NavbarDialogs";
+import { navbarReducer, initialNavbarState } from "@/components/Navbar/navbarReducer";
+import NavbarDesktopNav from "@/components/Navbar/components/NavbarDesktopNav";
+import NavbarMobileMenu from "@/components/Navbar/components/NavbarMobileMenu";
+import NavbarToolbar from "@/components/Navbar/components/NavbarToolbar";
+import { NavbarAuthDialog, NavbarPetDialog } from "@/components/Navbar/components/NavbarDialogs";
 
 const Navbar = () => {
   const navigate = useNavigate();

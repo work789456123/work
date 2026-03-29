@@ -13,7 +13,7 @@ export default function GopuChatMessageList({
   const copy = gopuChat;
 
   return (
-    <div id="gopu-chat-messages" className="flex-1 overflow-y-auto p-4 lg:p-6 space-y-6">
+    <div id="gopu-chat-messages" className="flex-1 overflow-y-auto p-4 lg:p-6 space-y-6 max-h-[calc(100vh-360px)]">
       {messages.length === 0 && !isLoading && (
         <div className="h-full flex flex-col items-center justify-center text-center space-y-4 py-20">
           <div className="w-20 h-20 bg-[#1F6559]/5 rounded-3xl flex items-center justify-center transform rotate-12">
