@@ -1,9 +1,9 @@
 import axios from 'axios';
 
 // Use relative path by default in production, absolute URL for dev
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL !== undefined 
-  ? process.env.REACT_APP_BACKEND_URL 
-  : (process.env.NODE_ENV === 'production' ? "" : "http://localhost:8000");
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL !== undefined
+  ? import.meta.env.VITE_BACKEND_URL
+  : (import.meta.env.PROD ? "" : "http://localhost:8000");
 
 export const API_BASE = `${BACKEND_URL}/api`;
 
