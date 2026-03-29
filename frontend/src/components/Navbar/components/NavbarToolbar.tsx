@@ -12,10 +12,10 @@ export default function NavbarToolbar({
   onOpenAuth,
 }: NavbarToolbarProps) {
   return (
-    <div id="user-navbar-toolbar" className="flex items-center space-x-3 ml-4 lg:ml-8">
+    <div id="user-navbar-toolbar" className="flex items-center gap-2 ">
       <Button
         onClick={onGopuClick}
-        className="hidden lg:flex rounded-full bg-white text-[#1F6559] hover:bg-white/90 font-semibold mr-3"
+        className="hidden lg:flex rounded-full bg-white text-[#1F6559] hover:bg-white/90 font-semibold"
         data-testid="try-gopu-button"
       >
         {navbarActions.tryGopu}

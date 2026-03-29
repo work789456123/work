@@ -3,10 +3,21 @@
 import { useEffect, useReducer, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { CalendarHeart } from "lucide-react";
 import { appointmentsPage } from "@/assets/content/appointments";
+import { brand } from "@/assets/content/shared/brand";
 import AppointmentsFormBody from "./components/AppointmentsFormBody";
 import { appointmentsReducer, initialAppointmentState } from "./appointmentsReducer";
 import UserPageShell from "@/motion/UserPageShell";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 function AppointmentsPage() {
   const router = useRouter();
@@ -36,38 +47,76 @@ function AppointmentsPage() {
   const c = appointmentsPage;
 
   return (
-    <UserPageShell
-      id="page-appointments"
-      className="container mx-auto p-6 py-20 bg-gradient-to-b from-[#1FA7A6] via-[#38C2B4] to-[#78D65C]/10 min-h-screen"
-    >
-      <h1 id="appointments-page-title" className="text-3xl font-bold text-center text-white mb-10">
-        {c.pageTitle}
-      </h1>
-
-      <AppointmentsFormBody
-        form={state.form}
-        onFieldChange={(field, value) => dispatch({ type: "SET_FIELD", field, value })}
-        onSubmit={handleSubmit}
-      />
-
-      {state.showPopup && (
+    <UserPageShell id="page-appointments" className="min-h-screen bg-[#FAFAFA]">
+      <section
+        id="appointments-hero"
+        className="relative overflow-hidden bg-gradient-to-b from-[#1FA7A6] via-[#38C2B4] to-[#78D65C]/15 pb-16 pt-12 md:pb-20 md:pt-16"
+      >
         <div
-          id="appointments-success-overlay"
-          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40"
+          className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-white/10 blur-3xl md:h-96 md:w-96"
+          aria-hidden
+        />
+        <div
+          className="pointer-events-none absolute -bottom-32 -left-16 h-72 w-72 rounded-full bg-[#1F6559]/20 blur-3xl"
+          aria-hidden
+        />
+
+        <div className="relative mx-auto max-w-3xl px-4 text-center sm:px-6">
+          <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-white/15 shadow-lg ring-1 ring-white/20 backdrop-blur-sm md:h-16 md:w-16">
+            <CalendarHeart className="h-7 w-7 text-white md:h-8 md:w-8" strokeWidth={1.75} aria-hidden />
+          </div>
+          <p className="heading-font mb-2 text-sm font-semibold uppercase tracking-[0.2em] text-white/90">
+            {brand.name}
+          </p>
+          <h1
+            id="appointments-page-title"
+            className="heading-font text-3xl font-bold leading-tight text-white md:text-4xl lg:text-5xl"
+          >
+            {c.pageTitle}
+          </h1>
+          <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-white/95 md:text-lg">
+            {c.pageSubtitle}
+          </p>
+        </div>
+      </section>
+
+      <section
+        id="appointments-form-section"
+        className="relative z-10 -mt-8 px-4 pb-16 pt-0 sm:px-6 md:-mt-10 md:pb-24"
+      >
+        <div className="mx-auto max-w-3xl">
+          <AppointmentsFormBody
+            form={state.form}
+            onFieldChange={(field, value) => dispatch({ type: "SET_FIELD", field, value })}
+            onSubmit={handleSubmit}
+          />
+        </div>
+      </section>
+
+      <Dialog open={state.showPopup} onOpenChange={(open) => !open && dispatch({ type: "CLOSE_POPUP" })}>
+        <DialogContent
+          id="appointments-success-dialog"
+          className="border-[#C7D3CC]/80 bg-white sm:max-w-md"
         >
-          <div id="appointments-success-dialog" className="bg-teal-50 p-8 rounded-xl shadow-lg text-center w-80">
-            <h2 className="text-2xl font-bold text-green-600 mb-3">{c.successPopup.title}</h2>
-            <p className="text-gray-600 mb-6">{c.successPopup.message}</p>
-            <button
+          <DialogHeader>
+            <DialogTitle className="heading-font text-xl text-[#1F6559] md:text-2xl">
+              {c.successPopup.title}
+            </DialogTitle>
+            <DialogDescription className="text-base text-[#6F6F6F]">
+              {c.successPopup.message}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="sm:justify-center">
+            <Button
               type="button"
               onClick={() => dispatch({ type: "CLOSE_POPUP" })}
-              className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700"
+              className="w-full bg-gradient-to-r from-[#1FA7A6] to-[#1F6559] text-white shadow-md hover:opacity-95 sm:w-auto sm:min-w-[120px]"
             >
               {c.successPopup.ok}
-            </button>
-          </div>
-        </div>
-      )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </UserPageShell>
   );
 }

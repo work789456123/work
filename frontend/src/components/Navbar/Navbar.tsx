@@ -95,7 +95,7 @@ const Navbar = () => {
         <motion.div
           key={pathname}
           id="user-navbar-inner"
-          className="max-w-[1400px] mx-auto  px-4 sm:px-6 lg:px-2"
+          className="2xl:max-w-[1440px] mx-auto  px-4 sm:px-6 "
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={t(transitionShort)}
@@ -117,7 +117,7 @@ const Navbar = () => {
             <Link
               id="user-navbar-brand"
               href="/"
-              className="flex items-center z-50 mr-auto shrink-0"
+              className="flex items-center z-50 shrink-0"
               data-testid="logo-link"
             >
               <img

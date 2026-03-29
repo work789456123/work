@@ -1,7 +1,15 @@
 /** Route: /appointments */
 export const appointmentsPage = {
   pageTitle: "Book Veterinary Appointment",
-  formTitle: "Appointment Form",
+  pageSubtitle:
+    "Share a few details about your pet and pick a time that works for you. We will follow up to confirm your visit.",
+  formTitle: "Appointment details",
+  formDescription: "Fields marked as required help us prepare for your appointment.",
+  sections: {
+    pet: "About your pet",
+    owner: "Your contact",
+    visit: "Visit & health",
+  },
   placeholders: {
     petName: "Pet Name",
     petType: "Pet Type (Dog, Cow, Cat...)",
@@ -22,7 +30,8 @@ export const appointmentsPage = {
   labels: {
     vaccinated: "Pet is Vaccinated",
     medicalHistoryAvailable: "Medical History Available",
-    medicalHistoryWarning: "⚠️ Please bring the medical History",
+    medicalHistoryWarning: "Please bring the medical history to your visit.",
+    medicalHistoryNotes: "Notes for the veterinarian",
   },
   submit: "Book Appointment",
   successPopup: {
