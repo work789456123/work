@@ -1,3 +1,5 @@
+"use client";
+
 import { motion, useReducedMotion } from "framer-motion";
 import { whatsapp } from "@/assets/content/home";
 import { transitionSpring } from "@/motion/scrollMotion";

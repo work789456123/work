@@ -1,3 +1,5 @@
+"use client";
+
 import { motion } from "framer-motion";
 import { philosophy } from "@/assets/content/home";
 import ScrollReveal from "@/motion/ScrollReveal";
