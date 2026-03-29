@@ -48,11 +48,18 @@ export default function HomeMeetGopuSection() {
       ref={sectionRef}
       id="home-meet-gopu"
       data-testid="meet-gopu-section"
-      className="relative overflow-hidden bg-gradient-to-br from-[#1FA7A6] via-[#38C2B4] to-[#78D65C] py-28 md:py-36"
+      className="relative overflow-hidden bg-teal-100 py-28 md:py-36"
     >
+      <img
+        src="/images/meet_gopu_bg_1.png"
+        alt=""
+        className="pointer-events-none absolute inset-0  block h-full w-full object-cover opacity-20"
+        aria-hidden
+      />
       {/* Texture */}
       <div className="pointer-events-none absolute inset-0" aria-hidden>
         <div className="absolute -left-24 top-1/3 h-96 w-96 rounded-full bg-white/10 blur-3xl" />
+
         <div className="absolute -right-16 bottom-1/4 h-72 w-72 rounded-full bg-white/[0.06] blur-3xl" />
       </div>
 
@@ -64,11 +71,52 @@ export default function HomeMeetGopuSection() {
           initial="hidden"
           animate={animate}
         >
+          {/* Text — dark palette for contrast on light mint / decorative bg */}
+          <motion.div
+            className="order-1 z-10 space-y-6 lg:order-2"
+            style={reduced ? {} : { y: textY }}
+            variants={textColumnVariants}
+          >
+            <motion.p
+              className="heading-font text-xs font-semibold uppercase tracking-[0.25em] text-[#1F6559]"
+              variants={fade}
+            >
+              {meetGopu.subtitle}
+            </motion.p>
+
+            <motion.div variants={fromRight}>
+              <SplitHeading
+                text={meetGopu.title}
+                as="h2"
+                className="heading-font text-4xl font-bold text-[#1F6559] lg:text-5xl"
+              />
+            </motion.div>
+
+            {meetGopu.paragraphs.map((text, i) => (
+              <motion.p
+                key={i}
+                className="text-base leading-relaxed text-[#444] md:text-lg"
+                variants={fade}
+              >
+                {text}
+              </motion.p>
+            ))}
+
+            <motion.blockquote
+              className="relative rounded-2xl border border-[#1FA7A6]/20 bg-white/85 px-6 py-5 shadow-sm backdrop-blur-sm"
+              variants={fade}
+            >
+              <Quote className="mb-2 h-5 w-5 text-[#1FA7A6]" aria-hidden />
+              <p className="heading-font text-base font-medium italic leading-relaxed text-[#333]">
+                &ldquo;Warm. Caring. Always alert. Gopu feels less like a tool and more like a trusted companion.&rdquo;
+              </p>
+            </motion.blockquote>
+          </motion.div>
           {/* Video — parallax */}
           <motion.div
-            className="relative order-2 lg:order-1"
+            className="relative z-10 order-1 lg:order-2"
             style={reduced ? {} : { y: videoY }}
-            variants={fromLeft}
+            variants={fromRight}
           >
             <div className="relative mx-auto max-w-md overflow-hidden rounded-3xl shadow-2xl shadow-black/20">
               <div className="absolute -inset-px rounded-3xl bg-gradient-to-br from-white/30 via-transparent to-white/10 pointer-events-none" />
@@ -83,47 +131,7 @@ export default function HomeMeetGopuSection() {
             </div>
           </motion.div>
 
-          {/* Text — parallax */}
-          <motion.div
-            className="order-1 space-y-6 lg:order-2"
-            style={reduced ? {} : { y: textY }}
-            variants={textColumnVariants}
-          >
-            <motion.p
-              className="heading-font text-xs font-semibold uppercase tracking-[0.25em] text-white/70"
-              variants={fade}
-            >
-              {meetGopu.subtitle}
-            </motion.p>
-
-            <motion.div variants={fromRight}>
-              <SplitHeading
-                text={meetGopu.title}
-                as="h2"
-                className="heading-font text-4xl font-bold text-white lg:text-5xl"
-              />
-            </motion.div>
-
-            {meetGopu.paragraphs.map((text, i) => (
-              <motion.p
-                key={i}
-                className="text-base leading-relaxed text-white/85 md:text-lg"
-                variants={fade}
-              >
-                {text}
-              </motion.p>
-            ))}
-
-            <motion.blockquote
-              className="relative rounded-2xl border border-white/20 bg-white/10 px-6 py-5 backdrop-blur-sm"
-              variants={fade}
-            >
-              <Quote className="mb-2 h-5 w-5 text-white/60" aria-hidden />
-              <p className="heading-font text-base font-medium italic leading-relaxed text-white/90">
-                &ldquo;Warm. Caring. Always alert. Gopu feels less like a tool and more like a trusted companion.&rdquo;
-              </p>
-            </motion.blockquote>
-          </motion.div>
+          
         </motion.div>
       </div>
     </section>

@@ -48,8 +48,8 @@ export default function HomeHeroCarouselSection({
 
   return (
     <section id="home-hero" className="relative  py-12 md:py-24 bg-teal-50 flex min-h-[calc(100vh-5.5rem)] items-center" data-testid="hero-section">
-      <img src="/images/contact_bg.png" alt="Home Hero Background" className="absolute inset-0 w-full h-full object-cover block z-0 opacity-80" />
-      <div id="home-hero-overlay" className=" absolute inset-0 bg-gradient-to-tr from-white/40 to-[#1F6559]/60 z-10 backdrop-blur-[3px]"></div>
+      <img src="/images/contact_bg.png" alt="Home Hero Background" className="absolute inset-0 w-full h-full object-cover block z-0 opacity-30" />
+      {/* <div id="home-hero-overlay" className=" absolute inset-0 bg-gradient-to-tr from-white/40 to-[#1F6559]/60 z-10 backdrop-blur-[3px]"></div> */}
       <div id="home-hero-inner" className="max-w-[110rem] mx-auto px-4 md:px-6">
         <div id="home-hero-grid" className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 items-center">
           <motion.div
