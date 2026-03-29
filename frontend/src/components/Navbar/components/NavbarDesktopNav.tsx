@@ -30,7 +30,7 @@ export default function NavbarDesktopNav({ primaryNav }: { primaryNav: PrimaryNa
         if (link.children?.length > 0) {
           return (
             <DropdownMenu key={link.name}>
-              <DropdownMenuTrigger className="pl-3 pr-1 py-2 text-sm font-medium rounded-lg transition-colors text-white/90 hover:text-white hover:bg-white/10 flex items-center">
+              <DropdownMenuTrigger className="pl-3 pr-1 py-2 text-sm font-medium rounded-lg transition-colors text-white/90 outline-none hover:text-white hover:bg-white/10 flex items-center">
                 {link.name} <ChevronDown className="ml-1 h-4 w-4" />
               </DropdownMenuTrigger>
               <DropdownMenuContent className="bg-white border-gray-200">
@@ -38,7 +38,7 @@ export default function NavbarDesktopNav({ primaryNav }: { primaryNav: PrimaryNa
                   <DropdownMenuItem
                     key={child.name}
                     onClick={() => handleChildClick(child)}
-                    className="cursor-pointer"
+                    className="cursor-pointer text-black"
                   >
                     {child.name}
                   </DropdownMenuItem>
