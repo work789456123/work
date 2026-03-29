@@ -1,8 +1,8 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
-import { Sparkles, Heart, Globe, Users, Shield, Zap } from "lucide-react";
+import { motion, useInView, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import { Sparkles, Heart, Zap, Shield } from "lucide-react";
 import { aboutSection, aboutPillars } from "@/assets/content/home";
 import {
   fadeUp,
@@ -10,82 +10,111 @@ import {
   useScrollMotion,
   transitionMedium,
   viewportRepeat,
+  homeEase,
 } from "@/motion/scrollMotion";
+import { SplitHeading } from "@/motion/SplitHeading";
 import { lucideFromMap } from "@/lib/lucideFromMap";
 
-const iconMap = {
-  sparkles: Sparkles,
-  heart: Heart,
-  globe: Globe,
-  users: Users,
-  shield: Shield,
-  zap: Zap,
-};
+const iconMap = { sparkles: Sparkles, heart: Heart, zap: Zap, shield: Shield };
+
+const pillGradients = [
+  "from-[#1FA7A6] to-[#38C2B4]",
+  "from-[#1F6559] to-[#1FA7A6]",
+  "from-[#38C2B4] to-[#78D65C]",
+  "from-[#78D65C] to-[#38C2B4]",
+];
 
 export default function HomeAboutPillarsSection() {
   const ref = useRef(null);
+  const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(ref, viewportRepeat);
-  const { t, stagger, delayChildren, reduced } = useScrollMotion();
+  const reduced = useReducedMotion();
+  const { t, stagger, delayChildren } = useScrollMotion();
   const tr = t(transitionMedium);
   const fade = fadeUp(tr);
   const cardIn = scaleIn(tr);
   const animate = reduced ? "visible" : isInView ? "visible" : "hidden";
 
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+
+  const headingY = useTransform(scrollYProgress, [0, 1], [60, -40]);
+  const cardsY = useTransform(scrollYProgress, [0, 1], [80, -30]);
+
   const outerVariants = {
     hidden: {},
-    visible: {
-      transition: { staggerChildren: stagger, delayChildren, when: "beforeChildren" },
-    },
-  };
-  const headerVariants = {
-    hidden: {},
-    visible: {
-      transition: { staggerChildren: stagger, delayChildren: 0.04, when: "beforeChildren" },
-    },
+    visible: { transition: { staggerChildren: stagger, delayChildren, when: "beforeChildren" as const } },
   };
   const gridVariants = {
     hidden: {},
-    visible: {
-      transition: { staggerChildren: stagger, delayChildren: 0.04, when: "beforeChildren" },
-    },
+    visible: { transition: { staggerChildren: stagger * 0.8, delayChildren: 0.18, when: "beforeChildren" as const } },
   };
 
   return (
     <section
+      ref={sectionRef}
       id="home-about-pillars"
-      className="py-24 bg-gradient-to-r from-[#1FA7A6] via-[#38C2B4] to-[#78D65C]"
       data-testid="about-section"
+      className="relative overflow-hidden bg-white py-28 md:py-36"
     >
-      <div className="max-w-5xl mx-auto px-6 text-center">
+      {/* Decorative orbs */}
+      <div className="pointer-events-none absolute inset-0" aria-hidden>
+        <div className="absolute -left-20 top-1/4 h-80 w-80 rounded-full bg-[#1FA7A6]/[0.06] blur-3xl" />
+        <div className="absolute -right-20 bottom-1/3 h-64 w-64 rounded-full bg-[#78D65C]/[0.05] blur-3xl" />
+      </div>
+
+      <div className="relative mx-auto max-w-5xl px-6 text-center">
         <motion.div
           ref={ref}
-          className="space-y-12"
+          className="space-y-16"
           variants={outerVariants}
           initial="hidden"
           animate={animate}
         >
-          <motion.div className="space-y-6" variants={headerVariants}>
-            <motion.h2 className="heading-font text-4xl lg:text-5xl font-bold text-white" variants={fade}>
-              {aboutSection.title}
-            </motion.h2>
-            <motion.p className="text-lg text-white/90 leading-relaxed max-w-3xl mx-auto" variants={fade}>
+          {/* Header — parallax */}
+          <motion.div
+            className="space-y-5"
+            style={reduced ? {} : { y: headingY }}
+            variants={fade}
+          >
+            <div className="flex justify-center">
+              <SplitHeading
+                text={aboutSection.title}
+                as="h2"
+                className="heading-font justify-center text-4xl font-bold text-[#1F6559] lg:text-5xl"
+              />
+            </div>
+            <p className="mx-auto max-w-2xl text-lg leading-relaxed text-[#555]">
               {aboutSection.body}
-            </motion.p>
+            </p>
           </motion.div>
 
+          {/* Pillar cards — parallax */}
           <motion.div
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 pt-0"
+            className="grid grid-cols-2 gap-5 lg:grid-cols-4 lg:gap-6"
+            style={reduced ? {} : { y: cardsY }}
             variants={gridVariants}
           >
-            {aboutPillars.map((p) => {
+            {aboutPillars.map((p, idx) => {
               const Icon = lucideFromMap(iconMap, p.icon);
               if (!Icon) return null;
               return (
-                <motion.div key={p.title} className="space-y-3" variants={cardIn}>
-                  <div className="w-12 h-12 bg-teal-50/20 rounded-xl flex items-center justify-center mx-auto backdrop-blur-sm">
-                    <Icon className="w-6 h-6 text-white" />
+                <motion.div
+                  key={p.title}
+                  className="group flex flex-col items-center gap-4 rounded-2xl border border-[#1FA7A6]/10 bg-[#FAFAFA] p-7 text-center transition-all duration-300 hover:-translate-y-1 hover:border-[#1FA7A6]/25 hover:shadow-xl hover:shadow-[#1FA7A6]/8"
+                  variants={cardIn}
+                  whileHover={reduced ? {} : { y: -6, transition: { duration: 0.22, ease: homeEase } }}
+                >
+                  <div
+                    className={`flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br ${pillGradients[idx % pillGradients.length]} shadow-md`}
+                  >
+                    <Icon className="h-7 w-7 text-white" />
                   </div>
-                  <h3 className="heading-font font-semibold text-white">{p.title}</h3>
+                  <h3 className="heading-font text-sm font-semibold leading-snug text-[#333] md:text-base">
+                    {p.title}
+                  </h3>
                 </motion.div>
               );
             })}

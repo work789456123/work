@@ -47,12 +47,14 @@ export default function HomeHeroCarouselSection({
   };
 
   return (
-    <section id="home-hero" className="relative bg-teal-50 py-12 md:py-24" data-testid="hero-section">
+    <section id="home-hero" className="relative  py-12 md:py-24 bg-teal-50 flex min-h-[calc(100vh-5.5rem)] items-center" data-testid="hero-section">
+      <img src="/images/contact_bg.png" alt="Home Hero Background" className="absolute inset-0 w-full h-full object-cover block z-0 opacity-80" />
+      <div id="home-hero-overlay" className=" absolute inset-0 bg-gradient-to-tr from-white/40 to-[#1F6559]/60 z-10 backdrop-blur-[3px]"></div>
       <div id="home-hero-inner" className="max-w-[110rem] mx-auto px-4 md:px-6">
         <div id="home-hero-grid" className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 items-center">
           <motion.div
             id="home-hero-content"
-            className="space-y-6 lg:col-span-5 text-center lg:text-left"
+            className="space-y-6 lg:col-span-5 text-center lg:text-left relative z-30"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
@@ -99,14 +101,14 @@ export default function HomeHeroCarouselSection({
 
           <motion.div
             id="home-hero-media-column"
-            className="relative lg:col-span-7 lg:ml-4 flex justify-center lg:justify-end mt-8 lg:mt-0"
+            className="relative lg:col-span-7 lg:ml-4 flex justify-center lg:justify-end mt-8 lg:mt-0 z-30"
             variants={mediaVariants}
             initial="hidden"
             animate="visible"
           >
             <div
               id="home-hero-carousel-frame"
-              className="relative w-full overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#1F6559]/10 to-transparent shadow-xl group"
+              className="relative w-full overflow-hidden rounded-[2rem] bg-black/20 shadow-xl group"
             >
               <div
                 id="home-hero-image"
