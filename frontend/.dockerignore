@@ -1,8 +1,8 @@
 node_modules
-build
-dist
-.env
+.next
 .git
 .gitignore
-Dockerfile
-nginx.conf
+.env
+.env.*
+!.env.example
+npm-debug.log*
