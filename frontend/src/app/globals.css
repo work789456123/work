@@ -121,3 +121,52 @@ textarea {
   background: #1c5f2133;
   border-radius: 10px;
 }
+
+/* SiteLoadingScreen — CSS-only motion (runs before React hydration) */
+@keyframes site-loader-logo-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.04);
+  }
+}
+
+.site-loader-logo {
+  animation: site-loader-logo-pulse 1.6s ease-in-out infinite;
+  transform-origin: center center;
+}
+
+@keyframes site-loader-shimmer-slide {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(350%);
+  }
+}
+
+.site-loader-shimmer-inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 35%;
+  height: 100%;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.9);
+  animation: site-loader-shimmer-slide 1.15s ease-in-out infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-loader-logo {
+    animation: none;
+  }
+
+  .site-loader-shimmer-inner {
+    animation: none;
+    transform: translateX(40%);
+    width: 40%;
+  }
+}

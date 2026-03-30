@@ -62,7 +62,7 @@ export const surakshaPlans = [
     ],
     limitations: ["No image upload", "No priority support"],
     buttonText: "Current Plan",
-    buttonStyle: "bg-gray-400 cursor-not-allowed",
+    buttonStyle: "bg-gray-400 text-gray-600 cursor-not-allowed",
     popular: false,
   },
   {

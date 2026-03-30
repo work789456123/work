@@ -2,26 +2,34 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { cn } from "@/lib/utils";
 import { brand } from "@/assets/content/shared/brand";
 
 const MIN_VISIBLE_MS = 550;
 const MAX_WAIT_MS = 14_000;
 
 /**
- * Full-screen splash while the document finishes loading (window `load`).
- * Dismisses after at least MIN_VISIBLE_MS so the brand moment is visible.
+ * Full-screen splash: animations are CSS-driven so they run as soon as styles load (not after hydration).
+ * Dismisses after DOMContentLoaded + MIN_VISIBLE_MS (does not wait for window `load` / every asset).
  */
 export function SiteLoadingScreen() {
-  const [visible, setVisible] = useState(true);
-  const reduced = useReducedMotion();
+  const [phase, setPhase] = useState<"show" | "exiting">("show");
+  const [renderOverlay, setRenderOverlay] = useState(true);
   const dismissed = useRef(false);
+  const exitingRef = useRef(false);
   const minTimerRef = useRef<number | null>(null);
+  const prevOverflowRef = useRef("");
 
   useEffect(() => {
-    const prevOverflow = document.body.style.overflow;
+    prevOverflowRef.current = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     const startedAt = Date.now();
+
+    const beginExit = () => {
+      if (exitingRef.current) return;
+      exitingRef.current = true;
+      setPhase("exiting");
+    };
 
     const dismiss = () => {
       if (dismissed.current) return;
@@ -30,15 +38,14 @@ export function SiteLoadingScreen() {
       const elapsed = Date.now() - startedAt;
       const wait = Math.max(0, MIN_VISIBLE_MS - elapsed);
       minTimerRef.current = window.setTimeout(() => {
-        setVisible(false);
-        document.body.style.overflow = prevOverflow || "";
+        beginExit();
         minTimerRef.current = null;
       }, wait);
     };
 
     let maxTimer: number | null = window.setTimeout(dismiss, MAX_WAIT_MS);
 
-    const onLoad = () => {
+    const onDomReady = () => {
       if (maxTimer) {
         window.clearTimeout(maxTimer);
         maxTimer = null;
@@ -46,100 +53,76 @@ export function SiteLoadingScreen() {
       dismiss();
     };
 
-    if (document.readyState === "complete") {
-      if (maxTimer) {
-        window.clearTimeout(maxTimer);
-        maxTimer = null;
-      }
-      dismiss();
+    // DOMContentLoaded: HTML parsed; app shell can show without waiting for all images (window `load`).
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", onDomReady, { once: true });
     } else {
-      window.addEventListener("load", onLoad, { once: true });
+      onDomReady();
     }
 
     return () => {
-      window.removeEventListener("load", onLoad);
+      document.removeEventListener("DOMContentLoaded", onDomReady);
       if (maxTimer) window.clearTimeout(maxTimer);
       if (minTimerRef.current) window.clearTimeout(minTimerRef.current);
-      document.body.style.overflow = prevOverflow || "";
+      if (!exitingRef.current) {
+        document.body.style.overflow = prevOverflowRef.current || "";
+      }
     };
   }, []);
 
+  const handleTransitionEnd = (e: React.TransitionEvent<HTMLDivElement>) => {
+    if (e.target !== e.currentTarget) return;
+    if (e.propertyName !== "opacity") return;
+    if (!exitingRef.current) return;
+    exitingRef.current = false;
+    setRenderOverlay(false);
+    document.body.style.overflow = prevOverflowRef.current || "";
+  };
+
+  if (!renderOverlay) return null;
+
   return (
-    <AnimatePresence>
-      {visible && (
-        <motion.div
-          role="status"
-          aria-live="polite"
-          aria-busy="true"
-          data-testid="site-loading-screen"
-          className="fixed inset-0 z-[10000] flex flex-col items-center justify-center overflow-hidden bg-gradient-to-br from-[#1F6559] via-[#1FA7A6] to-[#38C2B4]"
-          initial={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: reduced ? 0.15 : 0.45, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <span className="sr-only">Loading {brand.name}</span>
-
-          {/* Decorative orbs */}
-          <div className="pointer-events-none absolute inset-0" aria-hidden>
-            <div className="absolute -left-20 top-1/4 h-72 w-72 rounded-full bg-white/10 blur-3xl" />
-            <div className="absolute -right-16 bottom-1/3 h-64 w-64 rounded-full bg-[#78D65C]/20 blur-3xl" />
-          </div>
-
-          <div className="relative z-10 flex flex-col items-center gap-8 px-6">
-            <motion.div
-              className="relative flex h-28 w-28 items-center justify-center rounded-3xl bg-white/15 p-4 shadow-xl backdrop-blur-sm ring-1 ring-white/25"
-              initial={reduced ? false : { scale: 0.92, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <motion.div
-                className="flex h-20 w-auto items-center justify-center"
-                aria-hidden
-                animate={
-                  reduced
-                    ? {}
-                    : {
-                        scale: [1, 1.04, 1],
-                      }
-                }
-                transition={{
-                  duration: 1.6,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              >
-                <Image
-                  src="/pvhalflogo.png"
-                  alt=""
-                  width={160}
-                  height={64}
-                  className="h-20 w-auto object-contain drop-shadow-md"
-                  priority
-                />
-              </motion.div>
-            </motion.div>
-
-            <div className="text-center">
-              <p className="heading-font text-2xl font-bold tracking-tight text-white md:text-3xl">{brand.name}</p>
-              <p className="mt-2 max-w-xs text-sm text-white/80">{brand.tagline}</p>
-            </div>
-
-            {/* Indeterminate bar */}
-            <div className="relative h-1 w-48 overflow-hidden rounded-full bg-white/20 md:w-56">
-              <motion.div
-                className="absolute top-0 h-full w-20 rounded-full bg-white/90"
-                initial={{ left: "-20%" }}
-                animate={reduced ? { left: "40%" } : { left: ["-20%", "100%"] }}
-                transition={
-                  reduced
-                    ? { duration: 0.2 }
-                    : { duration: 1.15, repeat: Infinity, ease: "easeInOut" }
-                }
-              />
-            </div>
-          </div>
-        </motion.div>
+    <div
+      role="status"
+      aria-live="polite"
+      aria-busy={phase === "show"}
+      data-testid="site-loading-screen"
+      className={cn(
+        "fixed inset-0 z-[10000] flex flex-col items-center justify-center overflow-hidden bg-teal-500/60 backdrop-blur-lg transition-opacity duration-300 ease-out motion-reduce:duration-150",
+        phase === "exiting" ? "pointer-events-none opacity-0" : "opacity-100",
       )}
-    </AnimatePresence>
+      onTransitionEnd={handleTransitionEnd}
+    >
+      <span className="sr-only">Loading {brand.name}</span>
+
+      <div className="pointer-events-none absolute inset-0" aria-hidden>
+        <div className="absolute -left-20 top-1/4 h-72 w-72 rounded-full bg-white/10 blur-3xl" />
+        <div className="absolute -right-16 bottom-1/3 h-64 w-64 rounded-full bg-[#78D65C]/20 blur-3xl" />
+      </div>
+
+      <div className="relative z-10 flex flex-col items-center gap-8 px-6">
+        <div className="relative flex h-28 w-28 items-center justify-center rounded-full bg-white/15 p-4 shadow-xl backdrop-blur-sm ring-1 ring-white/25">
+          <div className="site-loader-logo flex h-20 w-auto items-center justify-center" aria-hidden>
+            <Image
+              src="/pvhalflogo.png"
+              alt=""
+              width={160}
+              height={64}
+              className="h-20 w-auto object-contain drop-shadow-md"
+              priority
+            />
+          </div>
+        </div>
+
+        <div className="text-center">
+          <p className="heading-font text-2xl font-bold tracking-tight text-white md:text-3xl">{brand.name}</p>
+          <p className="mt-2 max-w-xs text-sm text-white/80">{brand.tagline}</p>
+        </div>
+
+        <div className="relative h-1 w-48 overflow-hidden rounded-full bg-white/20 md:w-56">
+          <div className="site-loader-shimmer-inner" aria-hidden />
+        </div>
+      </div>
+    </div>
   );
 }
