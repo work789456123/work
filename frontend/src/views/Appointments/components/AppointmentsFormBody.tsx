@@ -31,7 +31,7 @@ export default function AppointmentsFormBody({ form, onFieldChange, onSubmit }: 
   return (
     <Card
       id="appointments-booking-form-card"
-      className="overflow-hidden border-[#C7D3CC]/70 bg-white/95 shadow-xl shadow-[#1F6559]/5 backdrop-blur-sm"
+      className="overflow-hidden border-[#C7D3CC]/70 bg-white/80 shadow-xl shadow-[#1F6559]/5 backdrop-blur-sm"
     >
       <CardHeader className="space-y-2 border-b border-[#E8EEEB] bg-gradient-to-br from-[#1FA7A6]/[0.06] via-transparent to-[#78D65C]/[0.06] pb-6">
         <CardTitle id="appointments-form-title" className="heading-font text-2xl text-[#333] md:text-[1.65rem]">

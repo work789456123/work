@@ -26,6 +26,7 @@ import {
 } from "@/motion/scrollMotion";
 import { lucideFromMap } from "@/lib/lucideFromMap";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 const iconFor = { phone: Phone, email: Mail, address: MapPin };
@@ -95,8 +96,10 @@ const Contact = () => {
     <UserPageShell
       id="page-contact"
       data-testid="contact-page"
-      className="relative min-h-screen overflow-hidden bg-[url('/images/contact_bg.png')] bg-cover bg-center"
+      className="relative min-h-screen overflow-hidden bg-teal-200"
     >
+      <div className="inset-0 absolute bg-[url(/images/contact_bg.png)] bg-cover opacity-30">
+      </div>
       {/* ── Content ──────────────────────────────────────────── */}
       <div
         id="contact-inner"
