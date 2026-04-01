@@ -58,7 +58,7 @@ export default function HomeAboutPillarsSection() {
       ref={sectionRef}
       id="home-about-pillars"
       data-testid="about-section"
-      className="relative overflow-hidden bg-teal-100/50 py-28 md:py-36"
+      className="relative overflow-hidden bg-teal-50 py-28 md:py-36"
     >
       <div className="pointer-events-none absolute inset-0 z-0">
               <Image

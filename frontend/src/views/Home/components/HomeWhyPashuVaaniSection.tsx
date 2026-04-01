@@ -87,7 +87,7 @@ export default function HomeWhyPashuVaaniSection() {
 			ref={sectionRef}
 			id="home-why-pashuvaani"
 			data-testid="why-section"
-			className="relative overflow-hidden bg-teal-100/50  py-28 md:py-36"
+			className="relative overflow-hidden bg-teal-50  py-28 md:py-36"
 		>
 			{/* Decorative elements */}
 			<div className="pointer-events-none absolute inset-0 z-0">
