@@ -13,6 +13,7 @@ import {
 } from "@/motion/scrollMotion";
 import ScrollReveal from "@/motion/ScrollReveal";
 import Image from "next/image";
+import PawTexture from "@/components/PawTexture";
 
 const whoIcons = { heart: Heart, shield: Shield, users: Users, globe: Globe };
 
@@ -30,14 +31,7 @@ export default function AboutWhoWeServeSection() {
 	return (
 		<section id="about-who-we-serve" className="bg-teal-50 relative py-20 md:py-28">
 			<div className="pointer-events-none absolute inset-0 z-0">
-				<Image
-					src="/images/bg_paws.png"
-					alt=""
-					fill
-					className="object-cover opacity-10 "
-					sizes="100vw"
-					priority
-				/>
+				<PawTexture/>
 			</div>
 			<div className="mx-auto max-w-5xl relative px-6">
 				<div className="mb-14 text-center">

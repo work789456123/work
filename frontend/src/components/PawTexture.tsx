@@ -7,7 +7,7 @@ function PawTexture() {
 				src="/images/bg_paws.png"
 				alt=""
 				fill
-				className="object-cover opacity-5 "
+				className="object-cover opacity-25 "
 				sizes="100vw"
 				priority
 			/>

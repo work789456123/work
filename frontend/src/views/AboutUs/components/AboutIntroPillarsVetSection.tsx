@@ -8,6 +8,7 @@ import { SplitHeading } from "@/motion/SplitHeading";
 import { useScrollMotion, transitionMedium, transitionShort, staggerContainer, fadeUp, scaleIn } from "@/motion/scrollMotion";
 import ScrollReveal from "@/motion/ScrollReveal";
 import Image from "next/image";
+import PawTexture from "@/components/PawTexture";
 
 const pillarIcons = { sparkles: Sparkles, heart: Heart, zap: Zap, shield: Shield };
 
@@ -26,16 +27,7 @@ export default function AboutIntroPillarsVetSection() {
 
   return (
     <section id="about-intro-pillars-vet" className="bg-teal-50 relative py-20 md:py-28">
-      <div className="pointer-events-none absolute inset-0 z-0">
-              <Image
-                src="/images/bg_paws.png"
-                alt=""
-                fill
-                className="object-cover opacity-5 "
-                sizes="100vw"
-                priority
-              />
-            </div>
+<PawTexture/>
       <div className="mx-auto max-w-6xl relative z-10 px-6 lg:px-12">
 
         <ScrollReveal

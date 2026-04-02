@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { navbarActions } from "@/assets/content/shared/auth_ui";
 import type { NavbarMobileMenuProps } from "@/types/navbar";
+import NavbarUserProfile from "./NavbarUserProfile";
 
 export default function NavbarMobileMenu({
   open,
@@ -117,16 +118,32 @@ export default function NavbarMobileMenu({
       </Button>
 
       {isLoggedIn && (
-        <Button
-          onClick={() => {
-            onLogout();
-            onClose();
-          }}
-          variant="outline"
-          className="w-full rounded-full border-white/30 text-white hover:bg-white/10 mt-2"
-        >
-          {navbarActions.logout}
-        </Button>
+        <>
+          <NavbarUserProfile 
+            onLogout={() => {
+              onLogout();
+              onClose();
+            }} 
+            trigger={
+              <Button
+                variant="outline"
+                className="w-full flex items-center justify-center gap-2 rounded-full border-white/30 text-white hover:bg-white/10 mt-2"
+              >
+                <User className="h-4 w-4" /> My Profile
+              </Button>
+            }
+          />
+          <Button
+            onClick={() => {
+              onLogout();
+              onClose();
+            }}
+            variant="outline"
+            className="w-full rounded-full border-white/30 text-white hover:bg-white/10 mt-2 hover:bg-red-500/20 hover:text-red-100 hover:border-red-500/30"
+          >
+            {navbarActions.logout}
+          </Button>
+        </>
       )}
 
       {!isLoggedIn && (

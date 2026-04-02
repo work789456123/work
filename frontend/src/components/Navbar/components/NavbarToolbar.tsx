@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { navbarActions } from "@/assets/content/shared/auth_ui";
 import type { NavbarToolbarProps } from "@/types/navbar";
+import NavbarUserProfile from "./NavbarUserProfile";
 
 export default function NavbarToolbar({
   mobileMenuOpen,
@@ -21,14 +22,9 @@ export default function NavbarToolbar({
         {navbarActions.tryGopu}
       </Button>
       {isLoggedIn && (
-        <Button
-          onClick={onLogout}
-          variant="outline"
-          className="hidden lg:flex rounded-full border-white/30 text-white hover:bg-white/10 hover:text-white"
-          data-testid="logout-button"
-        >
-          {navbarActions.logout}
-        </Button>
+        <div className="hidden lg:flex">
+          <NavbarUserProfile onLogout={onLogout} />
+        </div>
       )}
       {!isLoggedIn && (
         <Button

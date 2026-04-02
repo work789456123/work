@@ -15,6 +15,7 @@ import {
 import { SplitHeading } from "@/motion/SplitHeading";
 import { lucideFromMap } from "@/lib/lucideFromMap";
 import Image from "next/image";
+import PawTexture from "@/components/PawTexture";
 
 const iconMap = { sparkles: Sparkles, heart: Heart, zap: Zap, shield: Shield };
 
@@ -60,15 +61,7 @@ export default function HomeAboutPillarsSection() {
       data-testid="about-section"
       className="relative overflow-hidden bg-teal-50 py-28 md:py-36"
     >
-      <div className="pointer-events-none absolute inset-0 z-0">
-              <Image
-                src="/images/bg_paws.png"
-                alt=""
-                fill
-                className="object-cover opacity-10 "
-                sizes="100vw"
-                priority
-              /></div>
+<PawTexture/>    
 
       <div className="relative mx-auto max-w-5xl px-6 text-center">
         <motion.div
