@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .
+      args:
+        NEXT_PUBLIC_BACKEND_URL: https://pashuvaani.com
+    container_name: pashuvaani_frontend
+    restart: always
+    ports:
+      - "3000:3000"
