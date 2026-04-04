@@ -7,6 +7,8 @@ import { lucideFromMap } from "@/lib/lucideFromMap";
 import { SplitHeading } from "@/motion/SplitHeading";
 import { useScrollMotion, transitionMedium, staggerContainer, fadeUp, scaleIn } from "@/motion/scrollMotion";
 import ScrollReveal from "@/motion/ScrollReveal";
+import Image from "next/image";
+import PawTexture from "@/components/PawTexture";
 
 const capIcons = { target: Target, zap: Zap, shield: Shield, users: Users, heart: Heart };
 
@@ -15,8 +17,11 @@ export default function AboutPoweredBySection() {
   const tr = t(transitionMedium);
 
   return (
-    <section id="about-powered-by" className="bg-[#FAFAFA] py-20 md:py-28">
-      <div className="mx-auto max-w-5xl px-6">
+    <section id="about-powered-by" className="bg-teal-50 relative py-20 md:py-28">
+      <div className="pointer-events-none absolute inset-0 z-0">
+                    <PawTexture/>
+                  </div>
+      <div className="mx-auto max-w-5xl px-6 relative">
         <div className="mb-12 text-center">
           <SplitHeading
             text={aboutPoweredBy.title}

@@ -4,16 +4,24 @@ import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 import { aboutWhy } from "@/assets/content/about";
 import { SplitHeading } from "@/motion/SplitHeading";
-import { useScrollMotion, transitionMedium, staggerContainer, fadeUp } from "@/motion/scrollMotion";
+import {
+  useScrollMotion,
+  transitionMedium,
+  staggerContainer,
+  fadeUp,
+} from "@/motion/scrollMotion";
 import ScrollReveal from "@/motion/ScrollReveal";
+import Image from "next/image";
+import PawTexture from "@/components/PawTexture";
 
 export default function AboutWhySection() {
   const { t, stagger, delayChildren } = useScrollMotion();
   const tr = t(transitionMedium);
 
   return (
-    <section id="about-why" className="bg-white py-20 md:py-28">
-      <div className="mx-auto max-w-5xl px-6">
+    <section id="about-why" className="bg-teal-50 relative py-20 md:py-28">
+      <PawTexture />
+      <div className="mx-auto max-w-5xl relative z-10 px-6">
         <div className="mb-14 text-center">
           <SplitHeading
             text={aboutWhy.title}

@@ -14,6 +14,8 @@ import {
 } from "@/motion/scrollMotion";
 import { SplitHeading } from "@/motion/SplitHeading";
 import { lucideFromMap } from "@/lib/lucideFromMap";
+import Image from "next/image";
+import PawTexture from "@/components/PawTexture";
 
 const iconMap = { sparkles: Sparkles, heart: Heart, zap: Zap, shield: Shield };
 
@@ -57,13 +59,9 @@ export default function HomeAboutPillarsSection() {
       ref={sectionRef}
       id="home-about-pillars"
       data-testid="about-section"
-      className="relative overflow-hidden bg-white py-28 md:py-36"
+      className="relative overflow-hidden bg-teal-50 py-28 md:py-36"
     >
-      {/* Decorative orbs */}
-      <div className="pointer-events-none absolute inset-0" aria-hidden>
-        <div className="absolute -left-20 top-1/4 h-80 w-80 rounded-full bg-[#1FA7A6]/[0.06] blur-3xl" />
-        <div className="absolute -right-20 bottom-1/3 h-64 w-64 rounded-full bg-[#78D65C]/[0.05] blur-3xl" />
-      </div>
+<PawTexture/>    
 
       <div className="relative mx-auto max-w-5xl px-6 text-center">
         <motion.div

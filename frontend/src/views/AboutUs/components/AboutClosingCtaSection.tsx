@@ -8,6 +8,7 @@ import { aboutCta } from "@/assets/content/about";
 import { SplitHeading } from "@/motion/SplitHeading";
 import { useScrollMotion, transitionMedium, staggerContainer, fadeUp } from "@/motion/scrollMotion";
 import ScrollReveal from "@/motion/ScrollReveal";
+import Image from "next/image";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -18,17 +19,18 @@ export default function AboutClosingCtaSection() {
   return (
     <section
       id="about-closing-cta"
-      className="relative overflow-hidden bg-gradient-to-r from-[#1FA7A6] via-[#38C2B4] to-[#78D65C] py-24 md:py-32"
+      className="relative overflow-hidden bg-teal-500 py-24 md:py-32"
     >
-      <div
-        className="pointer-events-none absolute -left-16 -top-16 h-64 w-64 rounded-full bg-white/10 blur-3xl"
-        aria-hidden
-      />
-      <div
-        className="pointer-events-none absolute -bottom-16 right-8 h-64 w-64 rounded-full bg-[#1F6559]/20 blur-3xl"
-        aria-hidden
-      />
-
+      <div className="pointer-events-none absolute inset-0 z-0">
+        <Image
+          src="/images/contact_bg.png"
+          alt=""
+          fill
+          className="object-cover opacity-30"
+          sizes="100vw"
+          priority
+        />
+      </div>
       <div className="relative mx-auto max-w-4xl px-6 text-center">
         <motion.div
           className="mb-4 flex justify-center"

@@ -21,19 +21,19 @@ export default function HomeWhatsappFloatingButton() {
       transition={
         reduced
           ? { duration: 0 }
-          : { ...transitionSpring, delay: 0.9 }
+          : { ...transitionSpring, delay: 2.5 }
       }
       whileHover={reduced ? {} : { scale: 1.08 }}
       whileTap={reduced ? {} : { scale: 0.95 }}
     >
-      <div className="absolute inset-0 bg-[#25D366] rounded-full animate-ping opacity-20 group-hover:opacity-40 transition-opacity duration-300" />
-      <div className="absolute inset-0 bg-[#25D366] rounded-full animate-pulse opacity-30 shadow-[0_0_15px_rgba(37,211,102,0.8)]" />
+      <div className="absolute inset-0 bg-[#25D366] rounded-full opacity-20 animate-ping [animation-duration:3s]" />
+      <div className="absolute inset-0 bg-[#25D366] rounded-full opacity-25 shadow-[0_0_10px_rgba(37,211,102,0.6)] animate-pulse [animation-duration:2.5s]" />
       <Image
-        src={whatsapp.imageUrl}
+        src="/images/whatsappicon.png"
         alt=""
-        width={56}
-        height={56}
-        className="relative h-14 w-14 drop-shadow-xl"
+        width={92}
+        height={92}
+        className="relative h-16 w-14 drop-shadow-xl"
         aria-hidden
       />
     </motion.a>

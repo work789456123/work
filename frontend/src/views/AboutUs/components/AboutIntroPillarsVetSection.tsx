@@ -7,6 +7,8 @@ import { lucideFromMap } from "@/lib/lucideFromMap";
 import { SplitHeading } from "@/motion/SplitHeading";
 import { useScrollMotion, transitionMedium, transitionShort, staggerContainer, fadeUp, scaleIn } from "@/motion/scrollMotion";
 import ScrollReveal from "@/motion/ScrollReveal";
+import Image from "next/image";
+import PawTexture from "@/components/PawTexture";
 
 const pillarIcons = { sparkles: Sparkles, heart: Heart, zap: Zap, shield: Shield };
 
@@ -24,8 +26,9 @@ export default function AboutIntroPillarsVetSection() {
   const hi = aboutIntro.highlightPhrases;
 
   return (
-    <section id="about-intro-pillars-vet" className="bg-white py-20 md:py-28">
-      <div className="mx-auto max-w-6xl px-6 lg:px-12">
+    <section id="about-intro-pillars-vet" className="bg-teal-50 relative py-20 md:py-28">
+<PawTexture/>
+      <div className="mx-auto max-w-6xl relative z-10 px-6 lg:px-12">
 
         <ScrollReveal
           variants={staggerContainer(stagger, delayChildren)}
