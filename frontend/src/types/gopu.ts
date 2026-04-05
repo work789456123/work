@@ -76,6 +76,8 @@ export type GopuChatInputFooterProps = {
 export type GopuChatHeaderBarProps = {
   credits: CreditsBalanceResponse | null;
   remainingMessages: number | "∞";
+  mobileSidebarOpen: boolean;
+  onToggleMobileSidebar: () => void;
 };
 
 export type GopuChatMessageListProps = {
@@ -91,4 +93,7 @@ export type GopuChatSidebarProps = {
   sessionId: string | null;
   onNewChat: () => void;
   onSelectSession: (id: string) => void;
+  /** When false on viewports below lg, sidebar is off-canvas; lg+ ignores this for layout. */
+  isMobileOpen: boolean;
+  onRequestCloseMobile: () => void;
 };

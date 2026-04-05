@@ -1,6 +1,8 @@
 "use client";
 
+import { useCallback, useEffect, useState } from "react";
 import { useGopuChatController } from "@/hooks/useGopuChatController";
+import { gopuChat } from "@/assets/content/gopu";
 import GopuChatSidebar from "./components/GopuChatSidebar";
 import GopuChatHeaderBar from "./components/GopuChatHeaderBar";
 import GopuChatMessageList from "./components/GopuChatMessageList";
@@ -22,17 +24,53 @@ const GopuChat = () => {
 		handleSend,
 	} = useGopuChatController();
 
+	const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+	const closeMobileSidebar = useCallback(() => setMobileSidebarOpen(false), []);
+	const toggleMobileSidebar = useCallback(() => setMobileSidebarOpen((o) => !o), []);
+
+	const handleNewChat = useCallback(() => {
+		startNewSession();
+		closeMobileSidebar();
+	}, [startNewSession, closeMobileSidebar]);
+
+	const handleSelectSession = useCallback(
+		(id: string) => {
+			loadSessionHistory(id);
+			closeMobileSidebar();
+		},
+		[loadSessionHistory, closeMobileSidebar],
+	);
+
+	useEffect(() => {
+		if (!mobileSidebarOpen) return;
+		const onKey = (e: KeyboardEvent) => {
+			if (e.key === "Escape") closeMobileSidebar();
+		};
+		window.addEventListener("keydown", onKey);
+		return () => window.removeEventListener("keydown", onKey);
+	}, [mobileSidebarOpen, closeMobileSidebar]);
+
 	return (
 		<div
 			id="page-gopu-chat"
 			className="flex flex-col lg:flex-row lg:justify-end min-h-screen bg-[#FAFAFA] relative"
 			data-testid="gopu-chat-page"
 		>
+			{mobileSidebarOpen ? (
+				<button
+					type="button"
+					aria-label={gopuChat.header.closeSidebarAria}
+					className="lg:hidden fixed left-0 right-0 bottom-0 top-20 z-30 bg-black/40"
+					onClick={closeMobileSidebar}
+				/>
+			) : null}
 			<GopuChatSidebar
 				sessions={state.sessions}
 				sessionId={state.sessionId}
-				onNewChat={startNewSession}
-				onSelectSession={loadSessionHistory}
+				onNewChat={handleNewChat}
+				onSelectSession={handleSelectSession}
+				isMobileOpen={mobileSidebarOpen}
+				onRequestCloseMobile={closeMobileSidebar}
 			/>
 			<div
 				id="gopu-chat-main"
@@ -46,6 +84,8 @@ const GopuChat = () => {
 					<GopuChatHeaderBar
 						credits={state.credits}
 						remainingMessages={state.remainingMessages}
+						mobileSidebarOpen={mobileSidebarOpen}
+						onToggleMobileSidebar={toggleMobileSidebar}
 					/>
 					<GopuChatMessageList
 						messages={state.messages}

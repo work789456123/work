@@ -56,21 +56,22 @@ export default function HomeMeetGopuSection() {
           src="/images/meet_gopu_bg_1.png"
           alt=""
           fill
-          className="object-cover opacity-20"
+          className="object-cover opacity-20 hidden md:block"
           sizes="100vw"
         />
-      </div>
-      {/* Texture */}
-      <div className="pointer-events-none absolute inset-0" aria-hidden>
-        <div className="absolute -left-24 top-1/3 h-96 w-96 rounded-full bg-white/10 blur-3xl" />
-
-        <div className="absolute -right-16 bottom-1/4 h-72 w-72 rounded-full bg-white/[0.06] blur-3xl" />
+        <Image
+          src="/images/meet_gopu_bg_mobile.png"
+          alt=""
+          fill
+          className="object-cover opacity-20 block md:hidden"
+          sizes="100vw"
+        />
       </div>
 
       <div className="relative mx-auto max-w-6xl px-6">
         <motion.div
           ref={ref}
-          className="grid grid-cols-1 items-center gap-14 lg:grid-cols-2"
+          className="grid grid-cols-1 items-center gap-14 lg:grid-cols-2 "
           variants={gridVariants}
           initial="hidden"
           animate={animate}

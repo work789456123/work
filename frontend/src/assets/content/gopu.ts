@@ -11,6 +11,8 @@ export const gopuChat = {
     subtitle: "Pet Health Companion",
     unlimited: "Unlimited",
     leftSuffix: "Left",
+    toggleChatsAria: "Open or close chat history",
+    closeSidebarAria: "Close chat history",
   },
   emptyState: {
     title: "Start a conversation",
