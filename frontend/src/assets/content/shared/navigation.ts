@@ -15,19 +15,13 @@ export const primaryNav = [
     spl: false,
     children: [
       { spl: false, name: "Gopu.AI", link: "/pashucare-suraksha-plan" },
-      { spl: false, name: "Care Collection", link: null, action: "careCollectionSoon" },
+      { spl: false, name: "Care Collection", link: "/marketplace" },
     ],
   },
   {
     spl: false,
     name: "Consult with doctor",
     link: "/appointments",
-    children: [],
-  },
-  {
-    spl: false,
-    name: "Marketplace",
-    link: "/marketplace",
     children: [],
   },
   {
