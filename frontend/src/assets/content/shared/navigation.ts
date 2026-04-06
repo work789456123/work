@@ -26,6 +26,12 @@ export const primaryNav = [
   },
   {
     spl: false,
+    name: "Marketplace",
+    link: "/marketplace",
+    children: [],
+  },
+  {
+    spl: false,
     name: "Blogs",
     link: "/blogs",
     children: [],
