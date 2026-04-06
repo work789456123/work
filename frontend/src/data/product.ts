@@ -93,10 +93,10 @@ export const products: Product[] = [
       "Contains Vitamin C, Potassium iodate, and Glutamic Acid in a fortified base. Used for managing aphthous lesions, thyroid imbalance, and post FMD recovery symptoms like panting and infertility. Suitable for cattle, buffaloes, sheep, goats, and horses.",
     categoryId: "feed",
     imageUrl:
-      "https://images.unsplash.com/photo-1598514982841-74d8c5d65c3f?w=800&q=80",
+      "/images/Apthocare-60gms-1-scaled.webp",
     gallery: [
-      "https://images.unsplash.com/photo-1598514982841-74d8c5d65c3f?w=800&q=80",
-      "https://images.unsplash.com/photo-1500595046743-cd271d694d30?w=800&q=80",
+      "/images/Apthocare-60gms-1-scaled.webp",
+      "/images/Apthocare-60gms-2-scaled.webp",
     ],
     inStock: true,
     rating: 4.7,
@@ -115,10 +115,11 @@ export const products: Product[] = [
       "A feed supplement enriched with Vitamins A, D3, E and essential trace minerals like Zinc, Iodine, and Cobalt. Supports overall health, immunity, and productivity in dairy animals. Ideal for improving milk yield and maintaining body condition.",
     categoryId: "feed",
     imageUrl:
-      "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=800&q=80",
+      "/images/Mastizyme-1kg-1-scaled.webp",
     gallery: [
-      "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=800&q=80",
-      "https://images.unsplash.com/photo-1500595046743-cd271d694d30?w=800&q=80",
+      "/images/Mastizyme-1kg-1-scaled.webp",
+      "/images/Mastizyme-1kg-3-1-scaled.webp",
+      "/images/Mastizyme-250gms-1-scaled.webp",
     ],
     inStock: true,
     rating: 4.6,
