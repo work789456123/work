@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+body {
+  color: #1E293B;
+  font-family: sans-serif;
+  background-color: transparent;
+  background-image: url('/images/bg_plain.png');
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+}
