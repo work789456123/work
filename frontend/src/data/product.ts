@@ -28,6 +28,7 @@ export type Product = {
   rating: number;
   reviewCount: number;
   highlights: string[];
+  contact?: string;
 };
 
 /** Dial target for marketplace “Call now” (matches contact page). */

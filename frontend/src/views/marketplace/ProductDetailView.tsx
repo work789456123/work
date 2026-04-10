@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import type { Product } from "@/data/product";
-import { getCategoryById, marketplaceCallHref } from "@/data/product";
+import { getCategoryById } from "@/data/product";
 import { ProductImageGallery } from "@/views/marketplace/ProductImageGallery";
 
 type Props = {
@@ -29,6 +29,7 @@ function uniqueGalleryImages(product: Product): string[] {
 export function ProductDetailView({ product, relatedProducts }: Props) {
   const category = getCategoryById(product.categoryId);
   const galleryImages = uniqueGalleryImages(product);
+  const contactHref = `tel:${product.contact ?? "+917073041236"}`;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-[hsl(var(--muted)/0.25)] to-background">
@@ -91,7 +92,7 @@ export function ProductDetailView({ product, relatedProducts }: Props) {
                 className="rounded-xl bg-[#1F6559] text-base font-semibold hover:bg-[#1F6559]/90"
                 asChild
               >
-                <a href={marketplaceCallHref}>
+                <a href={contactHref}>
                   <Phone className="h-5 w-5" aria-hidden />
                   Call now
                 </a>

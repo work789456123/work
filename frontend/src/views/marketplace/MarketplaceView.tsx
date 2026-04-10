@@ -17,6 +17,7 @@ import {
   type ProductCategory,
   isProductCategoryId,
 } from "@/data/product";
+import { fetchMarketplaceProducts } from "@/data/marketplace-api";
 
 type SortKey = "featured" | "rating" | "name-asc";
 
@@ -42,11 +43,38 @@ export function MarketplaceView({ categories, products, initialCategory }: Props
     parseCategoryParam(effectiveInitial),
   );
   const [sort, setSort] = useState<SortKey>("featured");
+  const [liveProducts, setLiveProducts] = useState<Product[]>(products);
+  const [isLoadingProducts, setIsLoadingProducts] = useState(true);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
   const categoryParam = searchParams.get("category");
   useEffect(() => {
     setCategory(parseCategoryParam(categoryParam));
   }, [categoryParam]);
+
+  const fetchProducts = useCallback(async () => {
+    try {
+      const data = await fetchMarketplaceProducts();
+      setLiveProducts(data);
+    } catch {
+      setLiveProducts([]);
+    } finally {
+      setIsLoadingProducts(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    void fetchProducts();
+    const intervalId = window.setInterval(() => {
+      void fetchProducts();
+    }, 15000);
+    const onFocus = () => void fetchProducts();
+    window.addEventListener("focus", onFocus);
+    return () => {
+      window.clearInterval(intervalId);
+      window.removeEventListener("focus", onFocus);
+    };
+  }, [fetchProducts]);
 
   const setQueryCategory = useCallback(
     (next: MarketplaceFilterId) => {
@@ -63,8 +91,8 @@ export function MarketplaceView({ categories, products, initialCategory }: Props
   const filtered = useMemo(() => {
     const base =
       category === ALL_CATEGORIES_ID
-        ? [...products]
-        : products.filter((p) => p.categoryId === category);
+        ? [...liveProducts]
+        : liveProducts.filter((p) => p.categoryId === category);
     const list = [...base];
 
     if (sort === "rating") list.sort((a, b) => b.rating - a.rating);
@@ -72,7 +100,7 @@ export function MarketplaceView({ categories, products, initialCategory }: Props
     else list.sort((a, b) => b.reviewCount - a.reviewCount);
 
     return list;
-  }, [products, category, sort]);
+  }, [liveProducts, category, sort]);
 
   const activeCategoryMeta =
     category === ALL_CATEGORIES_ID
@@ -115,7 +143,7 @@ export function MarketplaceView({ categories, products, initialCategory }: Props
             <div className="flex items-center gap-3 text-sm text-white/90">
               <LayoutGrid className="h-5 w-5 shrink-0 opacity-90" aria-hidden />
               <span>
-                <strong className="font-semibold text-white">{products.length}</strong> products
+                <strong className="font-semibold text-white">{liveProducts.length}</strong> products
               </span>
             </div>
           </div>
@@ -151,11 +179,11 @@ export function MarketplaceView({ categories, products, initialCategory }: Props
                       >
                         <span>All products</span>
                         <Badge variant="outline" className="font-mono text-[10px]">
-                          {products.length}
+                          {liveProducts.length}
                         </Badge>
                       </button>
                       {categories.map((c) => {
-                        const count = products.filter((p) => p.categoryId === c.id).length;
+                        const count = liveProducts.filter((p) => p.categoryId === c.id).length;
                         return (
                           <button
                             key={c.id}
@@ -221,7 +249,13 @@ export function MarketplaceView({ categories, products, initialCategory }: Props
               </p>
             )}
 
-            {filtered.length === 0 ? (
+            {isLoadingProducts ? (
+              <ul className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+                {[1, 2, 3, 4, 5, 6].map((item) => (
+                  <li key={item} className="h-80 animate-pulse rounded-2xl bg-muted" />
+                ))}
+              </ul>
+            ) : filtered.length === 0 ? (
               <Card className="border-dashed py-16 text-center">
                 <CardContent>
                   <p className="heading-font text-lg font-semibold text-foreground">
@@ -294,8 +328,13 @@ export function MarketplaceView({ categories, products, initialCategory }: Props
                               Call now
                             </a>
                           </Button>
-                          <Button size="sm" variant="outline" className="w-full rounded-xl sm:flex-1" asChild>
-                            <Link href={`/marketplace/${p.slug}`}>View details</Link>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="w-full rounded-xl sm:flex-1"
+                            onClick={() => setSelectedProduct(p)}
+                          >
+                            Buy now
                           </Button>
                         </div>
                       </CardContent>
@@ -307,6 +346,27 @@ export function MarketplaceView({ categories, products, initialCategory }: Props
           </div>
         </div>
       </div>
+
+      {selectedProduct && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="w-full max-w-md rounded-2xl bg-white p-5 shadow-2xl">
+            <h3 className="text-lg font-bold text-slate-900">Buy Now</h3>
+            <p className="mt-1 text-sm text-slate-600">{selectedProduct.name}</p>
+            <p className="mt-3 text-sm text-slate-700">{selectedProduct.shortDescription}</p>
+            <p className="mt-3 text-sm font-semibold text-slate-800">
+              Contact: {selectedProduct.contact ?? "+917073041236"}
+            </p>
+            <div className="mt-5 flex gap-2">
+              <Button className="bg-[#1F6559] hover:bg-[#1F6559]/90" asChild>
+                <a href={`tel:${selectedProduct.contact ?? "+917073041236"}`}>Call Now</a>
+              </Button>
+              <Button variant="outline" onClick={() => setSelectedProduct(null)}>
+                Close
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

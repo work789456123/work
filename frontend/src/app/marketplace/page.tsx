@@ -1,7 +1,8 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import { MarketplaceView } from "@/views/marketplace/MarketplaceView";
-import { productCategories, products } from "@/data/product";
+import { fetchMarketplaceProducts } from "@/data/marketplace-api";
+import { productCategories } from "@/data/product";
 
 export const metadata: Metadata = {
   title: "Marketplace",
@@ -33,6 +34,8 @@ type PageProps = {
 
 export default async function MarketplacePage({ searchParams }: PageProps) {
   const { category } = await searchParams;
+
+  const products = await fetchMarketplaceProducts();
 
   return (
     <Suspense fallback={<MarketplaceSkeleton />}>

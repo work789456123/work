@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 
 from app.api.endpoints import auth, pets, appointments, chat, speech, blogs, contact, career, doctors, admin, credits
+from app.api import product
 
 api_router = APIRouter()
 api_router.include_router(auth.router, prefix="/auth", tags=["auth"])
@@ -15,3 +16,4 @@ api_router.include_router(contact.router, prefix="/contact", tags=["contact"])
 api_router.include_router(career.router, prefix="/career", tags=["career"])
 api_router.include_router(doctors.router, prefix="/doctors", tags=["doctors"])
 api_router.include_router(admin.router, prefix="/admin", tags=["admin"])
+api_router.include_router(product.router, prefix="/products", tags=["products"])

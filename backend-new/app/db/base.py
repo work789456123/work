@@ -11,3 +11,4 @@ from app.models.farm import Farmer, Animal, FarmConsultation, AIAlert
 from app.models.banned_device import BannedDevice
 from app.models.device_usage import DeviceUsage
 from app.models.ratelimit_exception import RatelimitException
+from app.models.products import Product

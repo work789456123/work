@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     ADMIN_EMAIL: str
     ADMIN_PASSWORD: str
     CORS_ORIGINS: str = "*"
+    BACKEND_PUBLIC_URL: str = "http://localhost:8000"
 
     # Email Settings
     SMTP_TLS: bool = True
