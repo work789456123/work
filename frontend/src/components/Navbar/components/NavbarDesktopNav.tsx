@@ -17,7 +17,7 @@ export default function NavbarDesktopNav({ primaryNav }: { primaryNav: PrimaryNa
   const pathname = usePathname();
 
   const handleChildClick = (child: PrimaryNavChild) => {
-    if (child.action === "careCollectionSoon") {
+    if ((child as any).action === "careCollectionSoon") {
       toast.info("Care Collection is Coming Soon!", { closeButton: true });
       return;
     }

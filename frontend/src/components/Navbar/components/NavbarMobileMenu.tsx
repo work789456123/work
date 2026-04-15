@@ -71,6 +71,13 @@ export default function NavbarMobileMenu({
         Consult with Doctor
       </Link>
       <Link
+        href="/marketplace"
+        onClick={() => onClose()}
+        className="block px-4 py-3 text-sm font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10"
+      >
+        Marketplace
+      </Link>
+      <Link
         href="/blogs"
         onClick={() => onClose()}
         className="block px-4 py-3 text-sm font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10"

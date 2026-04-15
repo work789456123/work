@@ -15,7 +15,7 @@ export const primaryNav = [
     spl: false,
     children: [
       { spl: false, name: "Gopu.AI", link: "/pashucare-suraksha-plan" },
-      { spl: false, name: "Care Collection", link: null, action: "careCollectionSoon" },
+      { spl: false, name: "Care Collection", link: "/marketplace" },
     ],
   },
   {
