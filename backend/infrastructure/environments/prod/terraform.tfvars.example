@@ -3,10 +3,28 @@ aws_region = "ap-south-1"
 project_name = "pashuvaani"
 environment  = "prod"
 
-backend_image = "123456789012.dkr.ecr.ap-south-1.amazonaws.com/pashuvaani-backend:stable"
-nextjs_image  = "123456789012.dkr.ecr.ap-south-1.amazonaws.com/pashuvaani-nextjs:stable"
+backend_image  = "385105851842.dkr.ecr.ap-south-1.amazonaws.com/pashuvaani-be:latest"
+frontend_image = "385105851842.dkr.ecr.ap-south-1.amazonaws.com/pashuvaani-frontend:latest"
 
 domain_name = "example.com"
 record_name = "app.example.com"
 
+# HTTPS: leave empty to create & validate ACM in ap-south-1 via Route53 (ALB must use same region as cert).
+# To use an existing certificate: set to arn:aws:acm:ap-south-1:ACCOUNT:certificate/... (NOT us-east-1).
+# acm_certificate_arn = ""
+# enable_alb_https = true
+
 ssh_ingress_cidrs = ["203.0.113.10/32"]
+instance_type    = "t3.small"
+root_volume_size = 30
+
+# Required for backend (see backend/app/core/config.py). Use async URL or plain postgresql:// (app rewrites).
+# Example: postgresql+asyncpg://dbuser:PASSWORD@your-rds.xxxxx.ap-south-1.rds.amazonaws.com:5432/pashuvaani
+backend_environment = {
+  SECRET_KEY         = "generate-a-long-random-string"
+  DATABASE_URL       = "postgresql+asyncpg://USER:PASS@RDS_ENDPOINT:5432/DBNAME"
+  OPENAI_API_KEY     = "sk-..."
+  ADMIN_EMAIL        = "admin@example.com"
+  ADMIN_PASSWORD     = "secure-password"
+  BACKEND_PUBLIC_URL = "https://dev.pashuvaani.com"
+}

@@ -11,8 +11,9 @@ This directory now contains a modular Terraform layout for enterprise-style depl
 - VPC with public and private subnets across 2 AZs
 - Internet/NAT routing
 - ALB in public subnets
-- EC2 Auto Scaling Group in private subnets
-- Dockerized `backend` + `nextjs` services with `nginx` reverse proxy on each instance
+- Dev: EC2 Auto Scaling Group in private subnets with Dockerized app stack
+- Prod: ECS cluster on EC2 capacity (Auto Scaling)
+- Prod routing: `/api` to backend service, `/` to frontend service
 - Route53 alias record pointing to ALB
 - S3 media bucket (private, encrypted, versioned)
 - IAM profile for EC2 with scoped access to the media bucket
@@ -47,10 +48,16 @@ cd backend/infrastructure/environments/dev
 cp terraform.tfvars.example terraform.tfvars
 ```
 
-3. Initialize and apply:
+3. Authenticate AWS profile:
 
 ```bash
-terraform init
+export AWS_PROFILE=pvaani
+```
+
+4. Initialize backend and apply:
+
+```bash
+terraform init -reconfigure
 terraform plan
 terraform apply
 ```
@@ -59,11 +66,14 @@ Repeat the same flow in `environments/prod`.
 
 ## Important production notes
 
-- Configure remote state backend (`S3 + DynamoDB locking`) in each environment before production rollout.
+- Remote state is configured via `backend.tf` in each environment and uses:
+  - S3 bucket: `pashuvaani-terraform-state-bucket-f4bbc7da`
+  - DynamoDB lock table: `pashuvaani-terraform-state-lock`
 - Add HTTPS listener and ACM certificate for ALB (currently HTTP listener is configured).
 - Restrict `ssh_ingress_cidrs` to office/VPN only (or disable SSH and use SSM Session Manager).
 - Keep container images in private ECR and pin immutable tags.
+- Prod ECS EC2 uses `t3.small`; set root volume to at least `30GB` for the current ECS-optimized AMI snapshot.
 
 ## Legacy files
 
-Existing top-level Terraform files (`ec2.tf`, `frontend_infra.tf`, etc.) are left intact for compatibility and migration; use `environments/*` for all new deployments.
+Legacy top-level Terraform files are now moved to `old-terraform/` for archive and migration reference. Use only `environments/*` and `modules/*` for active deployments.

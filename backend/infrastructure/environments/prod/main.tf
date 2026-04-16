@@ -38,20 +38,23 @@ module "security" {
   environment       = var.environment
   vpc_id            = module.network.vpc_id
   app_port          = var.app_port
+  additional_app_ports = [3000]
   ssh_ingress_cidrs = var.ssh_ingress_cidrs
   common_tags       = local.common_tags
 }
 
 module "alb" {
-  source = "../../modules/alb"
+  source = "../../modules/alb-ecs"
 
   project_name          = var.project_name
   environment           = var.environment
   vpc_id                = module.network.vpc_id
   public_subnet_ids     = module.network.public_subnet_ids
   alb_security_group_id = module.security.alb_security_group_id
-  target_port           = var.app_port
-  health_check_path     = var.alb_health_check_path
+  backend_health_check_path  = var.alb_health_check_path
+  frontend_health_check_path = "/"
+  enable_https          = var.enable_alb_https
+  certificate_arn       = local.alb_certificate_arn
   common_tags           = local.common_tags
 }
 
@@ -65,20 +68,23 @@ module "s3_media" {
 }
 
 module "compute" {
-  source = "../../modules/compute"
+  source = "../../modules/ecs-ec2"
 
   project_name          = var.project_name
   environment           = var.environment
+  aws_region            = var.aws_region
   private_subnet_ids    = module.network.private_subnet_ids
   app_security_group_id = module.security.app_security_group_id
-  target_group_arn      = module.alb.target_group_arn
+  backend_target_group_arn  = module.alb.backend_target_group_arn
+  frontend_target_group_arn = module.alb.frontend_target_group_arn
   instance_type         = var.instance_type
+  root_volume_size      = var.root_volume_size
   desired_capacity      = var.desired_capacity
   min_size              = var.min_size
   max_size              = var.max_size
   backend_image         = var.backend_image
-  nextjs_image          = var.nextjs_image
-  aws_region            = var.aws_region
+  frontend_image        = var.frontend_image
+  backend_environment   = var.backend_environment
   media_bucket_arn      = module.s3_media.bucket_arn
   media_bucket_name     = module.s3_media.bucket_name
   common_tags           = local.common_tags

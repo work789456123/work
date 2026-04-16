@@ -15,6 +15,12 @@ variable "app_port" {
   default = 80
 }
 
+variable "additional_app_ports" {
+  description = "Additional app ports allowed from ALB to app tasks/instances."
+  type        = list(number)
+  default     = []
+}
+
 variable "ssh_ingress_cidrs" {
   description = "CIDRs allowed to SSH to application instances."
   type        = list(string)

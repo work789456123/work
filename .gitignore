@@ -81,3 +81,6 @@ android-sdk/ -e
 # Environment files
 *.env
 *.env.*
+
+# Terraform: local variable files (secrets); copy from terraform.tfvars.example
+backend/infrastructure/environments/**/terraform.tfvars

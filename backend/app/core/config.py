@@ -1,6 +1,8 @@
-import os
 from typing import Optional
+
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
 
 class Settings(BaseSettings):
     PROJECT_NAME: str = "PashuVaani API (PostgreSQL)"
@@ -32,6 +34,28 @@ class Settings(BaseSettings):
 
     model_config = SettingsConfigDict(env_file=".env", case_sensitive=True, extra="ignore")
 
+    @field_validator("DATABASE_URL", mode="before")
+    @classmethod
+    def normalize_async_database_url(cls, v: object) -> str:
+        if v is None or (isinstance(v, str) and not v.strip()):
+            raise ValueError(
+                "DATABASE_URL is empty. Set it to a valid async URL, e.g. "
+                "postgresql+asyncpg://user:pass@host:5432/dbname"
+            )
+        if not isinstance(v, str):
+            v = str(v)
+        s = v.strip()
+        if s in ("CHANGE_ME_DATABASE_URL", "postgresql://CHANGE_ME"):
+            raise ValueError(
+                "DATABASE_URL is still a placeholder. In Terraform, set backend_environment.DATABASE_URL "
+                "to your RDS URL. Use postgresql+asyncpg://... or postgresql://... (the app upgrades the latter)."
+            )
+        # SQLAlchemy async engine expects the asyncpg driver in the URL scheme.
+        if s.startswith("postgresql://") and not s.startswith("postgresql+asyncpg://"):
+            return s.replace("postgresql://", "postgresql+asyncpg://", 1)
+        if s.startswith("postgres://"):
+            return s.replace("postgres://", "postgresql+asyncpg://", 1)
+        return s
 
 
 settings = Settings()

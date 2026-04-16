@@ -45,22 +45,22 @@ variable "ssh_ingress_cidrs" {
 
 variable "instance_type" {
   type    = string
-  default = "t3.medium"
+  default = "t3.small"
 }
 
 variable "desired_capacity" {
   type    = number
-  default = 2
+  default = 1
 }
 
 variable "min_size" {
   type    = number
-  default = 2
+  default = 1
 }
 
 variable "max_size" {
   type    = number
-  default = 4
+  default = 2
 }
 
 variable "backend_image" {
@@ -68,9 +68,21 @@ variable "backend_image" {
   type        = string
 }
 
-variable "nextjs_image" {
-  description = "Container image URI for Next.js service."
+variable "frontend_image" {
+  description = "Container image URI for frontend service."
   type        = string
+}
+
+variable "backend_environment" {
+  description = "Backend container environment variables."
+  type        = map(string)
+  default     = {}
+}
+
+variable "root_volume_size" {
+  description = "Root EBS size in GB for ECS EC2 instances."
+  type        = number
+  default     = 20
 }
 
 variable "domain_name" {
@@ -81,4 +93,16 @@ variable "domain_name" {
 variable "record_name" {
   description = "App DNS record, e.g. app.example.com."
   type        = string
+}
+
+variable "acm_certificate_arn" {
+  description = "Optional. ACM certificate ARN in ap-south-1 for HTTPS on the ALB. Leave empty to create & validate a new certificate via Route53."
+  type        = string
+  default     = ""
+}
+
+variable "enable_alb_https" {
+  description = "When true, ALB uses HTTPS (443) and redirects HTTP. Set false for HTTP-only (no ACM resources)."
+  type        = bool
+  default     = true
 }

@@ -22,6 +22,10 @@ export const metadata: Metadata = {
     template: "%s | PashuVaani",
   },
   description: "AI-powered animal health guidance and veterinary care resources.",
+  icons: {
+    icon: [{ url: "/pvhalflogo.png", type: "image/png", sizes: "any" }],
+    apple: "/pvhalflogo.png",
+  },
 };
 
 export default function RootLayout({

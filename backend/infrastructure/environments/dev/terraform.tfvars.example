@@ -3,8 +3,8 @@ aws_region = "ap-south-1"
 project_name = "pashuvaani"
 environment  = "dev"
 
-backend_image = "123456789012.dkr.ecr.ap-south-1.amazonaws.com/pashuvaani-backend:latest"
-nextjs_image  = "123456789012.dkr.ecr.ap-south-1.amazonaws.com/pashuvaani-nextjs:latest"
+backend_image = "385105851842.dkr.ecr.ap-south-1.amazonaws.com/pashuvaani-be:latest"
+nextjs_image  = "385105851842.dkr.ecr.ap-south-1.amazonaws.com/pashuvaani-frontend:latest"
 
 domain_name = "example.com"
 record_name = "app-dev.example.com"
