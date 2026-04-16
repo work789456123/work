@@ -1,0 +1,12 @@
+aws_region = "ap-south-1"
+
+project_name = "pashuvaani"
+environment  = "prod"
+
+backend_image = "123456789012.dkr.ecr.ap-south-1.amazonaws.com/pashuvaani-backend:stable"
+nextjs_image  = "123456789012.dkr.ecr.ap-south-1.amazonaws.com/pashuvaani-nextjs:stable"
+
+domain_name = "example.com"
+record_name = "app.example.com"
+
+ssh_ingress_cidrs = ["203.0.113.10/32"]
