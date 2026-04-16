@@ -278,7 +278,7 @@ export function MarketplaceView({ categories, products, initialCategory }: Props
                   <li key={p.id}>
                     <Card className="group flex h-full flex-col overflow-hidden border-border/70 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[#1F6559]/35 hover:shadow-lg">
                       <Link
-                        href={`/marketplace/${p.slug}`}
+                        href={`/marketplace/${p.id}`}
                         className="relative block aspect-[4/3] overflow-hidden bg-muted outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#1F6559]"
                       >
                         <Image
@@ -309,7 +309,7 @@ export function MarketplaceView({ categories, products, initialCategory }: Props
                           </span>
                         </div>
                         <Link
-                          href={`/marketplace/${p.slug}`}
+                          href={`/marketplace/${p.id}`}
                           className="heading-font text-lg font-bold leading-snug text-foreground hover:text-[#1F6559]"
                         >
                           {p.name}
