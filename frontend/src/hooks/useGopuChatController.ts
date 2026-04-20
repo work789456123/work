@@ -157,6 +157,7 @@ export function useGopuChatController() {
 
   const startRecording = async () => {
     try {
+      dispatch({ type: "SET_RECORDING", value: true });
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const recorder = new MediaRecorder(stream);
       const audioChunks: Blob[] = [];
@@ -175,6 +176,7 @@ export function useGopuChatController() {
             try {
               const response = await api.post<{ text: string }>("/speech/transcribe", {
                 audio_base64: base64Audio,
+                language: state.language,
               });
               dispatch({ type: "SET_INPUT", value: response.data.text });
               toast.success("Voice recorded successfully");
@@ -188,9 +190,9 @@ export function useGopuChatController() {
       };
       recorder.start();
       mediaRecorderRef.current = recorder;
-      dispatch({ type: "SET_RECORDING", value: true });
       toast.success("Recording started");
     } catch (error: unknown) {
+      dispatch({ type: "SET_RECORDING", value: false });
       toast.error("Microphone access denied");
       console.error(error);
     }
@@ -230,6 +232,7 @@ export function useGopuChatController() {
         message: state.input,
         session_id: state.sessionId ?? "",
         image_base64: state.uploadedImage?.base64,
+        language: state.language,
       });
 
       if (!state.sessionId && response.data.session_id) {
@@ -279,6 +282,20 @@ export function useGopuChatController() {
         });
       } else {
         messages = [...messages, { role: "assistant", content: response.data.response }];
+        
+        // Automatically synthesize and play the response audio
+        try {
+          const ttsResponse = await api.post<{ audio_base64: string }>("/speech/synthesize", {
+            text: response.data.response,
+          });
+          if (ttsResponse.data.audio_base64) {
+            const audio = new Audio(ttsResponse.data.audio_base64);
+            audio.play().catch((e) => console.error("Audio auto-play blocked by browser", e));
+          }
+        } catch (ttsError) {
+          console.error("Speech synthesis failed", ttsError);
+        }
+
         const dec =
           state.credits && !state.credits.has_subscription
             ? {

@@ -45,12 +45,12 @@ const Navbar = () => {
 		try {
 			const endpoint =
 				state.authMode === "login" ? "/auth/login" : "/auth/register";
-			const response = await api.post<{ token: string; full_name: string }>(
+			const response = await api.post<{ access_token: string; user: { full_name: string } }>(
 				endpoint,
 				state.formData,
 			);
-			localStorage.setItem("token", response.data.token);
-			localStorage.setItem("user_name", response.data.full_name);
+			localStorage.setItem("token", response.data.access_token);
+			localStorage.setItem("user_name", response.data.user.full_name);
 			dispatch({
 				type: "AUTH_SUCCESS",
 				showPetDialog: state.authMode === "register",

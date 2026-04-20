@@ -5,6 +5,7 @@ class ChatMessage(BaseModel):
     message: str
     session_id: Optional[str] = None
     image_base64: Optional[str] = None
+    language: Optional[str] = "Hindi"
 
 class SpeechTranscribe(BaseModel):
     audio_base64: str

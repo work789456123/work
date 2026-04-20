@@ -98,9 +98,9 @@ export default function GopuChatInputFooter({
             type="button"
             onClick={onToggleRecord}
             disabled={limitReached}
-            className={isRecording ? "text-red-500 animate-pulse" : "text-[#6F6F6F]"}
+            className={isRecording ? "text-red-500 bg-red-100 hover:bg-red-200 border border-red-300 animate-pulse" : "text-[#6F6F6F] hover:text-red-500 hover:bg-red-50"}
           >
-            {isRecording ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+            {isRecording ? <div className="w-3.5 h-3.5 rounded-sm bg-red-600" /> : <Mic className="w-5 h-5" />}
           </Button>
           <Button
             type="button"

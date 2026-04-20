@@ -30,6 +30,7 @@ export type GopuSession = {
 export type GopuChatState = {
   messages: GopuChatMessage[];
   input: string;
+  language: string;
   isLoading: boolean;
   sessionId: string | null;
   sessions: GopuSession[];
@@ -78,6 +79,8 @@ export type GopuChatHeaderBarProps = {
   remainingMessages: number | "∞";
   mobileSidebarOpen: boolean;
   onToggleMobileSidebar: () => void;
+  language?: string;
+  onLanguageChange?: (lang: string) => void;
 };
 
 export type GopuChatMessageListProps = {

@@ -3,6 +3,7 @@ import type { GopuChatAction, GopuChatState } from "@/types/gopu";
 export const initialGopuState: GopuChatState = {
   messages: [],
   input: "",
+  language: "Hindi",
   isLoading: false,
   sessionId: null,
   sessions: [],

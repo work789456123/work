@@ -28,7 +28,9 @@ class SpeechService:
                 with open(temp_filename, "rb") as audio_file:
                     kwargs = {"model": "whisper-1", "file": audio_file}
                     if language:
-                        kwargs["language"] = language
+                        language_map = {"Hindi": "hi", "English": "en"}
+                        mapped_lang = language_map.get(language, language)
+                        kwargs["language"] = mapped_lang
                     response = await self.client.audio.transcriptions.create(**kwargs)
                 return response.text
             finally:

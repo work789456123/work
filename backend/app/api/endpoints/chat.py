@@ -138,7 +138,8 @@ async def chat_with_gopu(
     ai_response_dict = await ai_chat_service_impl.get_response(
         user_message=chat_in.message,
         image_base64=chat_in.image_base64,
-        chat_history=history_context
+        chat_history=history_context,
+        language=chat_in.language
     )
     
     # Add assistant response to DB

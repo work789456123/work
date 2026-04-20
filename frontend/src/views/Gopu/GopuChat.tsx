@@ -86,6 +86,8 @@ const GopuChat = () => {
 						remainingMessages={state.remainingMessages}
 						mobileSidebarOpen={mobileSidebarOpen}
 						onToggleMobileSidebar={toggleMobileSidebar}
+						language={state.language}
+						onLanguageChange={(lang) => dispatch({ type: "MERGE", patch: { language: lang } })}
 					/>
 					<GopuChatMessageList
 						messages={state.messages}
