@@ -1,0 +1,107 @@
+{
+  "source": "Standard Veterinary Treatment Guidelines for Livestock and Poultry - DAHD, Government of India / FAO / USAID (2024)",
+  "disclaimer": "These are advocacy guidelines for veterinary professionals. Final decisions on diagnosis, drug choice, dose, and duration rest with the attending veterinarian. Not legally binding.",
+  "animals_covered": ["cattle", "buffalo", "goat", "sheep", "poultry", "pig"],
+
+  "antimicrobials": [
+    {"drug": "Amikacin sulphate", "animal": "large/small animal", "min_dose": "7 mg/kg", "max_dose": "7 mg/kg", "route": "IM/IV", "frequency": "tid (every 8h)", "notes": "Use broad-spectrum antibiotics for 3-5 days. Choose based on ABST."},
+    {"drug": "Amoxicillin sodium", "animal": "large/small animal", "min_dose": "22 mg/kg", "max_dose": "22 mg/kg", "route": "IM/SC", "frequency": "bid (every 12h)"},
+    {"drug": "Amoxicillin trihydrate", "animal": "large/small animal", "min_dose": "11 mg/kg", "max_dose": "22 mg/kg", "route": "IM/SC", "frequency": "sid/bid"},
+    {"drug": "Amoxicillin + Sulbactam", "animal": "large/small animal", "min_dose": "7 mg/kg", "max_dose": "10 mg/kg", "route": "IM/IV", "frequency": "bid"},
+    {"drug": "Ampicillin sodium", "animal": "large/small animal", "min_dose": "22 mg/kg", "max_dose": "22 mg/kg", "route": "SC/IV/IM", "frequency": "bid"},
+    {"drug": "Ampicillin trihydrate", "animal": "large/small animal", "min_dose": "4 mg/kg", "max_dose": "22 mg/kg", "route": "IM/SC", "frequency": "sid/bid"},
+    {"drug": "Cefotaxime", "animal": "large/small animal", "min_dose": "10 mg/kg", "max_dose": "11 mg/kg", "route": "IM/SC", "frequency": "bid"},
+    {"drug": "Ceftiofur sodium", "animal": "large/small animal", "min_dose": "1.1 mg/kg", "max_dose": "2.2 mg/kg", "route": "IM/IV", "frequency": "sid (every 24h)", "notes": "Also used via nebulization at 1 mg/kg for respiratory disease"},
+    {"drug": "Ceftriaxone", "animal": "large/small animal", "min_dose": "5 mg/kg", "max_dose": "10 mg/kg", "route": "IM/IV", "frequency": "bid"},
+    {"drug": "Enrofloxacin", "animal": "large/small animal", "min_dose": "2.5 mg/kg", "max_dose": "5 mg/kg", "route": "IM/SC", "frequency": "sid", "notes": "Fluoroquinolone - use judiciously in food animals. Effective for respiratory and systemic infections."},
+    {"drug": "Florfenicol", "animal": "large/small animal", "min_dose": "20 mg/kg", "max_dose": "40 mg/kg", "route": "IM", "frequency": "20 mg/kg repeat after 48h OR 40 mg/kg single dose", "notes": "Long-acting formulation available. Preferred for TEME (lowest MIC against H. somni)."},
+    {"drug": "Gentamicin sulphate", "animal": "large/small animal", "min_dose": "2.2 mg/kg", "max_dose": "6.6 mg/kg", "route": "IM/IV", "frequency": "bid/tid"},
+    {"drug": "Marbofloxacin", "animal": "large/small animal", "min_dose": "2 mg/kg", "max_dose": "2 mg/kg", "route": "IM/IV/SC", "frequency": "sid"},
+    {"drug": "Oxytetracycline", "animal": "large/small animal", "min_dose": "5 mg/kg", "max_dose": "20 mg/kg", "route": "IV/IM", "frequency": "sid/bid"},
+    {"drug": "Penicillin G benzathine (Long Acting)", "animal": "large/small animal", "min_dose": "44000 IU/kg", "max_dose": "66000 IU/kg", "route": "IM/SC", "frequency": "every 48-72h"},
+    {"drug": "Penicillin G procaine", "animal": "large/small animal", "min_dose": "10000 IU/kg", "max_dose": "60000 IU/kg", "route": "IM/SC", "frequency": "sid/bid"},
+    {"drug": "Streptomycin", "animal": "large/small animal", "min_dose": "11 mg/kg", "max_dose": "11 mg/kg", "route": "IM/SC", "frequency": "bid"},
+    {"drug": "Sulphadoxine/Trimethoprim", "animal": "large/small animal", "min_dose": "15 mg/kg", "max_dose": "15 mg/kg", "route": "IM/SC/IV", "frequency": "sid/bid"},
+    {"drug": "Sulphadimethoxine", "animal": "large/small animal", "min_dose": "55 mg/kg", "max_dose": "110 mg/kg", "route": "PO (oral)", "frequency": "sid"},
+    {"drug": "Sulphonamide/Trimethoprim", "animal": "large/small animal", "min_dose": "15 mg/kg", "max_dose": "30 mg/kg", "route": "IM/IV/PO", "frequency": "sid/bid"},
+    {"drug": "Tylosin", "animal": "large/small animal", "min_dose": "18 mg/kg", "max_dose": "18 mg/kg", "route": "IM", "frequency": "sid"}
+  ],
+
+  "anthelmintics": [
+    {"drug": "Albendazole", "animal": "large/small animal", "min_dose": "7.5 mg/kg", "max_dose": "10 mg/kg", "route": "PO", "frequency": "single dose", "notes": "Repeat/extend based on faecal egg count."},
+    {"drug": "Closantel", "animal": "sheep", "min_dose": "10 mg/kg", "max_dose": "10 mg/kg", "route": "SC/PO", "frequency": "single dose"},
+    {"drug": "Fenbendazole", "animal": "large/small animal", "min_dose": "5 mg/kg", "max_dose": "10 mg/kg", "route": "PO", "frequency": "single dose"},
+    {"drug": "Ivermectin", "animal": "large/small animal", "min_dose": "0.2 mg/kg", "max_dose": "0.2 mg/kg", "route": "SC", "frequency": "single dose"},
+    {"drug": "Levamisole", "animal": "large/small animal", "min_dose": "5.5 mg/kg (oral) / 3.3 mg/kg (SC)", "max_dose": "11 mg/kg (oral) / 8.0 mg/kg (SC)", "route": "PO or SC", "frequency": "single dose"},
+    {"drug": "Morantel tartrate", "animal": "large/small animal", "min_dose": "8 mg/kg", "max_dose": "10 mg/kg", "route": "PO", "frequency": "single dose"},
+    {"drug": "Moxidectin", "animal": "large animal", "min_dose": "0.2 mg/kg", "max_dose": "0.5 mg/kg (small animal)", "route": "PO/SC", "frequency": "single dose"},
+    {"drug": "Pyrantel pamoate", "animal": "large/small animal", "min_dose": "25 mg/kg", "max_dose": "25 mg/kg", "route": "PO", "frequency": "single dose"},
+    {"drug": "Triclabendazole", "animal": "large/small animal", "min_dose": "10 mg/kg", "max_dose": "12 mg/kg", "route": "PO", "frequency": "single dose", "notes": "Effective against liver flukes including immature stages."}
+  ],
+
+  "anti_inflammatory_nsaids": [
+    {"drug": "Carprofen", "animal": "large animal", "min_dose": "1.4 mg/kg", "max_dose": "1.4 mg/kg", "route": "SC/IV", "frequency": "single dose"},
+    {"drug": "Flunixin meglumine", "animal": "large/small animal", "min_dose": "1.1 mg/kg", "max_dose": "2.2 mg/kg", "route": "IM/IV", "frequency": "sid/bid"},
+    {"drug": "Meloxicam", "animal": "large/small animal", "min_dose": "0.5 mg/kg", "max_dose": "1.0 mg/kg", "route": "IV/SC/IM or PO", "frequency": "single dose or every 24-48h"},
+    {"drug": "Ketoprofen", "animal": "large animal", "min_dose": "2 mg/kg", "max_dose": "4 mg/kg", "route": "IM/IV", "frequency": "sid"},
+    {"drug": "Tolfenamic acid", "animal": "large animal", "min_dose": "2.0 mg/kg", "max_dose": "2.0 mg/kg", "route": "IM", "frequency": "sid"}
+  ],
+
+  "corticosteroids": [
+    {"drug": "Prednisolone", "animal": "large/small animal", "min_dose": "1 mg/kg", "max_dose": "4 mg/kg", "route": "IV", "frequency": "single dose or sid"},
+    {"drug": "Dexamethasone", "animal": "large/small animal", "min_dose": "0.02 mg/kg (anti-inflammatory)", "max_dose": "2.0 mg/kg (anti-inflammatory) / 5-20 mg/kg (ketosis) / 20-30 mg total dose (induction of parturition)", "route": "IV/IM", "frequency": "single dose or sid", "notes": "Wide dose range depending on indication. Anti-inflammatory: 0.02-2.0 mg/kg. Ketosis: 5-20 mg/kg. Parturition induction: 20-30 mg total dose."}
+  ],
+
+  "antihistamines": [
+    {"drug": "Diphenhydramine hydrochloride", "animal": "large/small animal", "min_dose": "0.5 mg/kg", "max_dose": "1.0 mg/kg", "route": "IV/IM", "frequency": "tid/qid/bid"},
+    {"drug": "Pheniramine Maleate", "animal": "large/small animal", "min_dose": "0.5 mg/kg", "max_dose": "1.0 mg/kg", "route": "IM", "frequency": "bid/tid", "notes": "Also used for anaphylaxis during calcium borogluconate infusion."},
+    {"drug": "Chlorpheniramine Maleate", "animal": "large/small animal", "min_dose": "0.5 mg/kg", "max_dose": "1.0 mg/kg", "route": "IM", "frequency": "bid/tid"}
+  ],
+
+  "vitamins": [
+    {"drug": "Vitamin A", "animal": "large animal", "min_dose": "440 IU/kg", "max_dose": "440 IU/kg", "route": "IM", "frequency": "sid"},
+    {"drug": "Vitamin D3 (Cholecalciferol)", "animal": "large animal", "min_dose": "10 million IU total dose", "max_dose": "10 million IU total dose", "route": "IM", "frequency": "2-8 days before calving"},
+    {"drug": "Vitamin E + Selenium", "animal": "large animal", "min_dose": "2 ml per 45 kg BW", "max_dose": "2 ml per 45 kg BW", "route": "IM", "frequency": "as indicated"},
+    {"drug": "Thiamine hydrochloride (Vitamin B1)", "animal": "large/small animal", "min_dose": "5 mg/kg", "max_dose": "50 mg/kg", "route": "IM/IV", "frequency": "bid", "notes": "For PEM/CCN: 10-15 mg/kg IV. Repeat within 4-6 hours, then twice daily for 3 more days."},
+    {"drug": "Ascorbic acid (Vitamin C)", "animal": "calves", "min_dose": "3 g total dose", "max_dose": "3 g total dose", "route": "SC", "frequency": "single dose"}
+  ],
+
+  "cardiac_diuretics": [
+    {"drug": "Digoxin", "animal": "cattle", "min_dose": "0.0034 mg/kg (maintenance)", "max_dose": "0.022 mg/kg (loading dose)", "route": "IV", "frequency": "Loading: 0.022 mg/kg IV; Maintenance: 0.0034 mg/kg every 4h", "notes": "For congestive heart failure. Also: loading dose 2.2 mg/100 kg BW IV, then 0.34 mg/100 kg BW every 4h."},
+    {"drug": "Furosemide", "animal": "large/small animal", "min_dose": "0.5 mg/kg", "max_dose": "2.0 mg/kg", "route": "IV/IM", "frequency": "sid/bid", "notes": "For volume overload, congestive heart failure, endocarditis."},
+    {"drug": "Mannitol", "animal": "large/small animal", "min_dose": "1 g/kg", "max_dose": "3 g/kg", "route": "IV", "frequency": "single dose"}
+  ],
+
+  "metabolic_electrolytes": [
+    {"drug": "Calcium borogluconate (1.86% with Mg and dextrose)", "animal": "large animal", "min_dose": "450 ml", "max_dose": "800 ml", "route": "slow IV", "frequency": "Repeat after 10-12h if needed. Auscultate heart throughout.", "notes": "For milk fever/hypocalcaemia. Small animals: 50-100 ml. Monitor for arrhythmia. If arrhythmia occurs, stop and give antihistamine."},
+    {"drug": "Calcium borogluconate (25%) + Magnesium hypophosphite (5%)", "animal": "cattle", "min_dose": "500 ml IV", "max_dose": "500 ml IV", "route": "IV", "frequency": "single dose", "notes": "For hypomagnesaemia. Sheep/goats: 50 ml IV."},
+    {"drug": "Magnesium sulphate (20-50%)", "animal": "cattle", "min_dose": "200 ml of 20% solution IV", "max_dose": "300 ml of 20% solution IV / 200 ml of 50% solution SC", "route": "IV or SC", "frequency": "single dose; lasts only 3-6 hours - dietary follow-up essential"},
+    {"drug": "Magnesium oxide", "animal": "large animal", "min_dose": "1000 mg/kg", "max_dose": "2000 mg/kg", "route": "PO", "frequency": "single dose", "notes": "60 g/cow/day for prevention of hypomagnesaemia."},
+    {"drug": "Magnesium hydroxide", "animal": "large animal", "min_dose": "400 g total dose", "max_dose": "500 g total dose", "route": "PO", "frequency": "sid/bid/tid"},
+    {"drug": "Magnesium sulphate (oral laxative)", "animal": "large animal", "min_dose": "200 g total dose", "max_dose": "300 g total dose", "route": "PO", "frequency": "single dose"},
+    {"drug": "Sodium acid phosphate", "animal": "cattle", "min_dose": "60 g in 300 ml distilled water IV", "max_dose": "60 g in 300 ml IV initially, then SC at 12h intervals x3", "route": "IV then SC", "frequency": "3 doses", "notes": "For post-parturient haemoglobinuria. Also: 40.3% solution @ 50 ml IV once in 12h for 3 times."},
+    {"drug": "Dicalcium phosphate", "animal": "cattle", "min_dose": "100 g twice daily", "max_dose": "120 g twice daily", "route": "PO", "frequency": "twice daily for 5 days", "notes": "Supplementation during recovery from haemoglobinuria."},
+    {"drug": "Dextrose 20%", "animal": "cattle", "min_dose": "500 ml IV", "max_dose": "1500 ml IV", "route": "IV", "frequency": "as needed", "notes": "For ketosis. Also 50% dextrose 500 ml IV."},
+    {"drug": "Propylene glycol", "animal": "cattle", "min_dose": "220 g", "max_dose": "300 ml", "route": "PO", "frequency": "daily for 5 days", "notes": "For ketosis and fatty liver. 300 mL daily for 5 days PO."},
+    {"drug": "Potassium chloride (KCl)", "animal": "cattle", "min_dose": "120 g", "max_dose": "120 g", "route": "PO", "frequency": "every 12h", "notes": "For hypokalemia. 0.4 g/kg BW."},
+    {"drug": "Ammonium chloride", "animal": "large/small animal", "min_dose": "50 mg/kg", "max_dose": "200 mg/kg", "route": "PO", "frequency": "sid/bid", "notes": "Also used 100 g/cow/day for 21 days before calving to prevent milk fever (DCAD management)."},
+    {"drug": "Iron dextran", "animal": "large/small animal", "min_dose": "2 mg/kg", "max_dose": "5 mg/kg", "route": "IM", "frequency": "single dose or alternate days", "notes": "For anaemia. 5 mg/kg BW IM on alternate days basis."},
+    {"drug": "Potassium iodide", "animal": "large/small animal", "min_dose": "1.5 mg/kg", "max_dose": "1.5 mg/kg", "route": "IV", "frequency": "sid"}
+  ],
+
+  "fluid_therapy": [
+    {"drug": "Isotonic crystalloids (Normal Saline / LRS / 5% DNS)", "animal": "large animal", "min_dose": "10 L", "max_dose": "20 L", "route": "IV continuous", "notes": "Maintenance: 50-80 ml/kg/day. Dehydration: 4-6%: 20-25 ml/kg; 6-8%: 30-50 ml/kg; 8-10%: 50-80 ml/kg; 10-12%: 80-120 ml/kg."},
+    {"drug": "Oral electrolyte solution", "animal": "large animal", "min_dose": "5 L/day", "max_dose": "10 L/day", "route": "PO via stomach tube", "notes": "NaCl 7g/L, KCl 1.25g/L, CaCl2 0.5g/L in water. Repeat as necessary."},
+    {"drug": "Colloids (Hydroxyethyl Starch / Dextrans)", "animal": "large/small animal", "min_dose": "5 ml/kg", "max_dose": "10 ml/kg", "route": "IV", "frequency": "short-term for shock"}
+  ],
+
+  "reproductive_hormones": [
+    {"drug": "GnRH analogue (0.0042 mg/ml)", "animal": "large ruminant", "min_dose": "2.5 ml total dose (anovulation/conception)", "max_dose": "5.0 ml total dose (true anoestrus/follicular cyst)", "route": "IM/IV", "notes": "Small ruminant: 1 ml total dose."},
+    {"drug": "PMSG (Pregnant Mare Serum Gonadotropin)", "animal": "large ruminant", "min_dose": "1500 IU total dose", "max_dose": "3000 IU total dose", "route": "IM/IV", "notes": "Small ruminant: 1000 IU. Avoid frequent use."},
+    {"drug": "hCG (Human Chorionic Gonadotropin)", "animal": "large ruminant", "min_dose": "1500 IU total dose", "max_dose": "3000 IU total dose", "route": "IM at breeding", "notes": "For repeat breeding. Avoid frequent use."},
+    {"drug": "Hydroxyprogesterone caproate (250 mg/ml)", "animal": "large ruminant", "min_dose": "500 mg total dose", "max_dose": "500 mg total dose", "route": "IM", "notes": "For cystic ovarian disease, habitual abortion, post-partum anoestrus."},
+    {"drug": "Prostaglandin F2alpha - Natural (5 mg/ml)", "animal": "large ruminant", "min_dose": "25 mg total dose", "max_dose": "25 mg total dose", "route": "IM", "notes": "Small ruminant: 10 mg. Contraindicated in pregnancy."},
+    {"drug": "Prostaglandin F2alpha - Synthetic (250 mcg/ml)", "animal": "large ruminant", "min_dose": "500 mcg total dose", "max_dose": "500 mcg total dose", "route": "IM", "notes": "Small ruminant: 250 mcg. Contraindicated in pregnancy."},
+    {"drug": "Oxytocin (5 units/ml)", "animal": "large ruminant", "min_dose": "50 IU total dose", "max_dose": "70 IU total dose", "route": "IM/IV", "notes": "Small ruminant: 20-30 IU. For uterine inertia, dystocia, RFM, uterine prolapse."}
+  ]
+}
