@@ -36,6 +36,7 @@ resource "aws_launch_template" "ecs" {
   name_prefix   = "${var.project_name}-${var.environment}-ecs-lt-"
   image_id      = data.aws_ssm_parameter.ecs_ami.value
   instance_type = var.instance_type
+  update_default_version = true
 
   vpc_security_group_ids = [var.app_security_group_id]
 
