@@ -18,17 +18,14 @@ app = FastAPI(title=settings.PROJECT_NAME)
 
 # --- Configure CORS Middleware ---
 # MUST be added before including routers to ensure preflight requests are handled
-if settings.CORS_ORIGINS == "*":
-    origins = ["*"]
-else:
-    raw_origins = settings.CORS_ORIGINS.split(",") if settings.CORS_ORIGINS else []
-    # Add common variations if not present
-    base_origins = [o.strip() for o in raw_origins if o.strip()]
-    origins = list(set(base_origins + [
-        "https://pashuvaani.com",
-        "https://www.pashuvaani.com",
-        "https://dev.pashuvaani.com"
-    ]))
+raw_origins = settings.CORS_ORIGINS.split(",") if settings.CORS_ORIGINS else []
+# Clean up whitespace and expand common variations if not present
+base_origins = [o.strip() for o in raw_origins if o.strip() and o.strip() != "*"]
+origins = list(set(base_origins + [
+    "https://pashuvaani.com",
+    "https://www.pashuvaani.com",
+    "https://dev.pashuvaani.com"
+]))
 
 logger.info(f"Configured CORS origins: {origins}")
 
