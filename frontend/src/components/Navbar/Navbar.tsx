@@ -58,10 +58,18 @@ const Navbar = () => {
 			window.dispatchEvent(new CustomEvent("authSuccess"));
 			toast.success("Logged in successfully");
 		} catch (error: unknown) {
-			const detail = isAxiosError(error)
-				? (error.response?.data as { detail?: string })?.detail
-				: undefined;
-			toast.error(detail ?? "Authentication failed");
+			let errorMessage = "Authentication failed";
+			if (isAxiosError(error) && error.response?.data) {
+				const data = error.response.data as any;
+				if (typeof data.detail === "string") {
+					errorMessage = data.detail;
+				} else if (Array.isArray(data.detail) && data.detail[0]?.msg) {
+					errorMessage = data.detail[0].msg;
+				} else if (data.message) {
+					errorMessage = data.message;
+				}
+			}
+			toast.error(errorMessage);
 		}
 	};
 
@@ -81,10 +89,18 @@ const Navbar = () => {
 			dispatch({ type: "SET_SHOW_ADD_PET", value: false });
 			dispatch({ type: "RESET_PET_FORM" });
 		} catch (error: unknown) {
-			const detail = isAxiosError(error)
-				? (error.response?.data as { detail?: string })?.detail
-				: undefined;
-			toast.error(detail ?? "Failed to add pet");
+			let errorMessage = "Failed to add pet";
+			if (isAxiosError(error) && error.response?.data) {
+				const data = error.response.data as any;
+				if (typeof data.detail === "string") {
+					errorMessage = data.detail;
+				} else if (Array.isArray(data.detail) && data.detail[0]?.msg) {
+					errorMessage = data.detail[0].msg;
+				} else if (data.message) {
+					errorMessage = data.message;
+				}
+			}
+			toast.error(errorMessage);
 		}
 	};
 
