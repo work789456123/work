@@ -11,7 +11,7 @@ resource "aws_lb" "this" {
 }
 
 resource "aws_lb_target_group" "backend" {
-  name        = "${var.project_name}-${var.environment}-be-tg"
+  name_prefix = "pv-be-"
   port        = 80
   protocol    = "HTTP"
   target_type = "ip"
@@ -27,13 +27,17 @@ resource "aws_lb_target_group" "backend" {
     unhealthy_threshold = 3
   }
 
+  lifecycle {
+    create_before_destroy = true
+  }
+
   tags = merge(var.common_tags, {
     Name = "${var.project_name}-${var.environment}-backend-tg"
   })
 }
 
 resource "aws_lb_target_group" "frontend" {
-  name        = "${var.project_name}-${var.environment}-fe-tg"
+  name_prefix = "pv-fe-"
   port        = 3000
   protocol    = "HTTP"
   target_type = "ip"
@@ -47,6 +51,10 @@ resource "aws_lb_target_group" "frontend" {
     timeout             = 5
     healthy_threshold   = 2
     unhealthy_threshold = 3
+  }
+
+  lifecycle {
+    create_before_destroy = true
   }
 
   tags = merge(var.common_tags, {

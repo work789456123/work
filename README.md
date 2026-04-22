@@ -83,3 +83,40 @@ The backend API will be available on the configured port.
 pip install -r requirements.txt
 uvicorn app.main:app --reload
 ```
+
+---
+
+## 🚀 Deployment to AWS (ECS & RDS)
+
+To deploy PashuVaani to production on AWS using Elastic Container Service (ECS) and Relational Database Service (RDS), follow these guidelines.
+
+### 1. Database (RDS)
+Set up a PostgreSQL instance on AWS RDS. When creating the instance:
+- Note the **Endpoint** and **Port** (default 5432).
+- Ensure the security group allows inbound traffic from your ECS tasks.
+- Your production `DATABASE_URL` will look like: `postgresql+asyncpg://USER:PASSWORD@RDS_ENDPOINT:5432/DB_NAME`.
+
+### 2. Environment Variables
+Refer to the `.env.production.template` files in both `backend/` and `frontend/` directories for the required variables.
+
+**Backend Key Variables:**
+- `DATABASE_URL`: Connection string for RDS.
+- `BACKEND_PUBLIC_URL`: The public-facing URL of your API (e.g., `https://api.pashuvaani.com`).
+- `FRONTEND_HOST`: The public-facing URL of your frontend (e.g., `https://pashuvaani.com`).
+- `CORS_ORIGINS`: Set this to your frontend domain to secure your API.
+
+### 3. Container Images (ECR)
+Build and push your Docker images to Amazon Elastic Container Registry (ECR).
+Example for Backend:
+```bash
+aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin YOUR_ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com
+docker build -t pashuvaani-be ./backend
+docker tag pashuvaani-be:latest YOUR_ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com/pashuvaani-be:latest
+docker push YOUR_ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com/pashuvaani-be:latest
+```
+
+### 4. ECS Task Definition
+When creating your Task Definition:
+- Use the ECR image URIs.
+- Map the internal container ports (Backend: 80, Frontend: 3000) to your Load Balancer.
+- Inject the environment variables listed in the templates. For sensitive values (API keys, DB passwords), it is highly recommended to use **AWS Secrets Manager**.

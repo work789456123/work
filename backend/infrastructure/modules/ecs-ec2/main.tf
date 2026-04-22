@@ -187,7 +187,6 @@ resource "aws_ecs_task_definition" "backend" {
       portMappings = [
         {
           containerPort = var.backend_container_port
-          hostPort      = var.backend_container_port
           protocol      = "tcp"
         }
       ]
@@ -236,7 +235,6 @@ resource "aws_ecs_task_definition" "frontend" {
       portMappings = [
         {
           containerPort = var.frontend_container_port
-          hostPort      = var.frontend_container_port
           protocol      = "tcp"
         }
       ]
@@ -258,10 +256,12 @@ resource "aws_ecs_service" "backend" {
   task_definition = aws_ecs_task_definition.backend.arn
   desired_count   = 1
   launch_type     = "EC2"
+  deployment_minimum_healthy_percent = 0
+  deployment_maximum_percent         = 100
 
   network_configuration {
-    subnets         = var.private_subnet_ids
-    security_groups = [var.app_security_group_id]
+    subnets          = var.private_subnet_ids
+    security_groups  = [var.app_security_group_id]
     assign_public_ip = false
   }
 
@@ -280,10 +280,12 @@ resource "aws_ecs_service" "frontend" {
   task_definition = aws_ecs_task_definition.frontend.arn
   desired_count   = 1
   launch_type     = "EC2"
+  deployment_minimum_healthy_percent = 0
+  deployment_maximum_percent         = 100
 
   network_configuration {
-    subnets         = var.private_subnet_ids
-    security_groups = [var.app_security_group_id]
+    subnets          = var.private_subnet_ids
+    security_groups  = [var.app_security_group_id]
     assign_public_ip = false
   }
 

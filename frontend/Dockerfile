@@ -1,5 +1,5 @@
 # Next.js standalone production image (replaces nginx static SPA)
-FROM node:20-alpine AS base
+FROM --platform=linux/amd64 node:20-alpine AS base
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
