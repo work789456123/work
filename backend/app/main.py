@@ -13,8 +13,14 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Initialize FastAPI app
-# We removed redirect_slashes=False to use FastAPI's default behavior
-app = FastAPI(title=settings.PROJECT_NAME)
+app = FastAPI(title=settings.PROJECT_NAME, redirect_slashes=False)
+
+# Debug middleware to log all incoming requests
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    logger.info(f"Incoming request: {request.method} {request.url.path}")
+    response = await call_next(request)
+    return response
 
 # --- Configure CORS Middleware ---
 # MUST be added before including routers to ensure preflight requests are handled
