@@ -87,7 +87,7 @@ jobs:
           file: ./frontend/Dockerfile
           push: true
           platforms: linux/amd64
-          build-args: NEXT_PUBLIC_BACKEND_URL=${{ vars.NEXT_PUBLIC_BACKEND_URL || 'https://pashuvaani.com' }}
+          build-args: NEXT_PUBLIC_BACKEND_URL=${{ vars.NEXT_PUBLIC_BACKEND_URL || '' }}
           tags: |
             ${{ steps.login-ecr.outputs.registry }}/pashuvaani-frontend:latest
             ${{ steps.login-ecr.outputs.registry }}/pashuvaani-frontend:${{ github.sha }}

@@ -22,7 +22,13 @@ if settings.CORS_ORIGINS == "*":
     origins = ["*"]
 else:
     raw_origins = settings.CORS_ORIGINS.split(",") if settings.CORS_ORIGINS else []
-    origins = [o.strip() for o in raw_origins if o.strip()]
+    # Add common variations if not present
+    base_origins = [o.strip() for o in raw_origins if o.strip()]
+    origins = list(set(base_origins + [
+        "https://pashuvaani.com",
+        "https://www.pashuvaani.com",
+        "https://dev.pashuvaani.com"
+    ]))
 
 logger.info(f"Configured CORS origins: {origins}")
 
