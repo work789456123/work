@@ -60,13 +60,11 @@ const Navbar = () => {
 		} catch (error: unknown) {
 			let errorMessage = "Authentication failed";
 			if (isAxiosError(error) && error.response?.data) {
-				const data = error.response.data as any;
+				const data = error.response.data as Record<string, unknown>;
 				if (typeof data.detail === "string") {
 					errorMessage = data.detail;
 				} else if (Array.isArray(data.detail) && data.detail[0]?.msg) {
 					errorMessage = data.detail[0].msg;
-				} else if (data.message) {
-					errorMessage = data.message;
 				}
 			}
 			toast.error(errorMessage);
@@ -91,13 +89,11 @@ const Navbar = () => {
 		} catch (error: unknown) {
 			let errorMessage = "Failed to add pet";
 			if (isAxiosError(error) && error.response?.data) {
-				const data = error.response.data as any;
+				const data = error.response.data as Record<string, unknown>;
 				if (typeof data.detail === "string") {
 					errorMessage = data.detail;
 				} else if (Array.isArray(data.detail) && data.detail[0]?.msg) {
 					errorMessage = data.detail[0].msg;
-				} else if (data.message) {
-					errorMessage = data.message;
 				}
 			}
 			toast.error(errorMessage);
