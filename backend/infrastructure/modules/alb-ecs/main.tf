@@ -12,7 +12,7 @@ resource "aws_lb" "this" {
 
 resource "aws_lb_target_group" "backend" {
   name_prefix = "pv-be-"
-  port        = 80
+  port        = var.backend_port
   protocol    = "HTTP"
   target_type = "ip"
   vpc_id      = var.vpc_id
@@ -38,7 +38,7 @@ resource "aws_lb_target_group" "backend" {
 
 resource "aws_lb_target_group" "frontend" {
   name_prefix = "pv-fe-"
-  port        = 3000
+  port        = var.frontend_port
   protocol    = "HTTP"
   target_type = "ip"
   vpc_id      = var.vpc_id

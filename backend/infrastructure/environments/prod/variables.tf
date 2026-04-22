@@ -30,7 +30,12 @@ variable "private_subnet_cidrs" {
 
 variable "app_port" {
   type    = number
-  default = 80
+  default = 8000
+}
+
+variable "frontend_port" {
+  type    = number
+  default = 3000
 }
 
 variable "alb_health_check_path" {

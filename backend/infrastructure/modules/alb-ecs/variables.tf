@@ -23,6 +23,16 @@ variable "backend_health_check_path" {
   default = "/"
 }
 
+variable "backend_port" {
+  type    = number
+  default = 8000
+}
+
+variable "frontend_port" {
+  type    = number
+  default = 3000
+}
+
 variable "frontend_health_check_path" {
   type    = string
   default = "/"

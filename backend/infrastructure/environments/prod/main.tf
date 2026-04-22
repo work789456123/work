@@ -51,6 +51,8 @@ module "alb" {
   vpc_id                = module.network.vpc_id
   public_subnet_ids     = module.network.public_subnet_ids
   alb_security_group_id = module.security.alb_security_group_id
+  backend_port          = var.app_port
+  frontend_port         = var.frontend_port
   backend_health_check_path  = var.alb_health_check_path
   frontend_health_check_path = "/"
   enable_https          = var.enable_alb_https
@@ -87,7 +89,9 @@ module "compute" {
   backend_environment   = var.backend_environment
   media_bucket_arn      = module.s3_media.bucket_arn
   media_bucket_name     = module.s3_media.bucket_name
-  common_tags           = local.common_tags
+  backend_container_port  = var.app_port
+  frontend_container_port = var.frontend_port
+  common_tags            = local.common_tags
 }
 
 module "route53" {
