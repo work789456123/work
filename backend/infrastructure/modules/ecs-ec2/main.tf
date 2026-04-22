@@ -72,6 +72,13 @@ resource "aws_autoscaling_group" "ecs" {
     version = "$Latest"
   }
 
+  instance_refresh {
+    strategy = "Rolling"
+    preferences {
+      min_healthy_percentage = 50
+    }
+  }
+
   tag {
     key                 = "Name"
     value               = "${var.project_name}-${var.environment}-ecs-instance"
