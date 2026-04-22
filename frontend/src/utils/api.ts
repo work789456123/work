@@ -1,9 +1,11 @@
 import axios, { type InternalAxiosRequestConfig } from "axios";
 
 function getBackendUrl(): string {
+  // In production, force relative paths to prevent domain mismatch/CORS issues
+  if (process.env.NODE_ENV === "production") return "";
+
   const env = process.env.NEXT_PUBLIC_BACKEND_URL;
   if (env !== undefined && env !== "") return env;
-  if (process.env.NODE_ENV === "production") return "";
   return "http://localhost:8000";
 }
 
