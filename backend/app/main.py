@@ -18,9 +18,11 @@ app = FastAPI(title=settings.PROJECT_NAME)
 
 # --- Configure CORS Middleware ---
 # MUST be added before including routers to ensure preflight requests are handled
-raw_origins = settings.CORS_ORIGINS.split(",") if settings.CORS_ORIGINS else ["*"]
-# Clean up whitespace from each origin to prevent matching failures
-origins = [o.strip() for o in raw_origins if o.strip()]
+if settings.CORS_ORIGINS == "*":
+    origins = ["*"]
+else:
+    raw_origins = settings.CORS_ORIGINS.split(",") if settings.CORS_ORIGINS else []
+    origins = [o.strip() for o in raw_origins if o.strip()]
 
 logger.info(f"Configured CORS origins: {origins}")
 
