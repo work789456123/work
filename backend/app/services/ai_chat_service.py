@@ -6,6 +6,7 @@ import math
 from collections import Counter
 from functools import lru_cache
 from typing import Any
+from difflib import get_close_matches
 
 try:
     from openai import AsyncOpenAI
@@ -147,6 +148,7 @@ def _load_reference_chunks() -> list[dict[str, Any]]:
 _REFERENCE_CHUNKS = _load_reference_chunks()
 _REFERENCE_DF: Counter[str] = Counter()
 _AVG_DOC_LENGTH = 1.0
+_KNOWN_DRUG_TERMS: set[str] = set()
 
 
 def _build_reference_stats() -> None:
@@ -165,6 +167,14 @@ def _build_reference_stats() -> None:
         for term in term_freq:
             _REFERENCE_DF[term] += 1
     _AVG_DOC_LENGTH = max(1.0, total_len / max(1, len(_REFERENCE_CHUNKS)))
+    for chunk in _REFERENCE_CHUNKS:
+        title = str(chunk.get("title", "")).lower()
+        main_title = title.split("(")[0].strip()
+        if main_title:
+            _KNOWN_DRUG_TERMS.add(main_title)
+        for term in _TOKEN_PATTERN.findall(main_title):
+            if len(term) > 2 and term not in _STOPWORDS:
+                _KNOWN_DRUG_TERMS.add(term)
 
 
 _build_reference_stats()
@@ -205,6 +215,22 @@ def _format_context(selected: list[tuple[float, dict[str, Any]]]) -> str:
     return "".join(lines).strip() if lines else "No relevant chunks found."
 
 
+def _find_similar_drug_suggestions(query: str, query_tokens: set[str], limit: int = 3) -> list[str]:
+    text_candidates = set(_TOKEN_PATTERN.findall(query.lower()))
+    text_candidates.update(query_tokens)
+    suggestions: list[str] = []
+    seen = set()
+    for token in text_candidates:
+        if len(token) < 4:
+            continue
+        matches = get_close_matches(token, list(_KNOWN_DRUG_TERMS), n=limit, cutoff=0.78)
+        for match in matches:
+            if match not in seen and len(suggestions) < limit:
+                seen.add(match)
+                suggestions.append(match)
+    return suggestions
+
+
 @lru_cache(maxsize=1024)
 def _retrieve_reference_context(query: str, top_k: int = _TOP_K_RETRIEVAL) -> str:
     query_tokens = _normalize_tokens(query)
@@ -232,6 +258,13 @@ def _retrieve_reference_context(query: str, top_k: int = _TOP_K_RETRIEVAL) -> st
         scored.append((score, chunk))
 
     if not scored:
+        suggestions = _find_similar_drug_suggestions(query, query_tokens)
+        if suggestions:
+            return (
+                "No relevant chunks found.\n"
+                "Possible medicine matches (spelling/alias guess): "
+                + ", ".join(suggestions)
+            )
         return "No relevant chunks found."
 
     scored.sort(key=lambda item: item[0], reverse=True)
@@ -278,6 +311,9 @@ NON-VECTOR RAG POLICY:
 - You are given RETRIEVED REFERENCE CHUNKS for each request.
 - Use ONLY those retrieved chunks for medicine names, dose ranges, route, and frequency.
 - Never use memory, guesswork, or external assumptions for dosages.
+- If RETRIEVED REFERENCE CHUNKS are missing but a "Possible medicine matches" hint is present,
+  ask a short clarification question and list the suggested medicine names.
+- In that clarification case, DO NOT provide dosage yet; wait for user confirmation.
 
 MEDICATION GUIDANCE — STRICT RULES:
 - You MAY name a medication and explain what it is used for.

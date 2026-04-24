@@ -21,6 +21,11 @@ class NonVectorRagTests(unittest.TestCase):
         context = _retrieve_reference_context("gaay ko bukhar me kaunsi dawai")
         self.assertNotIn("No relevant chunks found.", context)
 
+    def test_retrieval_suggests_similar_name_for_typo(self) -> None:
+        context = _retrieve_reference_context("amoxirin dose")
+        self.assertIn("Possible medicine matches", context)
+        self.assertIn("amoxicillin", context.lower())
+
 
 if __name__ == "__main__":
     unittest.main()
