@@ -30,7 +30,7 @@ variable "private_subnet_cidrs" {
 
 variable "app_port" {
   type    = number
-  default = 8000
+  default = 80
 }
 
 variable "frontend_port" {
@@ -40,7 +40,7 @@ variable "frontend_port" {
 
 variable "alb_health_check_path" {
   type    = string
-  default = "/"
+  default = "/health/db"
 }
 
 variable "ssh_ingress_cidrs" {

@@ -1,8 +1,11 @@
 import logging
+import asyncio
 from pathlib import Path
 from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from sqlalchemy import text
 from app.api.router import api_router
 from app.core.config import settings
 from app.db.session import engine
@@ -57,6 +60,17 @@ def root():
         "message": "Welcome to PashuVaani API Backend",
         "doc_url": "/docs"
     }
+
+@app.get("/health/db")
+async def db_health():
+    try:
+        async with engine.connect() as conn:
+            # Keep this bounded so ALB can quickly mark bad targets unhealthy.
+            await asyncio.wait_for(conn.execute(text("SELECT 1")), timeout=3)
+        return {"status": "ok"}
+    except Exception as exc:
+        logger.exception("Database health check failed: %s", exc)
+        return JSONResponse(status_code=503, content={"status": "degraded", "reason": "database_unreachable"})
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
