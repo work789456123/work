@@ -223,12 +223,43 @@ def _find_similar_drug_suggestions(query: str, query_tokens: set[str], limit: in
     for token in text_candidates:
         if len(token) < 4:
             continue
-        matches = get_close_matches(token, list(_KNOWN_DRUG_TERMS), n=limit, cutoff=0.78)
+        # Use a slightly looser cutoff so common typos still match (e.g. amoxirin -> amoxicillin).
+        matches = get_close_matches(token, list(_KNOWN_DRUG_TERMS), n=limit, cutoff=0.62)
         for match in matches:
             if match not in seen and len(suggestions) < limit:
                 seen.add(match)
                 suggestions.append(match)
     return suggestions
+
+
+def _chunks_for_suggested_drugs(suggestions: list[str], animal_tokens: set[str], max_chunks: int = 3) -> list[tuple[float, dict[str, Any]]]:
+    if not suggestions:
+        return []
+    picked: list[tuple[float, dict[str, Any]]] = []
+    for suggestion in suggestions:
+        s = suggestion.lower().strip()
+        if not s:
+            continue
+        for chunk in _REFERENCE_CHUNKS:
+            if animal_tokens and not any(tok in chunk.get("animal", "") for tok in animal_tokens):
+                continue
+            title_lower = str(chunk.get("title", "")).lower()
+            main_title = title_lower.split("(")[0].strip()
+            if s == main_title or s in title_lower:
+                picked.append((10.0, chunk))
+                break
+    # De-dupe while preserving order
+    out: list[tuple[float, dict[str, Any]]] = []
+    seen_titles: set[str] = set()
+    for score, chunk in picked:
+        key = f"{chunk.get('source_file')}::{chunk.get('title')}"
+        if key in seen_titles:
+            continue
+        seen_titles.add(key)
+        out.append((score, chunk))
+        if len(out) >= max_chunks:
+            break
+    return out
 
 
 @lru_cache(maxsize=1024)
@@ -260,6 +291,15 @@ def _retrieve_reference_context(query: str, top_k: int = _TOP_K_RETRIEVAL) -> st
     if not scored:
         suggestions = _find_similar_drug_suggestions(query, query_tokens)
         if suggestions:
+            selected = _chunks_for_suggested_drugs(suggestions, animal_tokens=animal_tokens, max_chunks=3)
+            if selected:
+                logger.info(
+                    "RAG retrieval fallback via fuzzy drug match query='%s' suggestions=%s titles=%s",
+                    query[:100],
+                    suggestions,
+                    [c["title"] for _, c in selected],
+                )
+                return _format_context(selected)
             return (
                 "No relevant chunks found.\n"
                 "Possible medicine matches (spelling/alias guess): "
@@ -314,15 +354,16 @@ NON-VECTOR RAG POLICY:
 - If RETRIEVED REFERENCE CHUNKS are missing but a "Possible medicine matches" hint is present,
   ask a short clarification question and list the suggested medicine names.
 - In that clarification case, DO NOT provide dosage yet; wait for user confirmation.
+- If RETRIEVED REFERENCE CHUNKS contain relevant medicine rows, DO NOT use the unknown-medicine fallback.
 
 MEDICATION GUIDANCE — STRICT RULES:
 - You MAY name a medication and explain what it is used for.
 - You MUST mention the general safe range (min and max dose) ONLY from RETRIEVED REFERENCE CHUNKS.
 - CRITICAL: If the drug or animal combination is NOT found in RETRIEVED REFERENCE CHUNKS, say:
-  "Is dawai ya bimari ke baare mein mujhe abhi poori jaankari nahi hai. Kripya ek veterinary doctor se milein."
+  "इस दवाई या बीमारी के बारे में मेरे पास अभी पूरी जानकारी नहीं है। कृपया एक पशु चिकित्सक से सलाह लें।"
   Do NOT guess or invent dosages.
 - Always add this disclaimer after any medication mention:
-  "Sahi dose aur tarika sirf ek certified veterinary doctor hi bata sakta hai."
+  "सही खुराक और तरीका केवल एक प्रमाणित पशु चिकित्सक ही बता सकता है।"
 
 SEVERITY TAGGING — MANDATORY:
 At the very end of EVERY response, append exactly one tag on its own line:

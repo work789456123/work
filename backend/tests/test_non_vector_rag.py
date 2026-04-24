@@ -23,7 +23,7 @@ class NonVectorRagTests(unittest.TestCase):
 
     def test_retrieval_suggests_similar_name_for_typo(self) -> None:
         context = _retrieve_reference_context("amoxirin dose")
-        self.assertIn("Possible medicine matches", context)
+        self.assertIn("drug:", context.lower())
         self.assertIn("amoxicillin", context.lower())
 
 
