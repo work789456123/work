@@ -20,12 +20,18 @@ logger = logging.getLogger(__name__)
 # Veterinary reference data — loaded once at startup
 # ---------------------------------------------------------------------------
 _REF_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "data", "vet_reference")
-_TOKEN_PATTERN = re.compile(r"[a-z0-9]+")
+# Latin letters/digits plus Devanagari word tokens (Hindi UI messages).
+_TOKEN_PATTERN = re.compile(r"[a-z0-9]+|[\u0900-\u097f]+", re.UNICODE)
 _STOPWORDS = {
     "the", "a", "an", "and", "or", "for", "to", "of", "in", "on", "at", "by", "with", "is", "are",
     "from", "this", "that", "it", "be", "as", "can", "if", "do", "not", "you", "your", "what",
     "how", "when", "where", "which", "about", "dose", "doses", "drug", "medicine", "medication",
     "animal", "animals", "pet", "pets", "cow", "cattle", "buffalo", "goat", "sheep"
+}
+# Very small Hindi stopword list — only to reduce noise in Devanagari-heavy queries.
+_HINDI_STOPWORDS = {
+    "और", "या", "के", "में", "से", "को", "पर", "है", "हैं", "था", "थी", "थे", "कि", "जो",
+    "एक", "कृपया", "बताएं", "बताइए", "क्या", "कैसे", "कब", "कहाँ", "कहां", "मुझे", "मेरे",
 }
 _QUERY_SYNONYMS: dict[str, set[str]] = {
     "fever": {"bukhar", "pyrexia", "temperature"},
@@ -39,13 +45,35 @@ _QUERY_SYNONYMS: dict[str, set[str]] = {
     "magnesium": {"grassstaggers", "hypomagnesaemia", "hypomagnesemia"},
 }
 _ANIMAL_FILTER_TOKENS = {"cattle", "cow", "buffalo", "goat", "sheep", "poultry", "pig", "calf"}
+# When the user names a species, map spoken/common tokens to substrings that appear in chunk["animal"].
+_ANIMAL_QUERY_EXPANSIONS: dict[str, set[str]] = {
+    "cow": {"cow", "cattle", "buffalo", "bovine", "ruminant", "large", "small"},
+    "cattle": {"cattle", "cow", "buffalo", "bovine", "ruminant", "large", "small"},
+    "buffalo": {"buffalo", "cattle", "bovine", "ruminant", "large", "small"},
+    "goat": {"goat", "small", "large"},
+    "sheep": {"sheep", "small", "large"},
+    "pig": {"pig", "swine", "porcine", "small", "large"},
+    "poultry": {"poultry", "bird", "avian", "chicken"},
+    "calf": {"calf", "cattle", "cow", "buffalo", "young", "large", "small"},
+}
 _MAX_RETRIEVAL_CHARS = 5000
 _TOP_K_RETRIEVAL = 8
 
 
 def _normalize_tokens(text: str) -> set[str]:
-    tokens = {t for t in _TOKEN_PATTERN.findall((text or "").lower()) if len(t) > 1}
-    return {t for t in tokens if t not in _STOPWORDS}
+    raw = _TOKEN_PATTERN.findall(text or "")
+    tokens: set[str] = set()
+    for t in raw:
+        if len(t) <= 1:
+            continue
+        if re.search(r"[a-z0-9]", t):
+            tl = t.lower()
+            if tl not in _STOPWORDS:
+                tokens.add(tl)
+        else:
+            if t not in _HINDI_STOPWORDS:
+                tokens.add(t)
+    return tokens
 
 
 def _expand_query_tokens(base_tokens: set[str]) -> set[str]:
@@ -57,7 +85,26 @@ def _expand_query_tokens(base_tokens: set[str]) -> set[str]:
             if token in variants:
                 expanded.add(canonical)
                 expanded.update(variants)
-    return {t for t in expanded if t not in _STOPWORDS}
+    return {t for t in expanded if t not in _STOPWORDS and t not in _HINDI_STOPWORDS}
+
+
+def _animal_filter_substrings(query_tokens: set[str]) -> set[str] | None:
+    hits = query_tokens.intersection(_ANIMAL_FILTER_TOKENS)
+    if not hits:
+        return None
+    out: set[str] = set()
+    for tok in hits:
+        out.update(_ANIMAL_QUERY_EXPANSIONS.get(tok, {tok}))
+    return out
+
+
+def _chunk_matches_animal_filter(chunk_animal: str, filter_substrings: set[str] | None) -> bool:
+    if not filter_substrings:
+        return True
+    ca = (chunk_animal or "").lower()
+    if not ca.strip():
+        return True
+    return any(sub in ca for sub in filter_substrings)
 
 
 def _cattle_chunks(data: dict) -> list[dict[str, Any]]:
@@ -78,13 +125,18 @@ def _cattle_chunks(data: dict) -> list[dict[str, Any]]:
                 f"Notes: {med.get('notes', 'n/a')}",
             ]
         )
+        atype = str(med.get("animal_type", animal)).lower()
+        # Queries often say "cow/buffalo" while reference rows say "cattle".
+        animal_field = atype
+        if atype == "cattle":
+            animal_field = "cattle cow buffalo bovine"
         chunks.append(
             {
                 "source_file": "cattle_medications.json",
                 "title": str(med.get("drug", "unknown")),
                 "text": text,
                 "tokens": _normalize_tokens(text),
-                "animal": str(med.get("animal_type", animal)).lower(),
+                "animal": animal_field,
             }
         )
     return chunks
@@ -115,13 +167,21 @@ def _svtg_chunks(data: dict) -> list[dict[str, Any]]:
                     f"Notes: {entry.get('notes', 'n/a')}",
                 ]
             )
+            a_raw = str(entry.get("animal", "n/a")).lower()
+            a_field = a_raw
+            if "large/small" in a_raw:
+                a_field = "cattle buffalo goat sheep pig poultry large small"
+            elif a_raw == "large animal":
+                a_field = "cattle buffalo large"
+            elif a_raw == "small animal":
+                a_field = "goat sheep pig poultry small"
             chunks.append(
                 {
                     "source_file": "svtg_medications.json",
                     "title": f"{entry.get('drug', 'unknown')} ({key})",
                     "text": text,
                     "tokens": _normalize_tokens(text),
-                    "animal": str(entry.get("animal", "n/a")).lower(),
+                    "animal": a_field,
                 }
             )
     return chunks
@@ -196,10 +256,6 @@ def _bm25_score(chunk: dict[str, Any], query_terms: set[str], k1: float = 1.5, b
     return score
 
 
-def _animal_in_query(query_terms: set[str]) -> set[str]:
-    return query_terms.intersection(_ANIMAL_FILTER_TOKENS)
-
-
 def _format_context(selected: list[tuple[float, dict[str, Any]]]) -> str:
     lines: list[str] = []
     used_chars = 0
@@ -232,7 +288,9 @@ def _find_similar_drug_suggestions(query: str, query_tokens: set[str], limit: in
     return suggestions
 
 
-def _chunks_for_suggested_drugs(suggestions: list[str], animal_tokens: set[str], max_chunks: int = 3) -> list[tuple[float, dict[str, Any]]]:
+def _chunks_for_suggested_drugs(
+    suggestions: list[str], animal_filter: set[str] | None, max_chunks: int = 3
+) -> list[tuple[float, dict[str, Any]]]:
     if not suggestions:
         return []
     picked: list[tuple[float, dict[str, Any]]] = []
@@ -241,7 +299,7 @@ def _chunks_for_suggested_drugs(suggestions: list[str], animal_tokens: set[str],
         if not s:
             continue
         for chunk in _REFERENCE_CHUNKS:
-            if animal_tokens and not any(tok in chunk.get("animal", "") for tok in animal_tokens):
+            if not _chunk_matches_animal_filter(str(chunk.get("animal", "")), animal_filter):
                 continue
             title_lower = str(chunk.get("title", "")).lower()
             main_title = title_lower.split("(")[0].strip()
@@ -268,12 +326,12 @@ def _retrieve_reference_context(query: str, top_k: int = _TOP_K_RETRIEVAL) -> st
     if not query_tokens or not _REFERENCE_CHUNKS:
         return "No relevant chunks found."
     query_tokens = _expand_query_tokens(query_tokens)
-    animal_tokens = _animal_in_query(query_tokens)
+    animal_filter = _animal_filter_substrings(query_tokens)
 
     scored: list[tuple[float, dict[str, Any]]] = []
     for chunk in _REFERENCE_CHUNKS:
         # Hard filter for explicit animal queries when possible.
-        if animal_tokens and not any(tok in chunk.get("animal", "") for tok in animal_tokens):
+        if not _chunk_matches_animal_filter(str(chunk.get("animal", "")), animal_filter):
             continue
         lexical_overlap = len(query_tokens.intersection(chunk["tokens"]))
         if lexical_overlap == 0:
@@ -291,7 +349,7 @@ def _retrieve_reference_context(query: str, top_k: int = _TOP_K_RETRIEVAL) -> st
     if not scored:
         suggestions = _find_similar_drug_suggestions(query, query_tokens)
         if suggestions:
-            selected = _chunks_for_suggested_drugs(suggestions, animal_tokens=animal_tokens, max_chunks=3)
+            selected = _chunks_for_suggested_drugs(suggestions, animal_filter=animal_filter, max_chunks=3)
             if selected:
                 logger.info(
                     "RAG retrieval fallback via fuzzy drug match query='%s' suggestions=%s titles=%s",
@@ -388,7 +446,7 @@ If unsure, default to [SEVERITY: moderate].
 1. 'पशु भी परिवार है' भावना का पालन करें। बहुत ही आत्मीय और सरल भाषा का उपयोग करें।
 2. जटिल चिकित्सा शब्दों से बचें। सीधी और आसान भाषा का उपयोग करें।
 3. पूरी सहानुभूति रखें - हर जानवर को प्रिय परिवार के सदस्य की तरह मानें।
-4. **सत्यता (GROUNDEDNESS)**: यदि आप किसी जानकारी के बारे में सुनिश्चित नहीं हैं, तो अनुमान न लगाएं। साफ कहें कि आपको इसके बारे में जानकारी नहीं है और डॉक्टर से सलाह लेने को कहें।
+4. **सत्यता (GROUNDEDNESS)**: अनुमान न लगाएं। दवाई की खुराक जैसी बातों में ऊपर दिए गए दवा-नियमों का पालन करें; बाकी विषयों में यदि आप सुनिश्चित नहीं हैं तो सरल भाषा में कहें कि आपको यह जानकारी निश्चित नहीं है और पशु चिकित्सक से सलाह लें।
 
 सुरक्षा (SAFETY):
 - यदि जानवर की स्थिति बहुत खराब है, तो तुरंत डॉक्टर को दिखाने की सलाह दें।
