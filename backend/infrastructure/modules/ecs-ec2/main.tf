@@ -156,6 +156,12 @@ data "aws_iam_policy_document" "task_s3_policy" {
     actions   = ["s3:ListBucket"]
     resources = [var.media_bucket_arn]
   }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["sagemaker:InvokeEndpoint"]
+    resources = ["*"] # Ideally scoped to the SageMaker endpoint ARN
+  }
 }
 
 resource "aws_iam_role_policy" "task_s3_policy" {

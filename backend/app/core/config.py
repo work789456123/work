@@ -16,6 +16,11 @@ class Settings(BaseSettings):
     CORS_ORIGINS: str = "*"
     BACKEND_PUBLIC_URL: str = "http://localhost:8000"
 
+    # AI Model Settings
+    USE_MEDGEMMA: bool = True
+    SAGEMAKER_ENDPOINT_NAME: str = "medgemma"
+    AWS_REGION: str = "ap-south-1"
+
     # Email Settings
     SMTP_TLS: bool = True
     SMTP_PORT: Optional[int] = 587
