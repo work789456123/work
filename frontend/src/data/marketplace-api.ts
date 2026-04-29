@@ -33,6 +33,7 @@ export function buildProductSlug(name: string, id: number): string {
 
 export function resolveImageUrl(imageUrl: string | null): string {
   if (!imageUrl) return FALLBACK_IMAGE;
+  imageUrl = imageUrl.replace("https://dev.pashuvaani.com", "https://pashuvaani.com");
   if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) return imageUrl;
   return `${getBackendUrl()}${imageUrl}`;
 }
