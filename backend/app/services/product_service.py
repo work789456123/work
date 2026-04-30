@@ -26,8 +26,7 @@ class ProductService:
         with image_path.open("wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
 
-        relative_url = f"/uploads/products/{unique_name}"
-        return f"{settings.BACKEND_PUBLIC_URL.rstrip('/')}{relative_url}"
+        return f"/uploads/products/{unique_name}"
 
     def delete_image_by_url(self, image_url: str | None) -> None:
         if not image_url:
