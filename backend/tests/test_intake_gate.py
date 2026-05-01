@@ -15,7 +15,11 @@ os.environ.setdefault("ADMIN_PASSWORD", "test-admin-password-123")
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from app.services.intake_gate import evaluate_intake
+from app.services.intake_gate import (
+    assistant_message_count,
+    evaluate_intake,
+    initial_welcome_message,
+)
 
 
 class IntakeGateTests(unittest.TestCase):
@@ -45,6 +49,30 @@ class IntakeGateTests(unittest.TestCase):
         ]
         ev = evaluate_intake("bukhar 2 din se hai", hist)
         self.assertTrue(ev.intake_complete)
+
+    def test_romanized_drug_info_query_bypasses_intake(self) -> None:
+        ev = evaluate_intake("mujhe Amoxcilyn ke bare mai jan na hai", None)
+        self.assertFalse(ev.emergency)
+        self.assertTrue(ev.intake_complete)
+
+    def test_short_drug_name_only_bypasses_intake(self) -> None:
+        ev = evaluate_intake("Amoxcilyn", None)
+        self.assertFalse(ev.emergency)
+        self.assertTrue(ev.intake_complete)
+
+    def test_assistant_message_count(self) -> None:
+        hist = [
+            SimpleNamespace(role="user", content="hi"),
+            SimpleNamespace(role="assistant", content="hello"),
+            SimpleNamespace(role="user", content="cow fever"),
+        ]
+        self.assertEqual(assistant_message_count(hist), 1)
+        self.assertEqual(assistant_message_count(None), 0)
+
+    def test_initial_welcome_mentions_help_paths(self) -> None:
+        text = initial_welcome_message("English")
+        self.assertIn("1)", text)
+        self.assertIn("4)", text)
 
 
 if __name__ == "__main__":

@@ -157,6 +157,18 @@ _EDUCATIONAL_EN = re.compile(
 )
 _EDUCATIONAL_HI = re.compile(r"(क्या है|लक्षण|बचाव|टीकाकरण|कीड़े|पोषण)", re.I)
 
+# Romanized Hindi / English “tell me about this drug” without full clinical intake.
+_INFO_INTENT = re.compile(
+    r"bare\s*me|bare\s*mai|ke\s*bare\s*me|ke\s*bare\s*mai|jan\s*na|janna|जानना|जानकारी|"
+    r"want\s+to\s+know|tell\s+me|what\s+is|information|learn\s+about",
+    re.I,
+)
+_DRUG_STEM = re.compile(
+    r"\b(amox|penicillin|florfen|ivermect|enroflox|oxytetra|ceftiofur|tylosin|"
+    r"dexame|melox|ketopro|sulfa|trimeth|metronidaz|fenbendaz|albendaz|ivermec)\w*",
+    re.I,
+)
+
 _TOKEN_SPLIT = re.compile(r"[^\w\u0900-\u097F]+", re.UNICODE)
 
 _CANONICAL_SYMPTOM_TOKENS = frozenset(
@@ -206,6 +218,25 @@ def _normalize_roles(history: list | None) -> str:
     return " ".join(parts)
 
 
+def assistant_message_count(chat_history: list | None) -> int:
+    """How many assistant replies are already in this thread (excludes the reply we are about to send)."""
+    if not chat_history:
+        return 0
+    return sum(1 for m in chat_history if getattr(m, "role", None) == "assistant")
+
+
+def _general_medication_info_query(blob: str, user_message: str) -> bool:
+    """Allow reference-backed answers about a named drug without animal + duration first."""
+    if not _DRUG_STEM.search(blob):
+        return False
+    if _INFO_INTENT.search(blob):
+        return True
+    um = (user_message or "").strip()
+    if len(um) >= 3 and len(um.split()) <= 3:
+        return True
+    return False
+
+
 def evaluate_intake(user_message: str, chat_history: list | None) -> IntakeEvaluation:
     """Heuristic intake: animal + problem + (duration OR dose/education shortcut)."""
     um = user_message or ""
@@ -217,6 +248,9 @@ def evaluate_intake(user_message: str, chat_history: list | None) -> IntakeEvalu
     for phrase in _EMERGENCY_HI:
         if phrase in blob:
             return IntakeEvaluation(intake_complete=True, emergency=True)
+
+    if _general_medication_info_query(blob, um):
+        return IntakeEvaluation(intake_complete=True, emergency=False)
 
     blob_tokens = expand_query_tokens(_tokenize_blob(blob))
 
@@ -248,18 +282,45 @@ def evaluate_intake(user_message: str, chat_history: list | None) -> IntakeEvalu
     return IntakeEvaluation(intake_complete=False, emergency=False)
 
 
+def initial_welcome_message(language: str) -> str:
+    """First incomplete-intake reply: explain how we can help instead of a single rigid paragraph."""
+    if language == "Hindi":
+        return (
+            "नमस्ते! मैं आपकी पशु/पालतू स्वास्थ्य में मदद के लिए यहाँ हूँ। "
+            "बताइए, आज किस तरह मदद चाहिए?\n\n"
+            "1) जानवर के साथ कोई सामान्य सवाल या समस्या\n"
+            "2) अपने जानवर के बारे में जानना (खान-पान, टीकाकरण, देखभाल)\n"
+            "3) बीमारी या इलाज की बात (लक्षण, दवा की जानकारी — खुराक हमेशा वेट से पूछें)\n"
+            "4) फर्स्ट एड / तुरंत ध्यान देने वाली स्थिति (गंभीर लक्षण पर तुरंत वेट से संपर्क करें)\n\n"
+            "आप नंबर लिख सकते हैं या अपने शब्दों में लिख सकते हैं। "
+            "किसी दवा के बारे में सिर्फ जानकारी चाहिए तो भी पूछ सकते हैं।"
+        )
+    return (
+        "Hi — I am here to help with your animal’s health. What would you like today?\n\n"
+        "1) General question or concern about an animal\n"
+        "2) Learn about your animal (feeding, vaccines, routine care)\n"
+        "3) Illness or treatment discussion (symptoms, drug information — dosing must come from a vet)\n"
+        "4) First aid / urgent warning signs (true emergencies: contact a vet immediately)\n\n"
+        "You can reply with a number or just describe things in your own words. "
+        "If you only want information about a medicine (for example what amoxicillin is), ask that too."
+    )
+
+
+def follow_up_incomplete_message(language: str) -> str:
+    """Later turns when clinical intake is still missing — shorter, not identical to the welcome."""
+    if language == "Hindi":
+        return (
+            "सुरक्षित सलाह के लिए थोड़ा और चाहिए: कौन सा जानवर है, मुख्य समस्या क्या है, "
+            "और लक्षण लगभग कब से हैं? जितना बता पाएँ, उतना अच्छा।"
+        )
+    return (
+        "To keep this safe I still need a bit more: which animal, the main problem, "
+        "and roughly how long you have noticed it. Whatever detail you can share helps."
+    )
+
+
 def intake_ask_back_message(language: str, evaluation: IntakeEvaluation) -> str:
     """Short clarifying reply when intake is incomplete (not an emergency)."""
     if evaluation.emergency:
         return ""
-
-    if language == "Hindi":
-        return (
-            "कृपया थोड़ा और बताएं: कौन सा जानवर है, मुख्य समस्या क्या है, "
-            "और लक्षण कब से हैं? इन जानकारियों के बाद ही मैं सुरक्षित सलाह दे पाऊँगा।"
-        )
-
-    return (
-        "Please share a bit more: which animal, the main problem, and how long you have seen "
-        "these signs. I need that context before giving careful guidance."
-    )
+    return follow_up_incomplete_message(language)
