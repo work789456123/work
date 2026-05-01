@@ -3,6 +3,12 @@ variable "aws_region" {
   default = "ap-south-1"
 }
 
+variable "aws_profile" {
+  type        = string
+  default     = "pvaani"
+  description = "AWS CLI profile passed to the Terraform AWS provider. Set to empty string to use the default credential chain instead."
+}
+
 variable "project_name" {
   type    = string
   default = "pashuvaani"

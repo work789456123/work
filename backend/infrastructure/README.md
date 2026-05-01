@@ -74,6 +74,16 @@ Repeat the same flow in `environments/prod`.
 - Keep container images in private ECR and pin immutable tags.
 - Prod ECS EC2 uses `t3.small`; set root volume to at least `30GB` for the current ECS-optimized AMI snapshot.
 
+## Qdrant RAG (production)
+
+After Terraform creates the Qdrant service and the **backend** task has `QDRANT_URL` (private DNS, e.g. `http://qdrant.pashuvaani-prod.internal:6333`):
+
+1. **Ship a backend image that includes** `backend/scripts/index_qdrant.py` and `backend/data/vet_reference/` (the default `Dockerfile` copies the full tree). Pushing to `main` runs [`.github/workflows/ecr-build-push.yml`](../.github/workflows/ecr-build-push.yml) when `backend/**` changes.
+2. **Roll ECS** so tasks pull the new image: `aws ecs update-service --cluster <cluster> --service <backend-svc> --force-new-deployment --region ap-south-1` (with `AWS_PROFILE` set).
+3. **Run the indexer once** as a one-off task with the same task definition/network as the backend, overriding the container command to:
+   `python scripts/index_qdrant.py --recreate`
+   On a single small EC2 instance, awsvpc tasks can hit the **ENI limit**; temporarily raise the ECS Auto Scaling Group desired count to `2`, run the task, then set desired back to `1`.
+
 ## Legacy files
 
 Legacy top-level Terraform files are now moved to `old-terraform/` for archive and migration reference. Use only `environments/*` and `modules/*` for active deployments.

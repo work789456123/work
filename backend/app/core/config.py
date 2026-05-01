@@ -1,6 +1,6 @@
 from typing import Optional
 
-from pydantic import field_validator
+from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -20,6 +20,15 @@ class Settings(BaseSettings):
     USE_MEDGEMMA: bool = True
     SAGEMAKER_ENDPOINT_NAME: str = "medgemma"
     AWS_REGION: str = "ap-south-1"
+
+    # RAG / Qdrant
+    QDRANT_URL: str = Field(default="http://localhost:6333", description="Qdrant HTTP API base URL")
+    QDRANT_API_KEY: Optional[str] = None
+    QDRANT_COLLECTION: str = "vet_reference"
+    USE_QDRANT_RAG: bool = True
+    EMBEDDING_MODEL: str = "text-embedding-3-small"
+    EMBEDDING_DIM: int = 1536
+    RAG_TOP_K: int = 8
 
     # Email Settings
     SMTP_TLS: bool = True

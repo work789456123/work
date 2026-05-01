@@ -14,6 +14,11 @@ variable "private_subnet_ids" {
   type = list(string)
 }
 
+variable "vpc_id" {
+  description = "VPC ID (for EFS and Cloud Map DNS namespace)."
+  type        = string
+}
+
 variable "app_security_group_id" {
   type = string
 }

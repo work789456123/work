@@ -9,7 +9,8 @@ terraform {
 }
 
 provider "aws" {
-  region = var.aws_region
+  region  = var.aws_region
+  profile = var.aws_profile != "" ? var.aws_profile : null
 }
 
 locals {
@@ -75,6 +76,7 @@ module "compute" {
   project_name          = var.project_name
   environment           = var.environment
   aws_region            = var.aws_region
+  vpc_id                = module.network.vpc_id
   private_subnet_ids    = module.network.private_subnet_ids
   app_security_group_id = module.security.app_security_group_id
   backend_target_group_arn  = module.alb.backend_target_group_arn

@@ -84,3 +84,7 @@ android-sdk/ -e
 
 # Terraform: local variable files (secrets); copy from terraform.tfvars.example
 backend/infrastructure/environments/**/terraform.tfvars
+backend/infrastructure/environments/**/tfplan
+**/*.tfstate
+**/*.tfstate.*
+**/*.tfstate.backup

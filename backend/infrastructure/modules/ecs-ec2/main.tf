@@ -213,6 +213,10 @@ resource "aws_ecs_task_definition" "backend" {
           {
             name  = "MEDIA_BUCKET"
             value = var.media_bucket_name
+          },
+          {
+            name  = "QDRANT_URL"
+            value = local.qdrant_service_url
           }
         ],
         [for k, v in var.backend_environment : {
