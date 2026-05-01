@@ -60,8 +60,9 @@ variable "instance_type" {
 }
 
 variable "desired_capacity" {
-  type    = number
-  default = 1
+  type        = number
+  default     = 2
+  description = "ECS EC2 capacity. Use at least 2 for prod if running Qdrant + backend + frontend (awsvpc ENI limits per instance)."
 }
 
 variable "min_size" {
