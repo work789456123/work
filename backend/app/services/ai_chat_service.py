@@ -19,6 +19,7 @@ from app.services.intake_gate import (
     evaluate_intake,
     follow_up_incomplete_message,
     initial_welcome_message,
+    normalize_ui_language,
 )
 from app.services.qdrant_rag import _retrieve_reference_context, retrieve_reference_context_async
 from app.services.reference_fallback import expand_query_tokens as _expand_query_tokens
@@ -26,7 +27,7 @@ from app.services.reference_fallback import expand_query_tokens as _expand_query
 logger = logging.getLogger(__name__)
 
 # Low temperatures sound stiff; ~0.5 keeps dosing discipline in the prompt while wording stays natural.
-_CHAT_TEMPERATURE = 0.56
+_CHAT_TEMPERATURE = 0.6
 
 _SEVERITY_ANY = re.compile(r"\[SEVERITY:\s*(low|moderate|critical)\s*\]", re.I)
 
@@ -228,14 +229,15 @@ LENGTH:
         """Get an AI response maintaining context from history. Uses MedGemma with OpenAI fallback."""
         try:
             intake = evaluate_intake(user_message or "", chat_history)
+            lang_key = normalize_ui_language(language)
             if not intake.emergency and not intake.intake_complete:
                 if assistant_message_count(chat_history) == 0:
-                    msg = initial_welcome_message(language)
+                    msg = initial_welcome_message(lang_key)
                 else:
-                    msg = follow_up_incomplete_message(language)
+                    msg = follow_up_incomplete_message(lang_key)
                 return {"response": msg, "severity": "low"}
 
-            base_prompt = self.prompts.get(language, self.prompts["English"])
+            base_prompt = self.prompts.get(lang_key, self.prompts["English"])
             retrieved_context = await retrieve_reference_context_async(
                 user_message or "",
                 self.openai_client,

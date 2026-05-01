@@ -1,4 +1,4 @@
-import { useRef, useEffect, useReducer, type ChangeEvent } from "react";
+import { useRef, useEffect, useReducer, useCallback, type ChangeEvent } from "react";
 import { isAxiosError } from "axios";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -14,6 +14,17 @@ export function useGopuChatController() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesScrollRef = useRef<HTMLDivElement>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const ttsAudioRef = useRef<HTMLAudioElement | null>(null);
+
+  const stopAssistantSpeech = useCallback(() => {
+    const current = ttsAudioRef.current;
+    if (current) {
+      current.pause();
+      current.removeAttribute("src");
+      current.load();
+      ttsAudioRef.current = null;
+    }
+  }, []);
 
   /** Scroll only the chat list panel — `scrollIntoView` on the sentinel scrolls the whole document. */
   const scrollToBottom = () => {
@@ -79,6 +90,17 @@ export function useGopuChatController() {
   };
 
   useEffect(() => {
+    try {
+      const stored = localStorage.getItem("gopuChatLanguage");
+      if (stored === "English" || stored === "Hindi") {
+        dispatch({ type: "MERGE", patch: { language: stored } });
+      }
+    } catch {
+      /* ignore */
+    }
+  }, []);
+
+  useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
       toast.error("To continue with this feature please log in");
@@ -95,6 +117,8 @@ export function useGopuChatController() {
     window.addEventListener("authSuccess", fetchData);
     return () => window.removeEventListener("authSuccess", fetchData);
   }, [router]);
+
+  useEffect(() => () => stopAssistantSpeech(), [stopAssistantSpeech]);
 
   const loadSessionHistory = async (sId: string) => {
     try {
@@ -210,6 +234,8 @@ export function useGopuChatController() {
     if (!state.input.trim() && !state.uploadedImage) return;
     if (state.limitReached) return;
 
+    stopAssistantSpeech();
+
     const userMessage: GopuChatMessage = {
       role: "user",
       content: state.input,
@@ -289,8 +315,13 @@ export function useGopuChatController() {
             text: response.data.response,
           });
           if (ttsResponse.data.audio_base64) {
+            stopAssistantSpeech();
             const audio = new Audio(ttsResponse.data.audio_base64);
-            audio.play().catch((e) => console.error("Audio auto-play blocked by browser", e));
+            ttsAudioRef.current = audio;
+            audio.addEventListener("ended", () => {
+              if (ttsAudioRef.current === audio) ttsAudioRef.current = null;
+            });
+            await audio.play().catch((e) => console.error("Audio auto-play blocked by browser", e));
           }
         } catch (ttsError) {
           console.error("Speech synthesis failed", ttsError);

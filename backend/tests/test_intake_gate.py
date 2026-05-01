@@ -19,6 +19,7 @@ from app.services.intake_gate import (
     assistant_message_count,
     evaluate_intake,
     initial_welcome_message,
+    normalize_ui_language,
 )
 
 
@@ -73,6 +74,20 @@ class IntakeGateTests(unittest.TestCase):
         text = initial_welcome_message("English")
         self.assertIn("1)", text)
         self.assertIn("4)", text)
+
+    def test_learn_about_dog_foods_bypasses_intake(self) -> None:
+        ev = evaluate_intake("I want to learn about dog favurote foods", None)
+        self.assertFalse(ev.emergency)
+        self.assertTrue(ev.intake_complete)
+
+    def test_normalize_ui_language(self) -> None:
+        self.assertEqual(normalize_ui_language("हिंदी (Hindi)"), "Hindi")
+        self.assertEqual(normalize_ui_language("English"), "English")
+        self.assertEqual(normalize_ui_language(None), "English")
+
+    def test_vomit_food_still_needs_intake_without_duration(self) -> None:
+        ev = evaluate_intake("my dog vomited after eating food", None)
+        self.assertFalse(ev.intake_complete)
 
 
 if __name__ == "__main__":

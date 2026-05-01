@@ -152,10 +152,25 @@ _DOSE_OR_DRUG_HINT_HI = re.compile(
 )
 
 _EDUCATIONAL_EN = re.compile(
-    r"\b(what is|how to prevent|symptoms of|signs of|vaccination schedule|deworm|nutrition)\b",
+    r"\b(what is|how to prevent|symptoms of|signs of|vaccination schedule|deworm|nutrition|"
+    r"learn about|want to learn|want to know|tell me about|feeding|diet)\b",
     re.I,
 )
-_EDUCATIONAL_HI = re.compile(r"(क्या है|लक्षण|बचाव|टीकाकरण|कीड़े|पोषण)", re.I)
+_EDUCATIONAL_HI = re.compile(
+    r"(क्या है|लक्षण|बचाव|टीकाकरण|कीड़े|पोषण|खाना|भोजन|खिलान|जानना|जानकारी)",
+    re.I,
+)
+
+# Owner wants routine info (diet, treats) — not a symptom timeline; requires learn-style phrasing.
+_LEARN_ROUTINE_EN = re.compile(
+    r"learn\s+about|want\s+to\s+learn|tell\s+me\s+about|want\s+to\s+know|good\s+foods?|best\s+foods?|"
+    r"favo?u?r\w*\s+foods?|foods?\s+for",
+    re.I,
+)
+_ROUTINE_FOOD_TERMS_EN = re.compile(
+    r"\b(foods?|feeding|diet|nutrition|treats?|snacks?|favo?u?r\w*)\b",
+    re.I,
+)
 
 # Romanized Hindi / English “tell me about this drug” without full clinical intake.
 _INFO_INTENT = re.compile(
@@ -255,6 +270,8 @@ def evaluate_intake(user_message: str, chat_history: list | None) -> IntakeEvalu
     blob_tokens = expand_query_tokens(_tokenize_blob(blob))
 
     has_animal = any(a in blob for a in _ANIMAL_EN) or any(a in um for a in _ANIMAL_HI)
+    if has_animal and _LEARN_ROUTINE_EN.search(blob) and _ROUTINE_FOOD_TERMS_EN.search(blob):
+        return IntakeEvaluation(intake_complete=True, emergency=False)
     has_topic = (
         bool(blob_tokens & _CANONICAL_SYMPTOM_TOKENS)
         or any(s in blob for s in _SYMPTOM_OR_TOPIC_EN)
@@ -282,9 +299,20 @@ def evaluate_intake(user_message: str, chat_history: list | None) -> IntakeEvalu
     return IntakeEvaluation(intake_complete=False, emergency=False)
 
 
+def normalize_ui_language(language: str | None) -> str:
+    """Map UI / API language strings to Hindi or English for templated replies."""
+    if not language:
+        return "English"
+    raw = language.strip()
+    low = raw.lower()
+    if "hindi" in low or "हिंदी" in raw:
+        return "Hindi"
+    return "English"
+
+
 def initial_welcome_message(language: str) -> str:
     """First incomplete-intake reply: explain how we can help instead of a single rigid paragraph."""
-    if language == "Hindi":
+    if normalize_ui_language(language) == "Hindi":
         return (
             "नमस्ते! मैं आपकी पशु/पालतू स्वास्थ्य में मदद के लिए यहाँ हूँ। "
             "बताइए, आज किस तरह मदद चाहिए?\n\n"
@@ -308,7 +336,7 @@ def initial_welcome_message(language: str) -> str:
 
 def follow_up_incomplete_message(language: str) -> str:
     """Later turns when clinical intake is still missing — shorter, not identical to the welcome."""
-    if language == "Hindi":
+    if normalize_ui_language(language) == "Hindi":
         return (
             "सुरक्षित सलाह के लिए थोड़ा और चाहिए: कौन सा जानवर है, मुख्य समस्या क्या है, "
             "और लक्षण लगभग कब से हैं? जितना बता पाएँ, उतना अच्छा।"

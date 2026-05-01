@@ -87,7 +87,16 @@ const GopuChat = () => {
 						mobileSidebarOpen={mobileSidebarOpen}
 						onToggleMobileSidebar={toggleMobileSidebar}
 						language={state.language}
-						onLanguageChange={(lang) => dispatch({ type: "MERGE", patch: { language: lang } })}
+						onLanguageChange={(lang) => {
+							try {
+								if (lang === "English" || lang === "Hindi") {
+									localStorage.setItem("gopuChatLanguage", lang);
+								}
+							} catch {
+								/* private mode */
+							}
+							dispatch({ type: "MERGE", patch: { language: lang } });
+						}}
 					/>
 					<GopuChatMessageList
 						messages={state.messages}
