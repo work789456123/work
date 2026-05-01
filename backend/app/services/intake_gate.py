@@ -161,10 +161,17 @@ _EDUCATIONAL_HI = re.compile(
     re.I,
 )
 
-# Owner wants routine info (diet, treats) — not a symptom timeline; requires learn-style phrasing.
+# Owner wants routine info (diet, treats) — not a symptom timeline.
 _LEARN_ROUTINE_EN = re.compile(
-    r"learn\s+about|want\s+to\s+learn|tell\s+me\s+about|want\s+to\s+know|good\s+foods?|best\s+foods?|"
-    r"favo?u?r\w*\s+foods?|foods?\s+for",
+    r"learn\s+about|want\s+to\s+learn|tell\s+me\s+about|want\s+to\s+know|information\s+about|"
+    r"good\s+foods?|best\s+foods?|which\s+foods?|what\s+foods?|"
+    r"favo?u?r\w*\s+foods?|foods?\s+for|about\s+\w+\s+fav\w*",  # "about dog favurote …"
+    re.I,
+)
+# Do not treat loss of appetite / vomiting as "food curiosity" intake bypass.
+_APPETITE_OR_GI_DISTRESS = re.compile(
+    r"not\s+eating|won'?t\s+eat|refus(es|ing)\s+to\s+eat|loss\s+of\s+appetite|"
+    r"vomit|vomiting|diarr|blood|letharg|collapse",
     re.I,
 )
 _ROUTINE_FOOD_TERMS_EN = re.compile(
@@ -270,7 +277,12 @@ def evaluate_intake(user_message: str, chat_history: list | None) -> IntakeEvalu
     blob_tokens = expand_query_tokens(_tokenize_blob(blob))
 
     has_animal = any(a in blob for a in _ANIMAL_EN) or any(a in um for a in _ANIMAL_HI)
-    if has_animal and _LEARN_ROUTINE_EN.search(blob) and _ROUTINE_FOOD_TERMS_EN.search(blob):
+    if (
+        has_animal
+        and _ROUTINE_FOOD_TERMS_EN.search(blob)
+        and _LEARN_ROUTINE_EN.search(blob)
+        and not _APPETITE_OR_GI_DISTRESS.search(blob)
+    ):
         return IntakeEvaluation(intake_complete=True, emergency=False)
     has_topic = (
         bool(blob_tokens & _CANONICAL_SYMPTOM_TOKENS)
