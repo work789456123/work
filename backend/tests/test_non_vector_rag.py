@@ -14,7 +14,7 @@ os.environ.setdefault("ADMIN_PASSWORD", "test-admin-password-123")
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from app.services.ai_chat_service import _expand_query_tokens
+from app.services.reference_fallback import expand_query_tokens as _expand_query_tokens
 from app.services.reference_fallback import retrieve_fallback_context
 
 
