@@ -29,3 +29,20 @@ class UserResponse(BaseModel):
 class CreditPurchase(BaseModel):
     plan_type: str
     payment_id: str
+
+
+# ─── Forgot-password / OTP flow ─────────────────────────────────────────────
+
+class ForgotPasswordRequest(BaseModel):
+    email: str
+
+
+class VerifyOTPRequest(BaseModel):
+    email: str
+    otp: str
+
+
+class ResetPasswordRequest(BaseModel):
+    reset_token: str
+    new_password: str
+    confirm_password: str

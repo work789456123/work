@@ -19,8 +19,14 @@ class ProductService:
         if file is None or file.filename is None or file.filename.strip() == "":
             return None
 
+        import re
         ext = Path(file.filename).suffix.lower()
-        unique_name = f"{uuid4().hex}{ext}"
+        base_name = Path(file.filename).stem
+        safe_name = re.sub(r'[^a-z0-9]+', '-', base_name.lower()).strip('-')
+        if not safe_name:
+            safe_name = uuid4().hex
+
+        unique_name = f"{safe_name}{ext}"
         image_path = self.upload_dir / unique_name
 
         with image_path.open("wb") as buffer:

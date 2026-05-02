@@ -1,5 +1,6 @@
 import type { ComponentProps } from "react";
 import { useEffect, useRef, useState } from "react";
+import { ForgotPasswordDialog } from "@/components/Navbar/components/ForgotPasswordDialog";
 import {
 	Dialog,
 	DialogContent,
@@ -211,6 +212,7 @@ export function NavbarAuthDialog({
 	onSubmit,
 }: NavbarAuthDialogProps) {
 	const [showPassword, setShowPassword] = useState(false);
+	const [showForgotPassword, setShowForgotPassword] = useState(false);
 	const isLogin = authMode === "login";
 
 	useEffect(() => {
@@ -229,6 +231,7 @@ export function NavbarAuthDialog({
 	};
 
 	return (
+		<>
 		<Dialog open={open} onOpenChange={onOpenChange}>
 			<DialogContent
 				id="navbar-dialog-auth"
@@ -437,6 +440,23 @@ export function NavbarAuthDialog({
 								</Button>
 							</div>
 						</FieldGroup>
+						{/* Forgot Password link — only on login */}
+						{isLogin && (
+							<div className="flex justify-end -mt-1">
+								<button
+									type="button"
+									id="auth-forgot-password-link"
+									data-testid="auth-forgot-password-link"
+									onClick={() => {
+										onOpenChange(false);
+										setShowForgotPassword(true);
+									}}
+									className="text-xs font-semibold text-[#1F6559] underline-offset-4 transition hover:text-[#184F46] hover:underline"
+								>
+									Forgot Password?
+								</button>
+							</div>
+						)}
 						<Button
 							type="submit"
 							data-testid="auth-submit-button"
@@ -444,21 +464,45 @@ export function NavbarAuthDialog({
 						>
 							{isLogin ? authDialog.submitLogin : authDialog.submitRegister}
 						</Button>
-						<p className="pt-1 text-center text-sm leading-relaxed text-[#6F6F6F]">
-							{isLogin ? authDialog.toggleToRegister : authDialog.toggleToLogin}
+						<div className="pt-1 flex flex-col items-center gap-1">
+							<p className="text-center text-sm leading-relaxed text-[#6F6F6F]">
+								{isLogin ? authDialog.toggleToRegister : authDialog.toggleToLogin}
+								<button
+									type="button"
+									onClick={onToggleMode}
+									className="heading-font ml-1 font-semibold text-[#1F6559] underline-offset-4 transition hover:text-[#184F46] hover:underline"
+									data-testid="auth-toggle-button"
+								>
+									{isLogin ? authDialog.toggleSignUp : authDialog.toggleLogin}
+								</button>
+							</p>
 							<button
 								type="button"
-								onClick={onToggleMode}
-								className="heading-font ml-1 font-semibold text-[#1F6559] underline-offset-4 transition hover:text-[#184F46] hover:underline"
-								data-testid="auth-toggle-button"
+								data-testid="auth-forgot-password-link-bottom"
+								onClick={() => {
+									onOpenChange(false);
+									setShowForgotPassword(true);
+								}}
+								className="text-xs font-medium text-[#9B9B9B] underline-offset-4 transition hover:text-[#1F6559] hover:underline"
 							>
-								{isLogin ? authDialog.toggleSignUp : authDialog.toggleLogin}
+								Forgot Password?
 							</button>
-						</p>
+						</div>
 					</form>
 				</div>
 			</DialogContent>
 		</Dialog>
+
+		{/* Forgot Password dialog — rendered outside the auth dialog so they don't nest */}
+		<ForgotPasswordDialog
+			open={showForgotPassword}
+			onOpenChange={setShowForgotPassword}
+			onBackToLogin={() => {
+				setShowForgotPassword(false);
+				onOpenChange(true);
+			}}
+		/>
+		</>
 	);
 }
 
