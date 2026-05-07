@@ -5,22 +5,29 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy import func
 from app.db.session import get_db
-from app.api.dependencies import get_current_admin
+from app.api.dependencies import get_current_admin, get_super_admin
 from app.models.user import User
 from app.models.pet import Pet
 from app.models.appointment import Appointment
 from app.models.doctor import Doctor
-from app.models.admin_data import DoctorApplication, EmergencyLog
+from app.models.admin_data import DoctorApplication, EmergencyLog, AdminPasswordResetTicket
 from app.models.farm import Farmer, Animal, FarmConsultation
 from app.schemas.appointment import AppointmentResponse
 from app.schemas.blog import BlogCreate, BlogResponse
-from app.schemas.admin_data import DoctorApplicationResponse, EmergencyLogResponse
-from app.schemas.user import AdminLogin
+from app.schemas.admin_data import (
+    DoctorApplicationResponse, EmergencyLogResponse,
+    AdminPasswordResetTicketCreate, AdminPasswordResetTicketResponse
+)
+from app.schemas.user import AdminLogin, AdminUserCreate, AdminUserResponse, UserRegister
 from app.api.endpoints.auth import create_access_token, pwd_context
 from app.crud.user import crud_user
 from app.crud.appointment import crud_appointment
 from app.crud.blog import crud_blog
 from app.crud.farm import crud_farm
+from app.crud.pet import crud_pet
+from app.crud.doctor import crud_doctor
+from app.schemas.pet import PetCreate
+from app.schemas.doctor import DoctorCreate, DoctorResponse
 from app.schemas.farm import (
     FarmerCreate, FarmerResponse, 
     AnimalCreate, AnimalResponse,
@@ -35,13 +42,265 @@ router = APIRouter()
 @router.post("/login")
 async def admin_login(admin_in: AdminLogin, db: AsyncSession = Depends(get_db)):
     user = await crud_user.get_by_phone_or_email(db, phone_or_email=admin_in.email)
-    if not user or user.role != "admin" or not pwd_context.verify(admin_in.password, user.hashed_password):
+    if not user or user.role not in ["admin", "superadmin"] or not pwd_context.verify(admin_in.password, user.hashed_password):
         raise HTTPException(status_code=401, detail="Invalid admin credentials")
         
     token_data = {"sub": user.id, "email": user.phone_or_email, "role": user.role}
     token = create_access_token(token_data)
     
-    return {"access_token": token, "admin": {"id": user.id, "email": user.phone_or_email, "role": user.role}}
+    return {"access_token": token, "admin": {"id": user.id, "email": user.phone_or_email, "role": user.role, "full_name": user.full_name}}
+
+
+
+
+# ─── Password Reset Tickets ───────────────────────────────────────────────────
+
+from pydantic import BaseModel
+class AdminResetPasswordRequest(BaseModel):
+    new_password: str
+
+@router.post("/password-reset-ticket", response_model=AdminPasswordResetTicketResponse)
+async def create_password_reset_ticket(
+    ticket_in: AdminPasswordResetTicketCreate,
+    db: AsyncSession = Depends(get_db)
+):
+    # Verify that an admin with this email exists
+    user = await crud_user.get_by_phone_or_email(db, phone_or_email=ticket_in.email)
+    if not user or user.role not in ["admin", "superadmin"]:
+        raise HTTPException(status_code=400, detail="No admin account found with this email.")
+
+    # Check if a pending ticket already exists
+    result = await db.execute(select(AdminPasswordResetTicket).where(
+        AdminPasswordResetTicket.email == ticket_in.email,
+        AdminPasswordResetTicket.status == "pending"
+    ))
+    existing_ticket = result.scalars().first()
+    if existing_ticket:
+        return existing_ticket
+
+    ticket = AdminPasswordResetTicket(email=ticket_in.email)
+    db.add(ticket)
+    await db.commit()
+    await db.refresh(ticket)
+    return ticket
+
+@router.get("/password-reset-tickets", response_model=List[AdminPasswordResetTicketResponse])
+async def get_password_reset_tickets(
+    db: AsyncSession = Depends(get_db),
+    current_admin: User = Depends(get_super_admin)
+):
+    result = await db.execute(select(AdminPasswordResetTicket).order_by(AdminPasswordResetTicket.created_at.desc()))
+    return result.scalars().all()
+
+@router.put("/password-reset-tickets/{ticket_id}/resolve", response_model=AdminPasswordResetTicketResponse)
+async def resolve_password_reset_ticket(
+    ticket_id: str,
+    db: AsyncSession = Depends(get_db),
+    current_admin: User = Depends(get_super_admin)
+):
+    result = await db.execute(select(AdminPasswordResetTicket).where(AdminPasswordResetTicket.id == ticket_id))
+    ticket = result.scalars().first()
+    if not ticket:
+        raise HTTPException(status_code=404, detail="Ticket not found")
+    ticket.status = "resolved"
+    await db.commit()
+    await db.refresh(ticket)
+    return ticket
+
+# ─── Admin user management ────────────────────────────────────────────────────
+
+@router.get("/admin-users", response_model=List[AdminUserResponse])
+async def list_admin_users(
+    db: AsyncSession = Depends(get_db),
+    current_admin: User = Depends(get_current_admin),
+):
+    """Return all users with role='admin' or 'superadmin'."""
+    result = await db.execute(select(User).where(User.role.in_(["admin", "superadmin"])).order_by(User.full_name))
+    return result.scalars().all()
+
+
+@router.post("/admin-users", response_model=AdminUserResponse, status_code=201)
+async def create_admin_user(
+    user_in: AdminUserCreate,
+    db: AsyncSession = Depends(get_db),
+    current_admin: User = Depends(get_super_admin),
+):
+    """Create a new admin user. Only existing admins can do this."""
+    existing = await crud_user.get_by_phone_or_email(db, phone_or_email=user_in.email)
+    if existing:
+        if existing.role in ["admin", "superadmin"]:
+            raise HTTPException(status_code=400, detail="An admin with this email already exists.")
+        # Promote existing regular user to admin
+        existing.role = "admin"
+        existing.hashed_password = pwd_context.hash(user_in.password)
+        existing.full_name = user_in.full_name
+        await db.commit()
+        await db.refresh(existing)
+        return existing
+
+    from app.schemas.user import UserRegister
+    new_user = await crud_user.create(
+        db,
+        user_in=UserRegister(
+            full_name=user_in.full_name,
+            phone_or_email=user_in.email,
+            password=user_in.password,
+            role="admin",
+        ),
+        role="admin",
+    )
+    return new_user
+
+
+@router.delete("/admin-users/{user_id}", status_code=204)
+async def delete_admin_user(
+    user_id: str,
+    db: AsyncSession = Depends(get_db),
+    current_admin: User = Depends(get_super_admin),
+):
+    """Remove admin access. Cannot delete yourself."""
+    if user_id == current_admin.id:
+        raise HTTPException(status_code=400, detail="You cannot remove your own admin access.")
+    result = await db.execute(select(User).where(User.id == user_id, User.role.in_(["admin", "superadmin"])))
+    user = result.scalars().first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Admin user not found.")
+    # Downgrade to regular user rather than hard-delete
+    user.role = "user"
+    await db.commit()
+    return None
+
+@router.put("/admin-users/{user_id}/reset-password")
+async def superadmin_reset_admin_password(
+    user_id: str,
+    body: AdminResetPasswordRequest,
+    db: AsyncSession = Depends(get_db),
+    current_admin: User = Depends(get_super_admin)
+):
+    result = await db.execute(select(User).where(User.id == user_id, User.role.in_(["admin", "superadmin"])))
+    user = result.scalars().first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Admin user not found")
+    
+    user.hashed_password = pwd_context.hash(body.new_password)
+    await db.commit()
+    return {"message": "Password reset successfully"}
+
+@router.get("/users")
+async def list_all_users(
+    db: AsyncSession = Depends(get_db),
+    current_admin: User = Depends(get_current_admin),
+):
+    """Return all regular (non-admin) users."""
+    result = await db.execute(
+        select(User).where(User.role == "user").order_by(User.full_name)
+    )
+    users = result.scalars().all()
+    return [
+        {
+            "id": u.id,
+            "full_name": u.full_name,
+            "phone_or_email": u.phone_or_email,
+            "role": u.role,
+            "has_subscription": u.has_subscription,
+            "credits_remaining": u.credits_remaining,
+            "is_verified": u.is_verified,
+        }
+        for u in users
+    ]
+
+@router.post("/users", status_code=201)
+async def create_regular_user(
+    user_in: UserRegister,
+    db: AsyncSession = Depends(get_db),
+    current_admin: User = Depends(get_current_admin),
+):
+    """Create a new regular user from admin panel."""
+    existing = await crud_user.get_by_phone_or_email(db, phone_or_email=user_in.phone_or_email)
+    if existing:
+        raise HTTPException(status_code=400, detail="User already exists")
+        
+    new_user = await crud_user.create(db, user_in=user_in, role="user")
+    return {
+        "id": new_user.id,
+        "full_name": new_user.full_name,
+        "phone_or_email": new_user.phone_or_email,
+        "role": new_user.role,
+        "has_subscription": new_user.has_subscription,
+        "credits_remaining": new_user.credits_remaining,
+        "is_verified": new_user.is_verified,
+    }
+
+
+@router.get("/pets")
+async def list_all_pets(
+    db: AsyncSession = Depends(get_db),
+    current_admin: User = Depends(get_current_admin),
+):
+    """Return all pets with their owner's name and contact."""
+    from sqlalchemy.orm import joinedload
+    result = await db.execute(
+        select(Pet).options(joinedload(Pet.owner)).order_by(Pet.name)
+    )
+    pets = result.scalars().all()
+    return [
+        {
+            "id": p.id,
+            "name": p.name,
+            "pet_type": p.pet_type,
+            "age": p.age,
+            "gender": p.gender,
+            "weight": p.weight,
+            "owner_name": p.owner.full_name if p.owner else "Unknown",
+            "owner_contact": p.owner.phone_or_email if p.owner else "—",
+        }
+        for p in pets
+    ]
+
+
+class AdminPetCreate(PetCreate):
+    user_id: str
+
+@router.post("/pets")
+async def create_pet_as_admin(
+    pet_in: AdminPetCreate,
+    db: AsyncSession = Depends(get_db),
+    current_admin: User = Depends(get_current_admin)
+):
+    user = await crud_user.get_by_id(db, user_id=pet_in.user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+        
+    pet = await crud_pet.create(db, pet_in=pet_in, user_id=pet_in.user_id)
+    return {
+        "id": pet.id,
+        "name": pet.name,
+        "pet_type": pet.pet_type,
+        "age": pet.age,
+        "gender": pet.gender,
+        "weight": pet.weight,
+        "owner_name": user.full_name,
+        "owner_contact": user.phone_or_email,
+    }
+
+
+@router.get("/vets", response_model=List[DoctorResponse])
+async def list_all_vets(
+    db: AsyncSession = Depends(get_db),
+    current_admin: User = Depends(get_current_admin),
+):
+    """Return all veterinarians for the admin panel."""
+    return await crud_doctor.get_multi(db)
+
+@router.post("/vets", response_model=DoctorResponse, status_code=201)
+async def create_vet(
+    vet_in: DoctorCreate,
+    db: AsyncSession = Depends(get_db),
+    current_admin: User = Depends(get_current_admin),
+):
+    """Create a new vet profile."""
+    return await crud_doctor.create(db, obj_in=vet_in)
+
 
 @router.get("/dashboard")
 async def get_admin_dashboard(
@@ -115,10 +374,16 @@ async def confirm_appointment(
     db: AsyncSession = Depends(get_db),
     current_admin: User = Depends(get_current_admin)
 ):
+    from sqlalchemy.orm import joinedload
     appointment = await crud_appointment.update_status(db, appointment_id, "confirmed")
     if not appointment:
         raise HTTPException(status_code=404, detail="Appointment not found")
-    return appointment
+    # Reload with user joined so user_email is populated
+    result = await db.execute(
+        select(Appointment).options(joinedload(Appointment.user)).where(Appointment.id == appointment_id)
+    )
+    appt = result.scalars().first()
+    return crud_appointment._to_response(appt)
 
 @router.put("/appointments/{appointment_id}/cancel", response_model=AppointmentResponse)
 async def cancel_appointment(
@@ -126,10 +391,16 @@ async def cancel_appointment(
     db: AsyncSession = Depends(get_db),
     current_admin: User = Depends(get_current_admin)
 ):
+    from sqlalchemy.orm import joinedload
     appointment = await crud_appointment.update_status(db, appointment_id, "cancelled")
     if not appointment:
         raise HTTPException(status_code=404, detail="Appointment not found")
-    return appointment
+    # Reload with user joined so user_email is populated
+    result = await db.execute(
+        select(Appointment).options(joinedload(Appointment.user)).where(Appointment.id == appointment_id)
+    )
+    appt = result.scalars().first()
+    return crud_appointment._to_response(appt)
 
 @router.get("/doctor-applications", response_model=List[DoctorApplicationResponse])
 async def get_doctor_applications(

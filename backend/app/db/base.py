@@ -12,3 +12,4 @@ from app.models.banned_device import BannedDevice
 from app.models.device_usage import DeviceUsage
 from app.models.ratelimit_exception import RatelimitException
 from app.models.products import Product
+from app.models.medical_emergency import MedicalEmergency

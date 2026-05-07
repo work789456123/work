@@ -384,25 +384,63 @@ export function NavbarAuthDialog({
 								/>
 							</FieldGroup>
 						)}
-						<FieldGroup>
-							<Label
-								htmlFor="navbar-auth-phone_or_email"
-								className="text-[#333]"
-							>
-								{authDialog.labels.phoneOrEmail}
-							</Label>
-							<Input
-								id="navbar-auth-phone_or_email"
-								data-testid="auth-phone-email-input"
-								value={formData.phone_or_email}
-								onChange={(e) =>
-									onFieldChange("phone_or_email", e.target.value)
-								}
-								required
-								autoComplete="username"
-								className={fieldInputClass}
-							/>
-						</FieldGroup>
+						{isLogin ? (
+							<FieldGroup>
+								<Label
+									htmlFor="navbar-auth-phone_or_email"
+									className="text-[#333]"
+								>
+									{authDialog.labels.phoneOrEmail}
+								</Label>
+								<Input
+									id="navbar-auth-phone_or_email"
+									data-testid="auth-phone-email-input"
+									value={formData.phone_or_email}
+									onChange={(e) =>
+										onFieldChange("phone_or_email", e.target.value)
+									}
+									required
+									autoComplete="username"
+									className={fieldInputClass}
+								/>
+							</FieldGroup>
+						) : (
+							<>
+								<FieldGroup>
+									<Label htmlFor="navbar-auth-email" className="text-[#333]">
+										{authDialog.labels.email}
+									</Label>
+									<Input
+										id="navbar-auth-email"
+										type="email"
+										data-testid="auth-email-input"
+										value={formData.email}
+										onChange={(e) => onFieldChange("email", e.target.value)}
+										required
+										autoComplete="email"
+										className={fieldInputClass}
+									/>
+								</FieldGroup>
+								<FieldGroup>
+									<Label htmlFor="navbar-auth-phone" className="text-[#333]">
+										{authDialog.labels.phone}
+									</Label>
+									<Input
+										id="navbar-auth-phone"
+										type="tel"
+										data-testid="auth-phone-input"
+										value={formData.phone}
+										onChange={(e) => {
+											const val = e.target.value.replace(/\D/g, "");
+											onFieldChange("phone", val);
+										}}
+										autoComplete="tel"
+										className={fieldInputClass}
+										maxLength={10}
+									/>
+								</FieldGroup>
+							</>
+						)}
 						<FieldGroup>
 							<Label htmlFor="navbar-auth-password" className="text-[#333]">
 								{authDialog.labels.password}
@@ -476,17 +514,6 @@ export function NavbarAuthDialog({
 									{isLogin ? authDialog.toggleSignUp : authDialog.toggleLogin}
 								</button>
 							</p>
-							<button
-								type="button"
-								data-testid="auth-forgot-password-link-bottom"
-								onClick={() => {
-									onOpenChange(false);
-									setShowForgotPassword(true);
-								}}
-								className="text-xs font-medium text-[#9B9B9B] underline-offset-4 transition hover:text-[#1F6559] hover:underline"
-							>
-								Forgot Password?
-							</button>
 						</div>
 					</form>
 				</div>

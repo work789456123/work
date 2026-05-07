@@ -19,6 +19,7 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
+  console.log(`[API] Request: ${config.method?.toUpperCase()} ${config.url}`, config.data);
   if (typeof window === "undefined") return config;
   const adminToken = localStorage.getItem("admin_token");
   const token = localStorage.getItem("token");
@@ -31,5 +32,13 @@ api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   }
   return config;
 });
+
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    console.error("[API] Error:", error.message, error.response?.data || error.config?.url);
+    return Promise.reject(error);
+  }
+);
 
 export default api;

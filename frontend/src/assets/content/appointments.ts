@@ -39,6 +39,57 @@ export const appointmentsPage = {
     message: "Appointment Booked Successfully!",
     ok: "OK",
   },
+  langToggle: {
+    switchToHindi: "हिंदी में भरें",
+    switchToEnglish: "Fill in English",
+  },
+};
+
+/** Hindi translations for the appointments page */
+export const appointmentsPageHindi = {
+  pageTitle: "पशु चिकित्सा अपॉइंटमेंट बुक करें",
+  pageSubtitle:
+    "अपने पशु के बारे में कुछ जानकारी दें और अपनी सुविधा के अनुसार समय चुनें। हम आपकी विज़िट की पुष्टि के लिए संपर्क करेंगे।",
+  formTitle: "अपॉइंटमेंट विवरण",
+  formDescription: "आवश्यक फ़ील्ड भरने से हमें आपकी अपॉइंटमेंट की तैयारी में मदद मिलती है।",
+  sections: {
+    pet: "आपके पशु के बारे में",
+    owner: "आपका संपर्क",
+    visit: "विज़िट और स्वास्थ्य",
+  },
+  placeholders: {
+    petName: "पशु का नाम",
+    petType: "पशु का प्रकार (कुत्ता, गाय, बिल्ली...)",
+    gender: "लिंग चुनें",
+    age: "उम्र",
+    weight: "वज़न",
+    ownerName: "मालिक का नाम",
+    ownerPhone: "मालिक का फ़ोन नंबर",
+    timeSlot: "समय स्लॉट चुनें",
+    medicalNote: "यहाँ कुछ लिखना हो तो लिखें",
+  },
+  genderOptions: [
+    { value: "", label: "लिंग चुनें" },
+    { value: "Male", label: "नर" },
+    { value: "Female", label: "मादा" },
+  ],
+  weightUnits: ["KG", "LBS"],
+  labels: {
+    vaccinated: "पशु का टीकाकरण हो चुका है",
+    medicalHistoryAvailable: "चिकित्सा इतिहास उपलब्ध है",
+    medicalHistoryWarning: "कृपया विज़िट के समय चिकित्सा इतिहास साथ लाएं।",
+    medicalHistoryNotes: "पशु चिकित्सक के लिए नोट्स",
+  },
+  submit: "अपॉइंटमेंट बुक करें",
+  successPopup: {
+    title: "✅ सफलता",
+    message: "अपॉइंटमेंट सफलतापूर्वक बुक हो गई!",
+    ok: "ठीक है",
+  },
+  langToggle: {
+    switchToHindi: "हिंदी में भरें",
+    switchToEnglish: "Fill in English",
+  },
 };
 
 export const appointmentTimeSlots = [

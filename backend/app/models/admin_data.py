@@ -23,3 +23,11 @@ class EmergencyLog(Base):
     id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
     message = Column(Text, nullable=False)
     timestamp = Column(DateTime, default=datetime.datetime.utcnow)
+
+class AdminPasswordResetTicket(Base):
+    __tablename__ = "admin_password_reset_tickets"
+
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    email = Column(String, nullable=False)
+    status = Column(String, default="pending") # pending, resolved
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)

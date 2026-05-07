@@ -43,6 +43,12 @@ class Settings(BaseSettings):
 
 
 
+    # Slack notifications
+    SLACK_WEBHOOK_URL: Optional[str] = None
+    SLACK_WEBHOOK_URL_APPOINTMENTS: Optional[str] = None
+    SLACK_WEBHOOK_URL_EMERGENCIES: Optional[str] = None
+    SLACK_SIGNING_SECRET: Optional[str] = None
+
     # Frontend URL for links in emails
     FRONTEND_HOST: str = "http://localhost:3000"
 

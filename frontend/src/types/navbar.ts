@@ -3,6 +3,8 @@ import type { FormEvent } from "react";
 export type NavbarAuthFormData = {
 	full_name: string;
 	phone_or_email: string;
+	email: string;
+	phone: string;
 	password: string;
 	role: "user" | "doctor" | "vendor";
 };

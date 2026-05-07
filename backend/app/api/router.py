@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.api.endpoints import auth, pets, appointments, chat, speech, blogs, contact, career, doctors, admin, credits
+from app.api.endpoints import auth, pets, appointments, chat, speech, blogs, contact, career, doctors, admin, credits, slack, medical_emergency
 from app.api import product
 
 api_router = APIRouter()
@@ -17,3 +17,5 @@ api_router.include_router(career.router, prefix="/career", tags=["career"])
 api_router.include_router(doctors.router, prefix="/doctors", tags=["doctors"])
 api_router.include_router(admin.router, prefix="/admin", tags=["admin"])
 api_router.include_router(product.router, prefix="/products", tags=["products"])
+api_router.include_router(slack.router, prefix="/slack", tags=["slack"])
+api_router.include_router(medical_emergency.router, prefix="/medical-emergency", tags=["medical_emergency"])

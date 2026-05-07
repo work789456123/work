@@ -41,6 +41,8 @@ export const authDialog = {
 	labels: {
 		fullName: "Full Name",
 		phoneOrEmail: "Phone or Email",
+		email: "Email ID",
+		phone: "Phone Number",
 		password: "Password",
 		showPassword: "Show password",
 		hidePassword: "Hide password",
@@ -102,4 +104,10 @@ export const navbarActions = {
 	tryGopu: "Try Gopu.AI Free",
 	logout: "Logout",
 	loginSignup: "Login / Sign up",
+	profile: {
+		yourOrders: "Your Orders",
+		tracking: "Tracking",
+		appointmentTracking: "Appointment Tracking",
+		medicalQueryTracking: "Medical Complaints",
+	},
 };

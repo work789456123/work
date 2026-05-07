@@ -29,8 +29,12 @@ export type AppointmentAction =
   | { type: "SUBMIT_SUCCESS" }
   | { type: "CLOSE_POPUP" };
 
+export type AppointmentLang = "en" | "hi";
+
 export type AppointmentsFormBodyProps = {
   form: AppointmentFormData;
   onFieldChange: <K extends keyof AppointmentFormData>(field: K, value: AppointmentFormData[K]) => void;
   onSubmit: (e: FormEvent<HTMLFormElement>) => void;
+  lang: AppointmentLang;
+  onLangToggle: () => void;
 };
