@@ -1,10 +1,16 @@
-from typing import List
+from typing import List, Optional
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from app.models.pet import Pet
 from app.schemas.pet import PetCreate
 
 class CRUDPet:
+    async def get_by_id(self, db: AsyncSession, pet_id: str, user_id: str) -> Optional[Pet]:
+        result = await db.execute(
+            select(Pet).where(Pet.id == pet_id, Pet.user_id == user_id)
+        )
+        return result.scalars().first()
+
     async def create(self, db: AsyncSession, pet_in: PetCreate, user_id: str) -> Pet:
         db_obj = Pet(
             user_id=user_id,

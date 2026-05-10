@@ -17,6 +17,7 @@ export type GopuChatMessage = {
   image?: string;
   isBlocked?: boolean;
   isWarning?: boolean;
+  isWelcome?: boolean;
   remaining?: number;
 };
 
@@ -25,6 +26,15 @@ export type GopuSession = {
   title?: string;
   updatedAt?: string;
   created_at?: string;
+};
+
+export type PetBasic = {
+  id: string;
+  name: string;
+  pet_type: string;
+  age?: string | null;
+  gender?: string | null;
+  weight?: string | null;
 };
 
 export type GopuChatState = {

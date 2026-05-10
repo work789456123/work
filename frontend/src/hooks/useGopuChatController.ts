@@ -388,18 +388,26 @@ export function useGopuChatController() {
     }
   };
 
-  const handleFAQClick = useCallback((faq: { question: string; answer: string }) => {
-    dispatch({
-      type: "MERGE",
-      patch: {
-        messages: [
-          ...state.messages,
-          { role: "user", content: faq.question },
-          { role: "assistant", content: faq.answer },
-        ],
-      },
-    });
-  }, [state.messages]);
+  const handleFAQClick = useCallback(
+    (faq: { question: string; answer: string }) => {
+      // Strip any severity tags that might have slipped into pre-written answers
+      const cleanAnswer = faq.answer
+        .replace(/\[SEVERITY:\s*(low|moderate|critical)\s*\]/gi, "")
+        .trim();
+
+      dispatch({
+        type: "MERGE",
+        patch: {
+          messages: [
+            ...state.messages,
+            { role: "user", content: faq.question },
+            { role: "assistant", content: cleanAnswer },
+          ],
+        },
+      });
+    },
+    [state.messages],
+  );
 
   return {
     state,
