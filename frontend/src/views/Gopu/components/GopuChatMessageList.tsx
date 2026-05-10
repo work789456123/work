@@ -67,7 +67,6 @@ export default function GopuChatMessageList({
                   className="mb-2 max-h-48 w-auto max-w-full rounded-lg object-contain"
                 />
               )}
-
               {msg.role === "user" ? (
                 <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.content}</p>
               ) : (

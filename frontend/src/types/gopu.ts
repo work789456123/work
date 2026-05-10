@@ -25,6 +25,7 @@ export type GopuSession = {
   id: string;
   title?: string;
   updatedAt?: string;
+  updated_at?: string;
   created_at?: string;
 };
 
@@ -61,11 +62,7 @@ export type GopuChatAction =
   | { type: "SET_UPLOADED_IMAGE"; value: GopuUploadedImage }
   | { type: "SET_RECORDING"; value: boolean }
   | { type: "SET_CREDITS"; value: CreditsBalanceResponse | null }
-  | {
-      type: "SET_LIMIT";
-      limitReached: boolean;
-      remainingMessages: number;
-    }
+  | { type: "SET_LIMIT"; limitReached: boolean; remainingMessages: number }
   | { type: "RESET_AFTER_SEND" }
   | { type: "DECREMENT_FREE_REMAINING" }
   | { type: "MERGE"; patch: Partial<GopuChatState> };
@@ -97,7 +94,6 @@ export type GopuChatMessageListProps = {
   messages: GopuChatMessage[];
   isLoading: boolean;
   messagesEndRef: RefObject<HTMLDivElement | null>;
-  /** Scrollable message list container — scroll this instead of using scrollIntoView (avoids scrolling the page). */
   messagesScrollRef: RefObject<HTMLDivElement | null>;
   onFAQClick?: (faq: { question: string; answer: string }) => void;
 };
@@ -107,7 +103,6 @@ export type GopuChatSidebarProps = {
   sessionId: string | null;
   onNewChat: () => void;
   onSelectSession: (id: string) => void;
-  /** When false on viewports below lg, sidebar is off-canvas; lg+ ignores this for layout. */
   isMobileOpen: boolean;
   onRequestCloseMobile: () => void;
 };

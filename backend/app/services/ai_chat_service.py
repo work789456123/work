@@ -27,9 +27,6 @@ _TITLE_TEMPERATURE = 0.3
 # Tokens in conversation history sent to the LLM (beyond system prompt + RAG context)
 _HISTORY_TOKEN_BUDGET = 2400
 
-# Minimum message count before the session is eligible for summarisation
-_SUMMARISE_AFTER_MESSAGES = 20
-
 _SEVERITY_RE = re.compile(r"\[SEVERITY:\s*(low|moderate|critical)\s*\]", re.I)
 
 

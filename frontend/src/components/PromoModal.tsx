@@ -30,7 +30,6 @@ const PromoModal = () => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className="sm:max-w-md text-center p-6 border-0 rounded-[28px] overflow-hidden">
-        {/* Background gradient decoration */}
         <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-r from-[#1FA7A6] via-[#38C2B4] to-[#78D65C] opacity-20 -z-10 blur-xl" />
 
         <DialogHeader>
@@ -48,7 +47,6 @@ const PromoModal = () => {
         </DialogHeader>
 
         <div className="py-2 space-y-5">
-          {/* Features list */}
           <div className="bg-[#1F6559]/5 rounded-2xl p-4 border border-[#1F6559]/10 text-left">
             <ul className="space-y-3">
               {[
@@ -64,7 +62,6 @@ const PromoModal = () => {
             </ul>
           </div>
 
-          {/* Primary CTA */}
           <Button
             onClick={() => go("/pashucare-suraksha-plan")}
             className="w-full rounded-full bg-amber-500 text-black hover:bg-amber-400 font-semibold py-6 text-lg transition-transform hover:scale-[1.02]"
@@ -72,14 +69,12 @@ const PromoModal = () => {
             View Suraksha Plan
           </Button>
 
-          {/* Divider */}
           <div className="flex items-center gap-3">
             <div className="flex-1 h-px bg-[#EAEAEA]" />
             <span className="text-xs text-[#9F9F9F] font-medium">or chat with Gopu</span>
             <div className="flex-1 h-px bg-[#EAEAEA]" />
           </div>
 
-          {/* Two Gopu options */}
           <div className="grid grid-cols-2 gap-3">
             <button
               type="button"

@@ -8,7 +8,7 @@ from app.crud.chat import crud_chat
 from app.crud.user import crud_user
 from app.db.session import get_db
 from app.models.user import User
-from app.schemas.chat import ChatMessage as ChatMessageSchema
+from app.schemas.chat import ChatMessage as ChatMessageSchema, SUMMARISE_AFTER_MESSAGES
 from app.services.ai_chat_service import ai_chat_service_impl
 from app.services.chat_language import normalize_ui_language
 
@@ -16,27 +16,27 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
-# Number of messages in a session before we generate/refresh a summary
-_SUMMARISE_THRESHOLD = 20
-
 
 # ---------------------------------------------------------------------------
-# Background task: summarise long sessions
+# Background task — uses its own db session (never the request session)
 # ---------------------------------------------------------------------------
 
-async def _maybe_summarise(
-    session_id: str,
-    language: str,
-    db: AsyncSession,
-) -> None:
-    """Runs in background: generates and stores a summary when session is long."""
+
+async def _maybe_summarise(session_id: str, language: str) -> None:
+    """Runs as a FastAPI background task.
+
+    Opens a fresh AsyncSession so it is not racing against the closed request session.
+    """
     try:
-        messages = await crud_chat.get_messages(db, session_id=session_id)
-        if len(messages) < _SUMMARISE_THRESHOLD:
-            return
-        summary = await ai_chat_service_impl.summarize_session(messages, language=language)
-        if summary:
-            await crud_chat.update_session_meta(db, session_id=session_id, summary=summary)
+        from app.db.session import AsyncSessionLocal
+
+        async with AsyncSessionLocal() as db:
+            messages = await crud_chat.get_messages(db, session_id=session_id)
+            if len(messages) < SUMMARISE_AFTER_MESSAGES:
+                return
+            summary = await ai_chat_service_impl.summarize_session(messages, language=language)
+            if summary:
+                await crud_chat.update_session_meta(db, session_id=session_id, summary=summary)
     except Exception as e:
         logger.warning("Background summarisation failed for session %s: %s", session_id, e)
 
@@ -44,6 +44,7 @@ async def _maybe_summarise(
 # ---------------------------------------------------------------------------
 # Session management endpoints
 # ---------------------------------------------------------------------------
+
 
 @router.get("/sessions")
 async def get_user_sessions(
@@ -126,7 +127,7 @@ async def get_latest_chat_history(
 ):
     session = await crud_chat.get_latest_session_for_user(db, user_id=current_user.id)
     if not session:
-        return {"session_id": None, "title": None, "messages": []}
+        return {"session_id": None, "title": None, "summary": None, "messages": []}
 
     messages = await crud_chat.get_messages(db, session_id=session.id)
     return {
@@ -150,6 +151,7 @@ async def get_latest_chat_history(
 # Main chat endpoint
 # ---------------------------------------------------------------------------
 
+
 @router.post("")
 async def chat_with_gopu(
     chat_in: ChatMessageSchema,
@@ -164,6 +166,7 @@ async def chat_with_gopu(
 
     # Rate-limit exemption check
     from app.crud.ratelimit_exception import crud_ratelimit_exception
+
     is_exempt = await crud_ratelimit_exception.is_exempt(db, current_user.phone_or_email)
 
     if not is_exempt and await crud_user.is_device_banned(db, device_id=device_hash):
@@ -175,6 +178,9 @@ async def chat_with_gopu(
             ),
         )
 
+    # Check (and consume) daily quota BEFORE doing any expensive work.
+    # If the AI subsequently fails, the user message is cleaned up below so the
+    # quota is a fair reflection of actual conversations attempted.
     can_proceed = await crud_user.increment_daily_count(
         db, user=current_user, ip=client_ip, user_agent=user_agent
     )
@@ -210,11 +216,12 @@ async def chat_with_gopu(
     session_id = chat_session.id
     is_first_message = not bool(chat_session.title)
 
-    # Save user message
-    await crud_chat.add_message(db, session_id=session_id, role="user", content=chat_in.message)
-
-    # Load history for context (full list; service handles token budget)
-    all_messages = await crud_chat.get_messages(db, session_id=session_id)
+    # ------------------------------------------------------------------
+    # Persist user message (will be deleted on AI failure)
+    # ------------------------------------------------------------------
+    user_msg_obj = await crud_chat.add_message(
+        db, session_id=session_id, role="user", content=chat_in.message
+    )
 
     # ------------------------------------------------------------------
     # Pet context injection (medical complaint mode)
@@ -222,6 +229,7 @@ async def chat_with_gopu(
     pet_context: str | None = None
     if chat_in.pet_id:
         from app.crud.pet import crud_pet
+
         pet = await crud_pet.get_by_id(db, pet_id=chat_in.pet_id, user_id=current_user.id)
         if pet:
             parts = [f"Name: {pet.name}", f"Type: {pet.pet_type}"]
@@ -234,16 +242,25 @@ async def chat_with_gopu(
             pet_context = " | ".join(parts)
 
     # ------------------------------------------------------------------
-    # AI response
+    # AI response — on failure, clean up the user message and raise 503
     # ------------------------------------------------------------------
-    ai_response_dict = await ai_chat_service_impl.get_response(
-        user_message=chat_in.message,
-        image_base64=chat_in.image_base64,
-        chat_history=all_messages,
-        language=chat_in.language or "Hindi",
-        session_summary=chat_session.summary,
-        pet_context=pet_context,
-    )
+    all_messages = await crud_chat.get_messages(db, session_id=session_id)
+    try:
+        ai_response_dict = await ai_chat_service_impl.get_response(
+            user_message=chat_in.message,
+            image_base64=chat_in.image_base64,
+            chat_history=all_messages,
+            language=chat_in.language or "Hindi",
+            session_summary=chat_session.summary,
+            pet_context=pet_context,
+        )
+    except Exception as exc:
+        logger.error("AI response failed for session %s: %s", session_id, exc)
+        await crud_chat.delete_message(db, message_id=user_msg_obj.id)
+        raise HTTPException(
+            status_code=503,
+            detail="Our AI expert is currently unavailable. Please try again in a moment.",
+        ) from exc
 
     response_text = ai_response_dict["response"]
     severity = ai_response_dict.get("severity", "low")
@@ -258,17 +275,17 @@ async def chat_with_gopu(
     )
 
     # ------------------------------------------------------------------
-    # Session metadata: auto-title on first exchange, auto-summarise on long sessions
+    # Session metadata: auto-title + background summarise
     # ------------------------------------------------------------------
     if is_first_message:
         title = ai_chat_service_impl.derive_session_title(chat_in.message)
         await crud_chat.update_session_meta(db, session_id=session_id, title=title)
-        chat_session.title = title  # reflect in response below
+        chat_session.title = title
 
-    total_messages = len(all_messages) + 1  # +1 for assistant message just saved
-    if total_messages >= _SUMMARISE_THRESHOLD and total_messages % 10 == 0:
+    total_messages = len(all_messages) + 1
+    if total_messages >= SUMMARISE_AFTER_MESSAGES and total_messages % 10 == 0:
         lang = normalize_ui_language(chat_in.language or "Hindi")
-        background_tasks.add_task(_maybe_summarise, session_id, lang, db)
+        background_tasks.add_task(_maybe_summarise, session_id, lang)
 
     remaining = max(0, 10 - current_user.daily_message_count)
 

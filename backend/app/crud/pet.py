@@ -1,11 +1,17 @@
 from typing import List, Optional
+
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+
 from app.models.pet import Pet
 from app.schemas.pet import PetCreate
 
+
 class CRUDPet:
-    async def get_by_id(self, db: AsyncSession, pet_id: str, user_id: str) -> Optional[Pet]:
+    async def get_by_id(
+        self, db: AsyncSession, pet_id: str, user_id: str
+    ) -> Optional[Pet]:
+        """Ownership-safe lookup — only returns the pet if it belongs to user_id."""
         result = await db.execute(
             select(Pet).where(Pet.id == pet_id, Pet.user_id == user_id)
         )
@@ -18,7 +24,7 @@ class CRUDPet:
             pet_type=pet_in.pet_type,
             age=pet_in.age,
             gender=pet_in.gender,
-            weight=pet_in.weight
+            weight=pet_in.weight,
         )
         db.add(db_obj)
         await db.commit()
@@ -28,5 +34,6 @@ class CRUDPet:
     async def get_multi_by_user(self, db: AsyncSession, user_id: str) -> List[Pet]:
         result = await db.execute(select(Pet).where(Pet.user_id == user_id))
         return list(result.scalars().all())
+
 
 crud_pet = CRUDPet()
