@@ -19,6 +19,7 @@ class AppointmentResponse(AppointmentCreate):
     id: str
     user_id: str
     status: str
+    user_email: Optional[str] = None
     
     class Config:
         from_attributes = True

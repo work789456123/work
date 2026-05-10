@@ -42,6 +42,15 @@ async def get_current_admin(
     db: AsyncSession = Depends(get_db)
 ) -> User:
     user = await get_current_user(credentials, db)
-    if user.role != "admin":
+    if user.role not in ["admin", "superadmin"]:
         raise HTTPException(status_code=403, detail="Not enough permissions")
+    return user
+
+async def get_super_admin(
+    credentials: HTTPAuthorizationCredentials = Depends(security),
+    db: AsyncSession = Depends(get_db)
+) -> User:
+    user = await get_current_user(credentials, db)
+    if user.role != "superadmin":
+        raise HTTPException(status_code=403, detail="Superadmin access required. Only the main ID can perform this action.")
     return user

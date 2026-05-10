@@ -13,6 +13,8 @@ const nextConfig: NextConfig = {
 			},
 			{ protocol: "http", hostname: "localhost", pathname: "/**" },
 			{ protocol: "https", hostname: "localhost", pathname: "/**" },
+			{ protocol: "http", hostname: "127.0.0.1", pathname: "/**" },
+			{ protocol: "https", hostname: "127.0.0.1", pathname: "/**" },
 			{ protocol: "http", hostname: "pashuvaani.com", pathname: "/**" },
 			{ protocol: "https", hostname: "pashuvaani.com", pathname: "/**" },
 		],

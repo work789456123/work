@@ -3,7 +3,7 @@ from typing import Optional
 
 class UserRegister(BaseModel):
     full_name: str
-    phone_or_email: str
+    email: EmailStr
     password: str
     role: Optional[str] = "user"
 
@@ -31,10 +31,29 @@ class CreditPurchase(BaseModel):
     payment_id: str
 
 
+# ─── Admin user management ───────────────────────────────────────────────────
+
+class AdminUserCreate(BaseModel):
+    full_name: str
+    email: str
+    password: str
+
+class AdminUserResponse(BaseModel):
+    id: str
+    full_name: str
+    phone_or_email: str
+    role: str
+    is_verified: bool
+
+    class Config:
+        from_attributes = True
+
+
 # ─── Forgot-password / OTP flow ─────────────────────────────────────────────
 
 class ForgotPasswordRequest(BaseModel):
     email: str
+    role: Optional[str] = None
 
 
 class VerifyOTPRequest(BaseModel):

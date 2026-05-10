@@ -13,4 +13,5 @@ from .ratelimit_exception import RatelimitException
 from .products import Product
 from .complaint_model import Complaint, ComplaintLog
 from .marketplace import Category, Seller, Cart, CartItem, Order, OrderItem
+from .medical_emergency import MedicalEmergency
 from .password_reset_otp import PasswordResetOTP

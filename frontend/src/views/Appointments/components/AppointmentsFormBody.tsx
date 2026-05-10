@@ -1,5 +1,6 @@
 import type { ComponentProps } from "react";
-import { appointmentsPage, appointmentTimeSlots } from "@/assets/content/appointments";
+import { useState } from "react";
+import { appointmentsPage, appointmentsPageHindi, appointmentTimeSlots } from "@/assets/content/appointments";
 import type { AppointmentsFormBodyProps } from "@/types/appointments";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,7 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle, Languages } from "lucide-react";
 
 const selectTriggerClass = cn(
   "h-11 border-[#E2E8E5] bg-[#FAFAFA]/80 focus:ring-[#1F6559]/35 focus:ring-2 focus:ring-offset-0"
@@ -25,8 +26,17 @@ function FieldGroup({ className, ...props }: ComponentProps<"div">) {
   return <div className={cn("space-y-2", className)} {...props} />;
 }
 
-export default function AppointmentsFormBody({ form, onFieldChange, onSubmit }: AppointmentsFormBodyProps) {
-  const c = appointmentsPage;
+export default function AppointmentsFormBody({ form, onFieldChange, onSubmit, lang, onLangToggle }: AppointmentsFormBodyProps) {
+  const c = lang === "hi" ? appointmentsPageHindi : appointmentsPage;
+  const [phoneTouched, setPhoneTouched] = useState(false);
+
+  const phoneError = phoneTouched && form.owner_number.length > 0 && form.owner_number.length !== 10;
+
+  const handlePhoneChange = (value: string) => {
+    // Allow only digits, max 10
+    const digits = value.replace(/\D/g, "").slice(0, 10);
+    onFieldChange("owner_number", digits);
+  };
 
   return (
     <Card
@@ -34,14 +44,40 @@ export default function AppointmentsFormBody({ form, onFieldChange, onSubmit }: 
       className="overflow-hidden border-[#C7D3CC]/70 bg-white/80 shadow-xl shadow-[#1F6559]/5 backdrop-blur-sm"
     >
       <CardHeader className="space-y-2 border-b border-[#E8EEEB] bg-gradient-to-br from-[#1FA7A6]/[0.06] via-transparent to-[#78D65C]/[0.06] pb-6">
-        <CardTitle id="appointments-form-title" className="heading-font text-2xl text-[#333] md:text-[1.65rem]">
-          {c.formTitle}
-        </CardTitle>
-        <CardDescription className="text-[15px] leading-relaxed text-[#6F6F6F]">{c.formDescription}</CardDescription>
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex-1" />
+          <div className="space-y-1.5 text-center">
+            <CardTitle id="appointments-form-title" className="heading-font text-2xl text-[#333] md:text-[1.65rem]">
+              {c.formTitle}
+            </CardTitle>
+            <CardDescription className="text-[15px] leading-relaxed text-[#6F6F6F]">{c.formDescription}</CardDescription>
+          </div>
+          {/* Language toggle button */}
+          <div className="flex flex-1 justify-end">
+            <button
+              type="button"
+              onClick={onLangToggle}
+              aria-label={lang === "hi" ? appointmentsPage.langToggle.switchToEnglish : appointmentsPage.langToggle.switchToHindi}
+              className={cn(
+                "flex shrink-0 items-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium transition-colors",
+                lang === "hi"
+                  ? "border-[#1F6559]/30 bg-[#1F6559]/10 text-[#1F6559] hover:bg-[#1F6559]/15"
+                  : "border-[#1FA7A6]/30 bg-[#1FA7A6]/10 text-[#1FA7A6] hover:bg-[#1FA7A6]/15"
+              )}
+            >
+              <Languages className="h-4 w-4" aria-hidden />
+              <span>
+                {lang === "hi"
+                  ? appointmentsPage.langToggle.switchToEnglish
+                  : appointmentsPage.langToggle.switchToHindi}
+              </span>
+            </button>
+          </div>
+        </div>
       </CardHeader>
 
       <CardContent className="pt-8">
-        <form id="appointments-booking-form" onSubmit={onSubmit} className="space-y-10">
+        <form id="appointments-booking-form" onSubmit={onSubmit} className="space-y-10" lang={lang === "hi" ? "hi" : "en"}>
           <div className="space-y-5">
             <h3 className="heading-font text-sm font-semibold uppercase tracking-wider text-[#1F6559]">
               {c.sections.pet}
@@ -101,10 +137,13 @@ export default function AppointmentsFormBody({ form, onFieldChange, onSubmit }: 
                 <Label htmlFor="appointments-field-age">{c.placeholders.age}</Label>
                 <Input
                   id="appointments-field-age"
+                  type="number"
+                  inputMode="numeric"
+                  min="0"
                   placeholder={c.placeholders.age}
                   className="h-11 border-[#E2E8E5] bg-[#FAFAFA]/80 focus-visible:ring-[#1F6559]/35"
                   value={form.age}
-                  onChange={(e) => onFieldChange("age", e.target.value)}
+                  onChange={(e) => onFieldChange("age", e.target.value.replace(/\D/g, ""))}
                 />
               </FieldGroup>
               <FieldGroup>
@@ -112,10 +151,13 @@ export default function AppointmentsFormBody({ form, onFieldChange, onSubmit }: 
                 <div className="flex gap-2">
                   <Input
                     id="appointments-field-weight"
+                    type="number"
+                    inputMode="decimal"
+                    min="0"
                     placeholder={c.placeholders.weight}
                     className="h-11 flex-1 border-[#E2E8E5] bg-[#FAFAFA]/80 focus-visible:ring-[#1F6559]/35"
                     value={form.weight}
-                    onChange={(e) => onFieldChange("weight", e.target.value)}
+                    onChange={(e) => onFieldChange("weight", e.target.value.replace(/[^\d.]/g, ""))}
                   />
                   <Select
                     value={form.weight_unit}
@@ -161,12 +203,26 @@ export default function AppointmentsFormBody({ form, onFieldChange, onSubmit }: 
                 <Input
                   id="appointments-field-owner_number"
                   type="tel"
+                  inputMode="numeric"
                   placeholder={c.placeholders.ownerPhone}
-                  className="h-11 border-[#E2E8E5] bg-[#FAFAFA]/80 focus-visible:ring-[#1F6559]/35"
+                  className={cn(
+                    "h-11 border-[#E2E8E5] bg-[#FAFAFA]/80 focus-visible:ring-[#1F6559]/35",
+                    phoneError && "border-red-400 focus-visible:ring-red-400/35"
+                  )}
                   value={form.owner_number}
-                  onChange={(e) => onFieldChange("owner_number", e.target.value)}
+                  onChange={(e) => handlePhoneChange(e.target.value)}
+                  onBlur={() => setPhoneTouched(true)}
+                  maxLength={10}
+                  pattern="\d{10}"
                   required
                 />
+                {phoneError && (
+                  <p className="text-xs text-red-500 mt-1">
+                    {lang === "hi"
+                      ? "कृपया 10 अंकों का फ़ोन नंबर दर्ज करें"
+                      : "Please enter a valid 10-digit phone number"}
+                  </p>
+                )}
               </FieldGroup>
             </div>
           </div>

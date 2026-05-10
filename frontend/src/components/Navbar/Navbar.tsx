@@ -24,6 +24,7 @@ import {
 	NavbarAuthDialog,
 	NavbarPetDialog,
 } from "@/components/Navbar/components/NavbarDialogs";
+import ProfileButton from "@/components/Navbar/components/ProfileButton";
 
 const Navbar = () => {
 	const router = useRouter();
@@ -42,15 +43,36 @@ const Navbar = () => {
 
 	const handleAuth = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
+		
+		// Validate phone number on registration
+		if (state.authMode === "register" && state.formData.phone.length < 10) {
+			toast.error("Phone number must be at least 10 digits");
+			return;
+		}
+		
 		try {
 			const endpoint =
 				state.authMode === "login" ? "/auth/login" : "/auth/register";
-			const response = await api.post<{ access_token: string; user: { full_name: string } }>(
+			
+			const payload = state.authMode === "login" 
+				? { phone_or_email: state.formData.phone_or_email, password: state.formData.password }
+				: { 
+						full_name: state.formData.full_name, 
+						email: state.formData.email, 
+						phone: state.formData.phone, 
+						password: state.formData.password,
+						role: state.formData.role 
+					};
+
+			const response = await api.post<{ access_token: string; user: { full_name: string; phone_or_email?: string } }>(
 				endpoint,
-				state.formData,
+				payload,
 			);
 			localStorage.setItem("token", response.data.access_token);
 			localStorage.setItem("user_name", response.data.user.full_name);
+			if (response.data.user.phone_or_email) {
+				localStorage.setItem("user_email", response.data.user.phone_or_email);
+			}
 			dispatch({
 				type: "AUTH_SUCCESS",
 				showPetDialog: state.authMode === "register",
@@ -103,6 +125,7 @@ const Navbar = () => {
 	const handleLogout = () => {
 		localStorage.removeItem("token");
 		localStorage.removeItem("user_name");
+		localStorage.removeItem("user_email");
 		dispatch({ type: "LOGOUT" });
 		router.push("/");
 		toast.success("Logged out successfully");

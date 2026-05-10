@@ -14,3 +14,4 @@ from app.models.device_usage import DeviceUsage
 from app.models.ratelimit_exception import RatelimitException
 from app.models.products import Product
 from app.models.marketplace import Category, Seller, Cart, CartItem, Order, OrderItem
+from app.models.medical_emergency import MedicalEmergency

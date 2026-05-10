@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useReducer, type FormEvent } from "react";
+import { useEffect, useReducer, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { CalendarHeart } from "lucide-react";
-import { appointmentsPage } from "@/assets/content/appointments";
+import { appointmentsPage, appointmentsPageHindi } from "@/assets/content/appointments";
 import { brand } from "@/assets/content/shared/brand";
 import AppointmentsFormBody from "./components/AppointmentsFormBody";
 import {
@@ -23,6 +23,8 @@ import {
 import { Button } from "@/components/ui/button";
 import PageTitle from "@/components/PageTitle";
 import PawTexture from "@/components/PawTexture";
+import api from "@/utils/api";
+import type { AppointmentLang } from "@/types/appointments";
 
 function AppointmentsPage() {
 	const router = useRouter();
@@ -30,6 +32,7 @@ function AppointmentsPage() {
 		appointmentsReducer,
 		initialAppointmentState,
 	);
+	const [lang, setLang] = useState<AppointmentLang>("en");
 
 	useEffect(() => {
 		const token = localStorage.getItem("token");
@@ -42,7 +45,7 @@ function AppointmentsPage() {
 		}
 	}, [router]);
 
-	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const submitData = {
 			...state.form,
@@ -50,11 +53,15 @@ function AppointmentsPage() {
 				? `${state.form.weight} ${state.form.weight_unit}`
 				: "NA",
 		};
-		console.log(submitData);
-		dispatch({ type: "SUBMIT_SUCCESS" });
+		try {
+			await api.post("/appointments", submitData);
+			dispatch({ type: "SUBMIT_SUCCESS" });
+		} catch {
+			toast.error("Failed to book appointment. Please try again.");
+		}
 	};
 
-	const c = appointmentsPage;
+	const c = lang === "hi" ? appointmentsPageHindi : appointmentsPage;
 
 	return (
 		<UserPageShell id="page-appointments" className="min-h-screen bg-teal-100/50">
@@ -106,6 +113,8 @@ function AppointmentsPage() {
 							dispatch({ type: "SET_FIELD", field, value })
 						}
 						onSubmit={handleSubmit}
+						lang={lang}
+						onLangToggle={() => setLang((prev) => (prev === "en" ? "hi" : "en"))}
 					/>
 				</div>
 			</section>

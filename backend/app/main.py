@@ -18,30 +18,42 @@ logger = logging.getLogger(__name__)
 # Initialize FastAPI app
 app = FastAPI(title=settings.PROJECT_NAME, redirect_slashes=False)
 
-# Debug middleware to log all incoming requests
-@app.middleware("http")
-async def log_requests(request: Request, call_next):
-    logger.info(f"Incoming request: {request.method} {request.url.path}")
-    response = await call_next(request)
-    return response
-
 # --- Configure CORS Middleware ---
-# MUST be added before including routers to ensure preflight requests are handled
 raw_origins = settings.CORS_ORIGINS.split(",") if settings.CORS_ORIGINS else []
-# Clean up whitespace and expand common variations if not present
-base_origins = [o.strip() for o in raw_origins if o.strip() and o.strip() != "*"]
-origins = list(set(base_origins + [
-    "https://pashuvaani.com",
-    "https://www.pashuvaani.com",
-    "https://dev.pashuvaani.com"
-]))
+base_origins = [o.strip() for o in raw_origins if o.strip()]
+
+if "*" in base_origins:
+    origins = ["*"]
+else:
+    origins = list(set(base_origins + [
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "http://localhost:3001",
+        "http://127.0.0.1:3001",
+        "https://pashuvaani.com",
+        "https://www.pashuvaani.com",
+        "https://dev.pashuvaani.com"
+    ]))
 
 logger.info(f"Configured CORS origins: {origins}")
+
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    try:
+        logger.info(f"Incoming request: {request.method} {request.url.path}")
+        response = await call_next(request)
+        return response
+    except Exception as e:
+        logger.error(f"Error processing request {request.method} {request.url.path}: {e}")
+        return JSONResponse(
+            status_code=500,
+            content={"detail": f"Internal Server Error: {str(e)}"}
+        )
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
-    allow_credentials=True,
+    allow_credentials=True if "*" not in origins else False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -65,7 +77,6 @@ def root():
 async def db_health():
     try:
         async with engine.connect() as conn:
-            # Keep this bounded so ALB can quickly mark bad targets unhealthy.
             await asyncio.wait_for(conn.execute(text("SELECT 1")), timeout=3)
         return {"status": "ok"}
     except Exception as exc:
