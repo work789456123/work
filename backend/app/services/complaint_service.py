@@ -1,8 +1,9 @@
 import datetime
 import random
 import string
+from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func
+from sqlalchemy import select
 from app.models.complaint_model import Complaint, ComplaintLog, ComplaintStatus
 from app.models.appointment import Appointment
 from app.models.doctor import Doctor
@@ -24,7 +25,16 @@ class ComplaintService:
 
     async def create_complaint(self, db: AsyncSession, user_id: str, obj_in: ComplaintCreate) -> Complaint:
         tracking_id = await self.generate_tracking_id(db)
-        
+
+        if obj_in.pet_id:
+            pet_result = await db.execute(select(Pet).where(Pet.id == obj_in.pet_id))
+            pet_row = pet_result.scalar_one_or_none()
+            if not pet_row or pet_row.user_id != user_id:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Invalid pet: not found or does not belong to your account.",
+                )
+
         db_complaint = Complaint(
             id=tracking_id,
             user_id=user_id,
@@ -40,7 +50,7 @@ class ComplaintService:
         
         if obj_in.book_appointment:
             # Try to find a doctor
-            doctor_result = await db.execute(select(Doctor).where(Doctor.availability_status == "available").limit(1))
+            doctor_result = await db.execute(select(Doctor).where(Doctor.availability == "available").limit(1))
             doctor = doctor_result.scalar_one_or_none()
             
             # Get pet info if pet_id is provided
@@ -50,7 +60,7 @@ class ComplaintService:
                 pet = pet_result.scalar_one_or_none()
                 if pet:
                     pet_name = pet.name
-                    pet_type = pet.species
+                    pet_type = pet.pet_type
                     gender = pet.gender
 
             # Create appointment

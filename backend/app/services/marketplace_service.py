@@ -1,7 +1,7 @@
 from typing import List, Optional
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, update, delete
-from app.models.marketplace import Category, Seller, Cart, CartItem, Order, OrderItem
+from sqlalchemy import select, update
+from app.models.marketplace import Category, Seller
 from app.models.products import Product
 from app.schemas.marketplace import CategoryCreate, SellerCreate, ProductCreate, ProductUpdate
 
@@ -47,16 +47,37 @@ class MarketplaceService:
         result = await db.execute(query)
         return result.scalars().all()
 
-    async def update_product(self, db: AsyncSession, product_id: str, obj_in: ProductUpdate) -> Optional[Product]:
+    async def get_product(self, db: AsyncSession, product_id: str) -> Optional[Product]:
+        result = await db.execute(
+            select(Product).where(Product.id == product_id, Product.is_deleted == False)
+        )
+        return result.scalar_one_or_none()
+
+    async def update_product_for_seller(
+        self, db: AsyncSession, seller_id: str, product_id: str, obj_in: ProductUpdate
+    ) -> Optional[Product]:
+        product = await self.get_product(db, product_id)
+        if not product or product.seller_id != seller_id:
+            return None
         update_data = obj_in.model_dump(exclude_unset=True)
-        query = update(Product).where(Product.id == product_id).values(**update_data).returning(Product)
+        query = (
+            update(Product)
+            .where(Product.id == product_id, Product.seller_id == seller_id)
+            .values(**update_data)
+            .returning(Product)
+        )
         result = await db.execute(query)
         await db.commit()
         return result.scalar_one_or_none()
 
-    async def delete_product(self, db: AsyncSession, product_id: str):
-        query = update(Product).where(Product.id == product_id).values(is_deleted=True)
-        await db.execute(query)
+    async def delete_product_for_seller(self, db: AsyncSession, seller_id: str, product_id: str) -> bool:
+        product = await self.get_product(db, product_id)
+        if not product or product.seller_id != seller_id:
+            return False
+        await db.execute(
+            update(Product).where(Product.id == product_id, Product.seller_id == seller_id).values(is_deleted=True)
+        )
         await db.commit()
+        return True
 
 marketplace_service = MarketplaceService()

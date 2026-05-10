@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import AsyncMock, MagicMock
 from app.services.complaint_service import complaint_service
 from app.schemas.complaint import ComplaintCreate
 from app.models.complaint_model import ComplaintStatus, ComplaintPriority
@@ -36,37 +36,43 @@ class TestComplaintService(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(complaint.status, ComplaintStatus.OPEN)
         db.add.assert_called()
 
-    @patch("app.services.complaint_service.select")
-    async def test_create_complaint_with_appointment(self, mock_select):
+    async def test_create_complaint_with_appointment(self):
         db = AsyncMock()
-        
+
         mock_result_id = MagicMock()
         mock_result_id.scalar_one_or_none.return_value = None
-        
+
+        mock_pet_owner = MagicMock()
+        mock_pet_owner.scalar_one_or_none.return_value = MagicMock(
+            user_id="user-123", name="Bessie", pet_type="Cow", gender="Female"
+        )
+
         mock_result_doc = MagicMock()
-        mock_result_doc.scalar_one_or_none.return_value = MagicMock(id="doc-123", availability_status="available")
-        
-        mock_result_pet = MagicMock()
-        mock_result_pet.scalar_one_or_none.return_value = MagicMock(name="Bessie", species="Cow", gender="Female")
-        
+        mock_result_doc.scalar_one_or_none.return_value = MagicMock(id="doc-123", availability="available")
+
+        mock_pet_appt = MagicMock()
+        mock_pet_appt.scalar_one_or_none.return_value = MagicMock(
+            name="Bessie", pet_type="Cow", gender="Female"
+        )
+
         db.execute.side_effect = [
-            mock_result_id, # Tracking ID check
-            mock_result_doc, # Doctor search
-            mock_result_pet  # Pet search
+            mock_result_id,  # tracking id collision check
+            mock_pet_owner,  # pet ownership validation
+            mock_result_doc,  # doctor
+            mock_pet_appt,  # pet details for appointment
         ]
-        
+
         obj_in = ComplaintCreate(
             title="Sick cow",
             description="Cow has fever",
             pet_id="pet-123",
             book_appointment=True,
-            appointment_time_slot="Morning"
+            appointment_time_slot="Morning",
         )
-        
+
         complaint = await complaint_service.create_complaint(db, user_id="user-123", obj_in=obj_in)
-        
+
         self.assertEqual(complaint.status, ComplaintStatus.ASSIGNED)
-        # Verify db.add was called for Complaint, Appointment, and Log
         self.assertEqual(db.add.call_count, 3)
 
 if __name__ == "__main__":

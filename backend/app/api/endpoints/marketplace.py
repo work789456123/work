@@ -2,7 +2,7 @@ from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.session import get_db
-from app.api.dependencies import get_current_user
+from app.api.dependencies import get_current_user, get_current_admin
 from app.models.user import User
 from app.schemas.marketplace import (
     CategoryCreate, CategoryResponse, 
@@ -18,7 +18,7 @@ router = APIRouter()
 async def create_category(
     category_in: CategoryCreate,
     db: AsyncSession = Depends(get_db),
-    # Add admin check here if needed
+    _admin: User = Depends(get_current_admin),
 ):
     return await marketplace_service.create_category(db, obj_in=category_in)
 
@@ -65,14 +65,13 @@ async def update_product(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    # Ownership check
     seller = await marketplace_service.get_seller_by_user(db, current_user.id)
     if not seller:
         raise HTTPException(status_code=403, detail="Not authorized")
-    
-    # Ideally check if product belongs to this seller here
-    
-    product = await marketplace_service.update_product(db, product_id=product_id, obj_in=product_in)
+
+    product = await marketplace_service.update_product_for_seller(
+        db, seller_id=seller.id, product_id=product_id, obj_in=product_in
+    )
     if not product:
         raise HTTPException(status_code=404, detail="Product not found")
     return product
@@ -83,6 +82,10 @@ async def delete_product(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    # Ownership check...
-    await marketplace_service.delete_product(db, product_id=product_id)
+    seller = await marketplace_service.get_seller_by_user(db, current_user.id)
+    if not seller:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    deleted = await marketplace_service.delete_product_for_seller(db, seller_id=seller.id, product_id=product_id)
+    if not deleted:
+        raise HTTPException(status_code=404, detail="Product not found")
     return None
