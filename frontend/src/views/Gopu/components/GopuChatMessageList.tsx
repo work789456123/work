@@ -6,6 +6,7 @@ import { MessageSquare, Loader2, Plus, AlertTriangle } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { useRouter } from "next/navigation";
 import { gopuChat } from "@/assets/content/gopu";
+import { FAQ_LIST } from "@/data/chatbot";
 import type { GopuChatMessageListProps } from "@/types/gopu";
 
 export default function GopuChatMessageList({
@@ -13,6 +14,7 @@ export default function GopuChatMessageList({
   isLoading,
   messagesEndRef,
   messagesScrollRef,
+  onFAQClick,
 }: GopuChatMessageListProps) {
   const router = useRouter();
   const copy = gopuChat;
@@ -113,6 +115,29 @@ export default function GopuChatMessageList({
           </div>
         </div>
       ))}
+
+      {!isLoading && messages.length > 0 && messages[messages.length - 1].role === "assistant" && !messages.some(m => m.role === "user" && !FAQ_LIST.some(f => f.question === m.content)) && (
+        <div className="flex flex-col items-start gap-4 ml-2 mt-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
+          <div className="flex items-center gap-2 ml-1">
+            <div className="w-1.5 h-1.5 rounded-full bg-[#1F6559]" />
+            <p className="text-xs font-bold text-[#1F6559]/70 uppercase tracking-widest">Suggested Questions</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 w-full max-w-2xl">
+            {FAQ_LIST.map((faq, index) => (
+              <button
+                key={index}
+                onClick={() => onFAQClick?.(faq)}
+                className="text-left px-5 py-4 rounded-2xl bg-white border border-[#1F6559]/10 text-[#1F6559] text-[13px] font-semibold hover:bg-teal-50 hover:border-[#1F6559]/30 transition-all duration-300 shadow-sm hover:shadow-md flex items-center justify-between group active:scale-[0.98]"
+              >
+                <span className="leading-tight pr-4">{faq.question}</span>
+                <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[#1F6559]/5 flex items-center justify-center group-hover:bg-[#1F6559] group-hover:text-white transition-colors duration-300">
+                  <Plus className="w-3.5 h-3.5" />
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
       {isLoading && (
         <div className="flex justify-start">
           <div className="bg-[#FAFAFA] border border-[#EAEAEA] p-4 rounded-2xl rounded-tl-sm flex items-center gap-2">

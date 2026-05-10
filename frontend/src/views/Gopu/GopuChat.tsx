@@ -22,6 +22,7 @@ const GopuChat = () => {
 		startRecording,
 		stopRecording,
 		handleSend,
+		handleFAQClick,
 	} = useGopuChatController();
 
 	const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
@@ -103,6 +104,7 @@ const GopuChat = () => {
 						isLoading={state.isLoading}
 						messagesEndRef={messagesEndRef}
 						messagesScrollRef={messagesScrollRef}
+						onFAQClick={handleFAQClick}
 					/>
 					<GopuChatInputFooter
 						input={state.input}

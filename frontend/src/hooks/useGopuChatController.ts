@@ -6,6 +6,7 @@ import api from "@/utils/api";
 import { gopuReducer, initialGopuState } from "@/views/Gopu/gopuChatReducer";
 import type { CreditsBalanceResponse } from "@/types/api";
 import type { GopuChatMessage } from "@/types/gopu";
+import { DEFAULT_MESSAGE } from "@/data/chatbot";
 
 export function useGopuChatController() {
   const router = useRouter();
@@ -80,10 +81,17 @@ export function useGopuChatController() {
       }>("/chat/history");
       if (response.data.session_id) {
         dispatch({ type: "SET_SESSION_ID", value: response.data.session_id });
-        dispatch({ type: "SET_MESSAGES", messages: response.data.messages ?? [] });
+        const history = response.data.messages ?? [];
+        dispatch({ 
+          type: "SET_MESSAGES", 
+          messages: history.length > 0 ? history : [DEFAULT_MESSAGE] 
+        });
+      } else {
+        dispatch({ type: "SET_MESSAGES", messages: [DEFAULT_MESSAGE] });
       }
     } catch (error: unknown) {
       console.error("Failed to load history", error);
+      dispatch({ type: "SET_MESSAGES", messages: [DEFAULT_MESSAGE] });
     } finally {
       dispatch({ type: "SET_LOADING", value: false });
     }
@@ -139,7 +147,7 @@ export function useGopuChatController() {
       dispatch({ type: "SET_LOADING", value: true });
       const response = await api.post<{ session_id: string }>("/chat/sessions/new");
       dispatch({ type: "SET_SESSION_ID", value: response.data.session_id });
-      dispatch({ type: "SET_MESSAGES", messages: [] });
+      dispatch({ type: "SET_MESSAGES", messages: [DEFAULT_MESSAGE] });
       void fetchUserSessions();
       toast.success("New chat started");
     } catch (error: unknown) {
@@ -380,6 +388,19 @@ export function useGopuChatController() {
     }
   };
 
+  const handleFAQClick = useCallback((faq: { question: string; answer: string }) => {
+    dispatch({
+      type: "MERGE",
+      patch: {
+        messages: [
+          ...state.messages,
+          { role: "user", content: faq.question },
+          { role: "assistant", content: faq.answer },
+        ],
+      },
+    });
+  }, [state.messages]);
+
   return {
     state,
     dispatch,
@@ -392,5 +413,6 @@ export function useGopuChatController() {
     startRecording,
     stopRecording,
     handleSend,
+    handleFAQClick,
   };
 }
