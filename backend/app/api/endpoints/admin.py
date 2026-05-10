@@ -138,12 +138,11 @@ async def create_admin_user(
         await db.refresh(existing)
         return existing
 
-    from app.schemas.user import UserRegister
     new_user = await crud_user.create(
         db,
         user_in=UserRegister(
             full_name=user_in.full_name,
-            phone_or_email=user_in.email,
+            email=user_in.email,
             password=user_in.password,
             role="admin",
         ),
@@ -216,7 +215,7 @@ async def create_regular_user(
     current_admin: User = Depends(get_current_admin),
 ):
     """Create a new regular user from admin panel."""
-    existing = await crud_user.get_by_phone_or_email(db, phone_or_email=user_in.phone_or_email)
+    existing = await crud_user.get_by_phone_or_email(db, phone_or_email=user_in.email)
     if existing:
         raise HTTPException(status_code=400, detail="User already exists")
         

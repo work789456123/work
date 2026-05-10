@@ -31,8 +31,6 @@ class CreditPurchase(BaseModel):
     payment_id: str
 
 
-# ─── Forgot-password / OTP flow ─────────────────────────────────────────────
-
 # ─── Admin user management ───────────────────────────────────────────────────
 
 class AdminUserCreate(BaseModel):
