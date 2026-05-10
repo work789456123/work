@@ -1,8 +1,10 @@
 from typing import List
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+from sqlalchemy.orm import joinedload
 from app.models.appointment import Appointment
-from app.schemas.appointment import AppointmentCreate
+from app.models.user import User
+from app.schemas.appointment import AppointmentCreate, AppointmentResponse
 
 class CRUDAppointment:
     async def create(self, db: AsyncSession, appointment_in: AppointmentCreate, user_id: str) -> Appointment:
@@ -26,13 +28,29 @@ class CRUDAppointment:
         await db.refresh(db_obj)
         return db_obj
 
+    def _to_response(self, appt: Appointment) -> AppointmentResponse:
+        """Convert ORM object to response schema, injecting user_email if loaded."""
+        data = AppointmentResponse.model_validate(appt)
+        if appt.user:
+            data.user_email = appt.user.phone_or_email
+        return data
+
     async def get_multi_by_user(self, db: AsyncSession, user_id: str) -> List[Appointment]:
-        result = await db.execute(select(Appointment).where(Appointment.user_id == user_id))
+        result = await db.execute(
+            select(Appointment)
+            .where(Appointment.user_id == user_id)
+            .order_by(Appointment.id.desc())
+        )
         return list(result.scalars().all())
         
-    async def get_all(self, db: AsyncSession) -> List[Appointment]:
-        result = await db.execute(select(Appointment))
-        return list(result.scalars().all())
+    async def get_all(self, db: AsyncSession) -> List[AppointmentResponse]:
+        result = await db.execute(
+            select(Appointment)
+            .options(joinedload(Appointment.user))
+            .order_by(Appointment.id.desc())
+        )
+        appointments = result.scalars().all()
+        return [self._to_response(a) for a in appointments]
         
     async def update_status(self, db: AsyncSession, appointment_id: str, status: str) -> Appointment | None:
         result = await db.execute(select(Appointment).where(Appointment.id == appointment_id))

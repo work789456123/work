@@ -31,7 +31,7 @@ class CRUDUser:
         hashed_password = pwd_context.hash(user_in.password)
         db_obj = User(
             full_name=user_in.full_name,
-            phone_or_email=user_in.phone_or_email,
+            phone_or_email=user_in.email,
             hashed_password=hashed_password,
             role=role,
             is_verified=True

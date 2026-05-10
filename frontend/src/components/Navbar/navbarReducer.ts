@@ -10,6 +10,8 @@ export const initialNavbarState: NavbarState = {
 	formData: {
 		full_name: "",
 		phone_or_email: "",
+		email: "",
+		phone: "",
 		password: "",
 		role: "user",
 	},

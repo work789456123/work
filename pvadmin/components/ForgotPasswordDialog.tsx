@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 
+type Mode = "admin" | "superadmin";
 type Step = "email" | "otp" | "reset" | "success";
 type StatusMsg = { type: "error" | "success"; text: string } | null;
 
@@ -16,80 +17,95 @@ export function ForgotPasswordDialog({
   open,
   onOpenChange,
   onBackToLogin,
-  apiBaseUrl = "http://localhost:8000",
+  apiBaseUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000",
 }: ForgotPasswordDialogProps) {
+  const [mode, setMode] = useState<Mode>("admin");
   const [step, setStep] = useState<Step>("email");
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [resetToken, setResetToken] = useState("");
-  const [newPw, setNewPw] = useState("");
-  const [confirmPw, setConfirmPw] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<StatusMsg>(null);
-  const [cooldown, setCooldown] = useState(0);
 
   useEffect(() => {
     if (!open) {
       const t = setTimeout(() => {
+        setMode("admin");
         setStep("email");
         setEmail("");
         setOtp("");
         setResetToken("");
-        setNewPw("");
-        setConfirmPw("");
+        setNewPassword("");
+        setConfirmPassword("");
         setStatus(null);
-        setCooldown(0);
       }, 300);
       return () => clearTimeout(t);
     }
   }, [open]);
 
-  useEffect(() => {
-    if (cooldown <= 0) return;
-    const t = setTimeout(() => setCooldown((c) => c - 1), 1000);
-    return () => clearTimeout(t);
-  }, [cooldown]);
+  const handleSubmitEmail = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus(null);
+    setLoading(true);
 
-  const post = async (path: string, body: object) => {
-    const res = await fetch(`${apiBaseUrl}/api${path}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
-    const data = await res.json();
-    if (!res.ok) {
-      const msg = typeof data.detail === "string" ? data.detail : "Request failed.";
-      if (res.status === 429) {
-        const ra = res.headers.get("retry-after");
-        setCooldown(ra ? parseInt(ra) : 60);
+    if (mode === "admin") {
+      try {
+        const res = await fetch(`${apiBaseUrl}/api/admin/password-reset-ticket`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(typeof data.detail === "string" ? data.detail : "Request failed.");
+        }
+        setStep("success");
+      } catch (err: unknown) {
+        setStatus({ type: "error", text: err instanceof Error ? err.message : "Failed to submit ticket." });
+      } finally {
+        setLoading(false);
       }
-      throw new Error(msg);
+    } else {
+      // Superadmin OTP flow - Request OTP
+      try {
+        const res = await fetch(`${apiBaseUrl}/api/auth/forgot-password`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, role: "superadmin" }),
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(typeof data.detail === "string" ? data.detail : "Request failed.");
+        }
+        setStatus({ type: "success", text: "OTP sent to your email." });
+        setStep("otp");
+      } catch (err: unknown) {
+        setStatus({ type: "error", text: err instanceof Error ? err.message : "Failed to send OTP." });
+      } finally {
+        setLoading(false);
+      }
     }
-    return data;
   };
 
-  const handleSendOTP = async (e: React.FormEvent) => {
+  const handleVerifyOtp = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus(null);
     setLoading(true);
     try {
-      await post("/auth/forgot-password", { email });
-      setStep("otp");
-      setCooldown(60);
-    } catch (err: unknown) {
-      setStatus({ type: "error", text: err instanceof Error ? err.message : "Failed to send OTP." });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleVerifyOTP = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setStatus(null);
-    setLoading(true);
-    try {
-      const data = await post("/auth/verify-otp", { email, otp });
+      const res = await fetch(`${apiBaseUrl}/api/auth/verify-otp`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, otp }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(typeof data.detail === "string" ? data.detail : "Verification failed.");
+      }
       setResetToken(data.reset_token);
+      setStatus(null);
       setStep("reset");
     } catch (err: unknown) {
       setStatus({ type: "error", text: err instanceof Error ? err.message : "Invalid OTP." });
@@ -98,38 +114,23 @@ export function ForgotPasswordDialog({
     }
   };
 
-  const handleResend = async () => {
-    setStatus(null);
-    setLoading(true);
-    try {
-      await post("/auth/forgot-password", { email });
-      setOtp("");
-      setCooldown(60);
-      setStatus({ type: "success", text: "A new OTP has been sent." });
-    } catch (err: unknown) {
-      setStatus({ type: "error", text: err instanceof Error ? err.message : "Could not resend OTP." });
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (newPw !== confirmPw) {
-      setStatus({ type: "error", text: "Passwords do not match." });
-      return;
-    }
     setStatus(null);
     setLoading(true);
     try {
-      await post("/auth/reset-password", {
-        reset_token: resetToken,
-        new_password: newPw,
-        confirm_password: confirmPw,
+      const res = await fetch(`${apiBaseUrl}/api/auth/reset-password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reset_token: resetToken, new_password: newPassword, confirm_password: confirmPassword }),
       });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(typeof data.detail === "string" ? data.detail : "Reset failed.");
+      }
       setStep("success");
     } catch (err: unknown) {
-      setStatus({ type: "error", text: err instanceof Error ? err.message : "Could not update password." });
+      setStatus({ type: "error", text: err instanceof Error ? err.message : "Failed to reset password." });
     } finally {
       setLoading(false);
     }
@@ -158,15 +159,17 @@ export function ForgotPasswordDialog({
           </p>
           <h2 className="text-2xl font-bold text-white">
             {step === "email" && "Forgot Password?"}
-            {step === "otp" && "Verify OTP"}
+            {step === "otp" && "Enter OTP"}
             {step === "reset" && "Set New Password"}
-            {step === "success" && "All Done!"}
+            {step === "success" && (mode === "admin" ? "Ticket Submitted" : "Password Reset")}
           </h2>
           <p className="text-sm text-white/80 mt-1">
-            {step === "email" && "Enter your registered email to receive an OTP."}
-            {step === "otp" && "Enter the 6-digit code sent to your inbox."}
-            {step === "reset" && "Choose a strong new password (min. 8 characters)."}
-            {step === "success" && "Your password has been updated successfully."}
+            {step === "email" && mode === "admin" && "Submit a ticket to the super admin to request a password reset."}
+            {step === "email" && mode === "superadmin" && "We will send an OTP to your registered email to reset your password."}
+            {step === "otp" && "Please enter the 6-digit OTP sent to your email."}
+            {step === "reset" && "Create a new strong password for your account."}
+            {step === "success" && mode === "admin" && "Your request has been received."}
+            {step === "success" && mode === "superadmin" && "Your password has been changed successfully."}
           </p>
           <button
             onClick={() => onOpenChange(false)}
@@ -179,6 +182,29 @@ export function ForgotPasswordDialog({
 
         {/* Body */}
         <div className="p-6 space-y-4">
+          {step === "email" && (
+            <div className="flex rounded-xl bg-slate-100 p-1 mb-4">
+              <button
+                type="button"
+                className={`flex-1 rounded-lg py-2 text-sm font-semibold transition-colors ${
+                  mode === "admin" ? "bg-white text-[#1F6559] shadow-sm" : "text-slate-500 hover:text-slate-700"
+                }`}
+                onClick={() => setMode("admin")}
+              >
+                Admin
+              </button>
+              <button
+                type="button"
+                className={`flex-1 rounded-lg py-2 text-sm font-semibold transition-colors ${
+                  mode === "superadmin" ? "bg-white text-[#1F6559] shadow-sm" : "text-slate-500 hover:text-slate-700"
+                }`}
+                onClick={() => setMode("superadmin")}
+              >
+                Super Admin
+              </button>
+            </div>
+          )}
+
           {status && (
             <div
               className={`rounded-xl border px-3 py-2.5 text-sm ${
@@ -192,7 +218,7 @@ export function ForgotPasswordDialog({
           )}
 
           {step === "email" && (
-            <form onSubmit={handleSendOTP} className="space-y-4">
+            <form onSubmit={handleSubmitEmail} className="space-y-4">
               <input
                 type="email"
                 placeholder="your@email.com"
@@ -203,7 +229,7 @@ export function ForgotPasswordDialog({
                 className={inputClass}
               />
               <button type="submit" disabled={loading} className={btnClass}>
-                {loading ? "Sending…" : "Send OTP"}
+                {loading ? "Please wait…" : mode === "admin" ? "Submit Ticket" : "Send OTP"}
               </button>
               <button
                 type="button"
@@ -216,41 +242,26 @@ export function ForgotPasswordDialog({
           )}
 
           {step === "otp" && (
-            <form onSubmit={handleVerifyOTP} className="space-y-4">
-              <p className="text-sm text-slate-600">
-                OTP sent to <strong className="text-[#1F6559]">{email}</strong>. Expires in 7 minutes.
-              </p>
+            <form onSubmit={handleVerifyOtp} className="space-y-4">
               <input
                 type="text"
-                inputMode="numeric"
-                maxLength={6}
-                placeholder="• • • • • •"
+                placeholder="6-digit OTP"
                 value={otp}
-                onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                onChange={(e) => setOtp(e.target.value)}
                 required
-                autoComplete="one-time-code"
-                className={`${inputClass} text-center text-2xl tracking-[1rem] font-bold`}
+                maxLength={6}
+                className={inputClass}
               />
-              <button type="submit" disabled={loading || otp.length !== 6} className={btnClass}>
+              <button type="submit" disabled={loading} className={btnClass}>
                 {loading ? "Verifying…" : "Verify OTP"}
               </button>
-              <div className="flex items-center justify-between">
-                <button
-                  type="button"
-                  onClick={() => { setStep("email"); setStatus(null); setOtp(""); }}
-                  className="text-sm text-slate-500 hover:text-[#1F6559] transition"
-                >
-                  ← Back
-                </button>
-                <button
-                  type="button"
-                  onClick={handleResend}
-                  disabled={cooldown > 0 || loading}
-                  className="text-sm font-semibold text-[#1F6559] hover:underline disabled:opacity-40 transition"
-                >
-                  {cooldown > 0 ? `Resend in ${cooldown}s` : "Resend OTP"}
-                </button>
-              </div>
+              <button
+                type="button"
+                onClick={() => setStep("email")}
+                className="w-full text-sm text-slate-500 hover:text-[#1F6559] transition"
+              >
+                ← Change Email
+              </button>
             </form>
           )}
 
@@ -258,32 +269,24 @@ export function ForgotPasswordDialog({
             <form onSubmit={handleResetPassword} className="space-y-4">
               <input
                 type="password"
-                placeholder="New password (min 8 chars)"
-                value={newPw}
-                onChange={(e) => setNewPw(e.target.value)}
+                placeholder="New Password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
                 required
                 minLength={8}
-                autoComplete="new-password"
                 className={inputClass}
               />
               <input
                 type="password"
-                placeholder="Confirm password"
-                value={confirmPw}
-                onChange={(e) => setConfirmPw(e.target.value)}
+                placeholder="Confirm Password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
                 required
-                autoComplete="new-password"
-                className={`${inputClass} ${confirmPw && newPw !== confirmPw ? "border-red-400 ring-1 ring-red-300" : ""}`}
+                minLength={8}
+                className={inputClass}
               />
-              {confirmPw && newPw !== confirmPw && (
-                <p className="text-xs text-red-500">Passwords do not match.</p>
-              )}
-              <button
-                type="submit"
-                disabled={loading || newPw.length < 8 || newPw !== confirmPw}
-                className={btnClass}
-              >
-                {loading ? "Updating…" : "Update Password"}
+              <button type="submit" disabled={loading} className={btnClass}>
+                {loading ? "Resetting…" : "Reset Password"}
               </button>
             </form>
           )}
@@ -293,7 +296,11 @@ export function ForgotPasswordDialog({
               <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#1F6559]/10">
                 <span className="text-3xl">✅</span>
               </div>
-              <p className="text-slate-600 text-sm">You can now sign in with your new password.</p>
+              <p className="text-slate-600 text-sm">
+                {mode === "admin"
+                  ? "A password reset ticket has been sent to the super admin. They will contact you shortly."
+                  : "Your password has been successfully reset. You can now login with your new password."}
+              </p>
               <button
                 onClick={() => {
                   onOpenChange(false);
@@ -301,7 +308,7 @@ export function ForgotPasswordDialog({
                 }}
                 className={btnClass}
               >
-                Sign In
+                Back to Sign In
               </button>
             </div>
           )}
