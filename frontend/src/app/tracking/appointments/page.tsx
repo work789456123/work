@@ -30,6 +30,16 @@ interface Appointment {
   status: "pending" | "confirmed" | "completed" | "cancelled";
 }
 
+/** Shape returned by GET /appointments before we derive date/time strings. */
+interface AppointmentApiRow {
+  id: string;
+  pet_name: string;
+  pet_type: string;
+  owner_name: string;
+  time_slot: string;
+  status: Appointment["status"];
+}
+
 export default function AppointmentTrackingPage() {
   const router = useRouter();
 
@@ -53,15 +63,14 @@ export default function AppointmentTrackingPage() {
 
         const response = await api.get("/appointments");
 
-        const mappedData = response.data
-          .map((apt: any) => ({
+        const rows = response.data as AppointmentApiRow[];
+        const mappedData = rows
+          .map((apt) => ({
             ...apt,
             date: apt.time_slot.split(" ")[0] || "N/A",
             time: apt.time_slot.split(" ").slice(1).join(" ") || "N/A",
           }))
-          .sort((a: any, b: any) => {
-            return b.time_slot.localeCompare(a.time_slot);
-          });
+          .sort((a, b) => b.time_slot.localeCompare(a.time_slot));
 
         setAppointments(mappedData);
         setFilteredAppointments(mappedData);

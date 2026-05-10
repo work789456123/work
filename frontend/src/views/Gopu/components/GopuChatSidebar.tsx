@@ -65,8 +65,10 @@ export default function GopuChatSidebar({
 
 
 
-    } catch (err: any) {
-      setSubmitError(err.message || "An error occurred.");
+    } catch (err: unknown) {
+      setSubmitError(
+        err instanceof Error ? err.message : "An error occurred.",
+      );
     } finally {
       setIsSubmitting(false);
     }
