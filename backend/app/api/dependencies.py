@@ -26,11 +26,12 @@ async def get_current_user(
 ) -> User:
     token = credentials.credentials
     payload = verify_token(token)
-    
+
     user_id = payload.get("sub")
-    if not user_id:
+    if user_id is None or user_id == "":
         raise HTTPException(status_code=401, detail="Could not validate credentials")
-        
+    user_id = str(user_id)
+
     user = await crud_user.get_by_id(db, user_id=user_id)
     if not user:
         raise HTTPException(status_code=401, detail="User not found")

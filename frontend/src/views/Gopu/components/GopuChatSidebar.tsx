@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { getApiOrigin } from "@/utils/api";
 import { Plus, Clock, MessageSquare, X, AlertTriangle, Loader2 } from "lucide-react";
 import { gopuChat } from "@/assets/content/gopu";
 import type { GopuChatSidebarProps } from "@/types/gopu";
@@ -40,9 +41,8 @@ export default function GopuChatSidebar({
     setIsSubmitting(true);
     setSubmitError("");
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
       const token = localStorage.getItem("token");
-      const res = await fetch(`${API_URL}/api/medical-emergency`, {
+      const res = await fetch(`${getApiOrigin()}/api/medical-emergency`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
