@@ -442,25 +442,9 @@ export function NavbarAuthDialog({
 							</>
 						)}
 						<FieldGroup>
-							<div className="flex items-center justify-between gap-2">
-								<Label htmlFor="navbar-auth-password" className="text-[#333]">
-									{authDialog.labels.password}
-								</Label>
-								{isLogin && (
-									<button
-										type="button"
-										id="auth-forgot-password-link"
-										data-testid="auth-forgot-password-link"
-										onClick={() => {
-											onOpenChange(false);
-											setShowForgotPassword(true);
-										}}
-										className="shrink-0 text-xs font-semibold text-[#1F6559] underline-offset-4 transition hover:text-[#184F46] hover:underline"
-									>
-										Forgot password?
-									</button>
-								)}
-							</div>
+							<Label htmlFor="navbar-auth-password" className="text-[#333]">
+								{authDialog.labels.password}
+							</Label>
 							<div className="relative">
 								<Input
 									id="navbar-auth-password"
@@ -501,6 +485,21 @@ export function NavbarAuthDialog({
 						>
 							{isLogin ? authDialog.submitLogin : authDialog.submitRegister}
 						</Button>
+						<div className="flex flex-col items-center gap-1 border-t border-[#EAEAEA]/80 pt-3">
+							<button
+								type="button"
+								id="auth-forgot-password-link"
+								data-testid="auth-forgot-password-link"
+								onClick={() => {
+									onOpenChange(false);
+									setShowForgotPassword(true);
+								}}
+								className="text-sm font-semibold text-[#1F6559] underline-offset-4 transition hover:text-[#184F46] hover:underline"
+							>
+								{authDialog.forgotPassword}
+							</button>
+							<p className="text-center text-xs text-[#6F6F6F]">{authDialog.forgotPasswordHint}</p>
+						</div>
 						<div className="pt-1 flex flex-col items-center gap-1">
 							<p className="text-center text-sm leading-relaxed text-[#6F6F6F]">
 								{isLogin ? authDialog.toggleToRegister : authDialog.toggleToLogin}
