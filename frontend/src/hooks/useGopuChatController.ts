@@ -6,6 +6,9 @@ import api from "@/utils/api";
 import { gopuReducer, initialGopuState } from "@/views/Gopu/gopuChatReducer";
 import type { CreditsBalanceResponse } from "@/types/api";
 import type { GopuChatMessage } from "@/types/gopu";
+import { DEFAULT_MESSAGE } from "@/data/chatbot";
+
+const _SEVERITY_RE = /\[SEVERITY:\s*(low|moderate|critical)\s*\]/gi;
 
 export function useGopuChatController() {
   const router = useRouter();
@@ -26,20 +29,13 @@ export function useGopuChatController() {
     }
   }, []);
 
-  /** Scroll only the chat list panel — `scrollIntoView` on the sentinel scrolls the whole document. */
   const scrollToBottom = () => {
     const el = messagesScrollRef.current;
     if (!el) return;
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
-      });
-    });
+    requestAnimationFrame(() => requestAnimationFrame(() => el.scrollTo({ top: el.scrollHeight, behavior: "smooth" })));
   };
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [state.messages]);
+  useEffect(() => { scrollToBottom(); }, [state.messages]);
 
   const fetchCreditBalance = async () => {
     try {
@@ -49,9 +45,7 @@ export function useGopuChatController() {
         type: "MERGE",
         patch: {
           credits: data,
-          remainingMessages: data.is_exempt
-            ? "∞"
-            : Math.max(0, 10 - (data.daily_count ?? 0)),
+          remainingMessages: data.is_exempt ? "∞" : Math.max(0, 10 - (data.daily_count ?? 0)),
           limitReached: !data.can_chat,
         },
       });
@@ -62,9 +56,7 @@ export function useGopuChatController() {
 
   const fetchUserSessions = async () => {
     try {
-      const response = await api.get<{ sessions?: { id: string; title?: string; updatedAt?: string }[] }>(
-        "/chat/sessions"
-      );
+      const response = await api.get<{ sessions?: import("@/types/gopu").GopuSession[] }>("/chat/sessions");
       dispatch({ type: "SET_SESSIONS", sessions: response.data.sessions ?? [] });
     } catch (error: unknown) {
       console.error("Failed to fetch sessions", error);
@@ -74,16 +66,17 @@ export function useGopuChatController() {
   const loadLatestHistory = async () => {
     try {
       dispatch({ type: "SET_LOADING", value: true });
-      const response = await api.get<{
-        session_id?: string;
-        messages?: GopuChatMessage[];
-      }>("/chat/history");
+      const response = await api.get<{ session_id?: string; messages?: GopuChatMessage[] }>("/chat/history");
       if (response.data.session_id) {
         dispatch({ type: "SET_SESSION_ID", value: response.data.session_id });
-        dispatch({ type: "SET_MESSAGES", messages: response.data.messages ?? [] });
+        const history = response.data.messages ?? [];
+        dispatch({ type: "SET_MESSAGES", messages: history.length > 0 ? history : [DEFAULT_MESSAGE] });
+      } else {
+        dispatch({ type: "SET_MESSAGES", messages: [DEFAULT_MESSAGE] });
       }
     } catch (error: unknown) {
       console.error("Failed to load history", error);
+      dispatch({ type: "SET_MESSAGES", messages: [DEFAULT_MESSAGE] });
     } finally {
       dispatch({ type: "SET_LOADING", value: false });
     }
@@ -92,12 +85,8 @@ export function useGopuChatController() {
   useEffect(() => {
     try {
       const stored = localStorage.getItem("gopuChatLanguage");
-      if (stored === "English" || stored === "Hindi") {
-        dispatch({ type: "MERGE", patch: { language: stored } });
-      }
-    } catch {
-      /* ignore */
-    }
+      if (stored === "English" || stored === "Hindi") dispatch({ type: "MERGE", patch: { language: stored } });
+    } catch { /* ignore */ }
   }, []);
 
   useEffect(() => {
@@ -139,7 +128,7 @@ export function useGopuChatController() {
       dispatch({ type: "SET_LOADING", value: true });
       const response = await api.post<{ session_id: string }>("/chat/sessions/new");
       dispatch({ type: "SET_SESSION_ID", value: response.data.session_id });
-      dispatch({ type: "SET_MESSAGES", messages: [] });
+      dispatch({ type: "SET_MESSAGES", messages: [DEFAULT_MESSAGE] });
       void fetchUserSessions();
       toast.success("New chat started");
     } catch (error: unknown) {
@@ -157,24 +146,13 @@ export function useGopuChatController() {
       toast.error("Image upload is available only with paid plans.");
       return;
     }
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error("Image size should be less than 5MB");
-      return;
-    }
+    if (file.size > 5 * 1024 * 1024) { toast.error("Image size should be less than 5MB"); return; }
     const reader = new FileReader();
     reader.onloadend = () => {
       const result = reader.result;
       if (typeof result !== "string") return;
-      const parts = result.split(",");
-      const base64 = parts[1] ?? "";
-      dispatch({
-        type: "SET_UPLOADED_IMAGE",
-        value: {
-          file,
-          preview: result,
-          base64,
-        },
-      });
+      const base64 = result.split(",")[1] ?? "";
+      dispatch({ type: "SET_UPLOADED_IMAGE", value: { file, preview: result, base64 } });
     };
     reader.readAsDataURL(file);
   };
@@ -185,9 +163,7 @@ export function useGopuChatController() {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const recorder = new MediaRecorder(stream);
       const audioChunks: Blob[] = [];
-      recorder.ondataavailable = (ev) => {
-        audioChunks.push(ev.data);
-      };
+      recorder.ondataavailable = (ev) => audioChunks.push(ev.data);
       recorder.onstop = () => {
         const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
         const reader = new FileReader();
@@ -242,10 +218,7 @@ export function useGopuChatController() {
       ...(state.uploadedImage ? { image: state.uploadedImage.preview } : {}),
     };
     let messages: GopuChatMessage[] = [...state.messages, userMessage];
-    dispatch({
-      type: "MERGE",
-      patch: { messages, isLoading: true },
-    });
+    dispatch({ type: "MERGE", patch: { messages, isLoading: true } });
 
     try {
       const response = await api.post<{
@@ -267,85 +240,30 @@ export function useGopuChatController() {
       }
 
       if (response.data.limit_reached) {
-        messages = [
-          ...messages,
-          {
-            role: "assistant",
-            content: response.data.response,
-            isBlocked: true,
-          },
-        ];
-        dispatch({
-          type: "MERGE",
-          patch: {
-            messages,
-            limitReached: true,
-            remainingMessages: 0,
-            input: "",
-            uploadedImage: null,
-            isLoading: false,
-          },
-        });
+        messages = [...messages, { role: "assistant", content: response.data.response, isBlocked: true }];
+        dispatch({ type: "MERGE", patch: { messages, limitReached: true, remainingMessages: 0, input: "", uploadedImage: null, isLoading: false } });
       } else if (response.data.credits_warning) {
-        messages = [
-          ...messages,
-          {
-            role: "assistant",
-            content: response.data.response,
-            isWarning: true,
-            remaining: response.data.remaining,
-          },
-        ];
-        dispatch({
-          type: "MERGE",
-          patch: {
-            messages,
-            remainingMessages: response.data.remaining ?? state.remainingMessages,
-            input: "",
-            uploadedImage: null,
-            isLoading: false,
-          },
-        });
+        messages = [...messages, { role: "assistant", content: response.data.response, isWarning: true, remaining: response.data.remaining }];
+        dispatch({ type: "MERGE", patch: { messages, remainingMessages: response.data.remaining ?? state.remainingMessages, input: "", uploadedImage: null, isLoading: false } });
       } else {
         messages = [...messages, { role: "assistant", content: response.data.response }];
-        
-        // Automatically synthesize and play the response audio
+
+        // TTS (best-effort)
         try {
-          const ttsResponse = await api.post<{ audio_base64: string }>("/speech/synthesize", {
-            text: response.data.response,
-          });
+          const ttsResponse = await api.post<{ audio_base64: string }>("/speech/synthesize", { text: response.data.response });
           if (ttsResponse.data.audio_base64) {
             stopAssistantSpeech();
             const audio = new Audio(ttsResponse.data.audio_base64);
             ttsAudioRef.current = audio;
-            audio.addEventListener("ended", () => {
-              if (ttsAudioRef.current === audio) ttsAudioRef.current = null;
-            });
-            await audio.play().catch((e) => console.error("Audio auto-play blocked by browser", e));
+            audio.addEventListener("ended", () => { if (ttsAudioRef.current === audio) ttsAudioRef.current = null; });
+            await audio.play().catch((e) => console.error("Audio auto-play blocked", e));
           }
-        } catch (ttsError) {
-          console.error("Speech synthesis failed", ttsError);
-        }
+        } catch (ttsError) { console.error("Speech synthesis failed", ttsError); }
 
-        const dec =
-          state.credits && !state.credits.has_subscription
-            ? {
-                remainingMessages:
-                  typeof state.remainingMessages === "number"
-                    ? Math.max(0, state.remainingMessages - 1)
-                    : state.remainingMessages,
-              }
-            : {};
-        dispatch({
-          type: "MERGE",
-          patch: {
-            messages,
-            input: "",
-            uploadedImage: null,
-            isLoading: false,
-            ...dec,
-          },
-        });
+        const dec = state.credits && !state.credits.has_subscription
+          ? { remainingMessages: typeof state.remainingMessages === "number" ? Math.max(0, state.remainingMessages - 1) : state.remainingMessages }
+          : {};
+        dispatch({ type: "MERGE", patch: { messages, input: "", uploadedImage: null, isLoading: false, ...dec } });
       }
 
       if (fileInputRef.current) fileInputRef.current.value = "";
@@ -353,32 +271,33 @@ export function useGopuChatController() {
     } catch (error: unknown) {
       if (isAxiosError(error) && error.response?.status === 429) {
         const detail = (error.response.data as { detail?: string })?.detail;
-        messages = [
-          ...messages,
-          {
-            role: "assistant",
-            content: detail ?? "You've reached your daily limit.",
-            isBlocked: true,
-          },
-        ];
-        dispatch({
-          type: "MERGE",
-          patch: {
-            messages,
-            limitReached: true,
-            remainingMessages: 0,
-            isLoading: false,
-          },
-        });
+        messages = [...messages, { role: "assistant", content: detail ?? "You've reached your daily limit.", isBlocked: true }];
+        dispatch({ type: "MERGE", patch: { messages, limitReached: true, remainingMessages: 0, isLoading: false } });
       } else {
-        const detail = isAxiosError(error)
-          ? (error.response?.data as { detail?: string })?.detail
-          : undefined;
+        const detail = isAxiosError(error) ? (error.response?.data as { detail?: string })?.detail : undefined;
         toast.error(detail ?? "Failed to send message");
         dispatch({ type: "SET_LOADING", value: false });
       }
     }
   };
+
+  const handleFAQClick = useCallback(
+    (faq: { question: string; answer: string }) => {
+      // Strip any severity tags from pre-written answers before showing in the UI
+      const cleanAnswer = faq.answer.replace(_SEVERITY_RE, "").trim();
+      dispatch({
+        type: "MERGE",
+        patch: {
+          messages: [
+            ...state.messages,
+            { role: "user", content: faq.question },
+            { role: "assistant", content: cleanAnswer },
+          ],
+        },
+      });
+    },
+    [state.messages],
+  );
 
   return {
     state,
@@ -392,5 +311,6 @@ export function useGopuChatController() {
     startRecording,
     stopRecording,
     handleSend,
+    handleFAQClick,
   };
 }

@@ -138,7 +138,6 @@ async def create_admin_user(
         await db.refresh(existing)
         return existing
 
-    from app.schemas.user import UserRegister
     new_user = await crud_user.create(
         db,
         user_in=UserRegister(

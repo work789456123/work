@@ -65,8 +65,10 @@ export default function GopuChatSidebar({
 
 
 
-    } catch (err: any) {
-      setSubmitError(err.message || "An error occurred.");
+    } catch (err: unknown) {
+      setSubmitError(
+        err instanceof Error ? err.message : "An error occurred.",
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -130,7 +132,9 @@ export default function GopuChatSidebar({
                   className={`w-4 h-4 mt-1 ${sessionId === session.id ? "text-[#1F6559]" : "text-[#9F9F9F]"}`}
                 />
                 <div className="flex-1 truncate">
-                  <p className="text-sm font-medium truncate">{c.sessionLabel}</p>
+                  <p className="text-sm font-medium truncate">
+                    {session.title ?? c.sessionLabel}
+                  </p>
                   <p className="text-[10px] opacity-60">
                     {new Date(session.created_at ?? session.updatedAt ?? 0).toLocaleDateString()} at{" "}
                     {new Date(session.created_at ?? session.updatedAt ?? 0).toLocaleTimeString([], {

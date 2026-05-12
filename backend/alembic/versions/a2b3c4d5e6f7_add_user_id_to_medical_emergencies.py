@@ -1,7 +1,7 @@
 """add user_id to medical_emergencies
 
 Revision ID: a2b3c4d5e6f7
-Revises: ef0698c7e761
+Revises: c9153c74171b
 Create Date: 2026-05-06 12:00:00.000000
 
 """
@@ -13,7 +13,7 @@ import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
 revision: str = 'a2b3c4d5e6f7'
-down_revision: Union[str, None] = 'ef0698c7e761'
+down_revision: Union[str, None] = 'c9153c74171b'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 

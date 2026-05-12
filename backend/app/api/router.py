@@ -1,12 +1,33 @@
 from fastapi import APIRouter
 
-from app.api.endpoints import auth, pets, appointments, chat, speech, blogs, contact, career, doctors, admin, credits, slack, medical_emergency, whatsapp, telegram, pet_cabs
+from app.api.endpoints import (
+    auth,
+    pets,
+    appointments,
+    chat,
+    speech,
+    blogs,
+    contact,
+    career,
+    doctors,
+    admin,
+    credits,
+    complaints,
+    marketplace,
+    slack,
+    medical_emergency,
+    whatsapp,
+    telegram,
+    pet_cabs,
+)
 from app.api import product
 
 api_router = APIRouter()
 api_router.include_router(auth.router, prefix="/auth", tags=["auth"])
 api_router.include_router(credits.router, prefix="/credits", tags=["credits"])
 api_router.include_router(pets.router, prefix="/pets", tags=["pets"])
+api_router.include_router(complaints.router, prefix="/complaints", tags=["complaints"])
+api_router.include_router(marketplace.router, prefix="/marketplace", tags=["marketplace"])
 
 api_router.include_router(appointments.router, prefix="/appointments", tags=["appointments"])
 api_router.include_router(chat.router, prefix="/chat", tags=["chat"])
