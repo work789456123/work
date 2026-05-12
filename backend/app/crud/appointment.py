@@ -21,7 +21,8 @@ class CRUDAppointment:
             vaccination_status=appointment_in.vaccination_status,
             medical_history_available=appointment_in.medical_history_available,
             medical_history=appointment_in.medical_history,
-            time_slot=appointment_in.time_slot
+            time_slot=appointment_in.time_slot,
+            source=appointment_in.source,
         )
         db.add(db_obj)
         await db.commit()

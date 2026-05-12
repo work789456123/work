@@ -47,10 +47,32 @@ class Settings(BaseSettings):
     SLACK_WEBHOOK_URL: Optional[str] = None
     SLACK_WEBHOOK_URL_APPOINTMENTS: Optional[str] = None
     SLACK_WEBHOOK_URL_EMERGENCIES: Optional[str] = None
+    SLACK_WEBHOOK_URL_PET_CABS: Optional[str] = "https://hooks.slack.com/services/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"
     SLACK_SIGNING_SECRET: Optional[str] = None
+
+    # WhatsApp Business API (Meta Cloud API)
+    WHATSAPP_VERIFY_TOKEN: str = "pashuvaani_whatsapp_verify_2026"
+    WHATSAPP_ACCESS_TOKEN: Optional[str] = None
+    WHATSAPP_PHONE_NUMBER_ID: Optional[str] = None
+    WHATSAPP_API_VERSION: str = "v21.0"
+
+    # Groq API
+    GROQ_API_KEY: Optional[str] = None
+
+    # Telegram Bot
+    TELEGRAM_BOT_TOKEN: Optional[str] = None
+    TELEGRAM_VERIFY_TOKEN: str = "pashuvaani_telegram_verify_2026"
 
     # Frontend URL for links in emails
     FRONTEND_HOST: str = "http://localhost:3000"
+
+    # S3 Storage Settings
+    USE_S3: bool = False
+    S3_BUCKET: Optional[str] = None
+    S3_ACCESS_KEY: Optional[str] = None
+    S3_SECRET_KEY: Optional[str] = None
+    S3_REGION: str = "ap-south-1"
+    S3_CUSTOM_DOMAIN: Optional[str] = None  # e.g., "cdn.pashuvaani.com"
 
     model_config = SettingsConfigDict(env_file=".env", case_sensitive=True, extra="ignore")
 

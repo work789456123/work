@@ -121,6 +121,15 @@ export default function ProfileButton({ onLogout }: ProfileButtonProps) {
                 </div>
               </DropdownMenuItem>
               <DropdownMenuItem 
+                onClick={() => router.push("/tracking/pet-cabs")}
+                className="p-2.5 rounded-lg cursor-pointer hover:bg-[#1F6559]/5 focus:bg-[#1F6559]/5 hover:text-[#1F1F1F] focus:text-[#1F1F1F] text-[#1F1F1F]"
+              >
+                <div className="flex items-center">
+                  <Package className="h-4 w-4 mr-2.5 text-[#1F6559]" />
+                  <span className="text-sm font-medium">Pet Cab Tracking</span>
+                </div>
+              </DropdownMenuItem>
+              <DropdownMenuItem 
                 onClick={() => router.push("/tracking/medical-queries")}
                 className="p-2.5 rounded-lg cursor-pointer hover:bg-[#1F6559]/5 focus:bg-[#1F6559]/5 hover:text-[#1F1F1F] focus:text-[#1F1F1F] text-[#1F1F1F]"
               >

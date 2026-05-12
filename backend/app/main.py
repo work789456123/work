@@ -58,6 +58,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.on_event("startup")
+async def startup_event():
+    import app.db.base
+    try:
+        async with engine.begin() as conn:
+            await conn.run_sync(app.db.base.Base.metadata.create_all)
+        logger.info("Database tables verified/created successfully.")
+    except Exception as e:
+        logger.error(f"Error creating tables: {e}")
+
 # --- Static Files & Routers ---
 uploads_dir = Path("uploads")
 uploads_dir.mkdir(parents=True, exist_ok=True)

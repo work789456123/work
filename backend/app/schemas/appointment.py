@@ -14,6 +14,7 @@ class AppointmentCreate(BaseModel):
     medical_history_available: bool = False
     medical_history: Optional[str] = ""
     time_slot: str
+    source: str = "website"  # "website" or "whatsapp"
 
 class AppointmentResponse(AppointmentCreate):
     id: str

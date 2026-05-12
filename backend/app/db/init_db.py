@@ -73,7 +73,7 @@ async def init_db() -> None:
             logger.info("Seeding Admin User...")
             user_in = UserRegister(
                 full_name="System Admin",
-                phone_or_email=admin_email,
+                email=admin_email,
                 password=settings.ADMIN_PASSWORD
             )
             admin_user = await crud_user.create(db, user_in)

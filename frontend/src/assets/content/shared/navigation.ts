@@ -32,6 +32,12 @@ export const primaryNav = [
   },
   {
     spl: false,
+    name: "Travel with Pet",
+    link: "/travel-with-pet",
+    children: [],
+  },
+  {
+    spl: false,
     name: "About PashuVaani",
     link: null,
     children: [

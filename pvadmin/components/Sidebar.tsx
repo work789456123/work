@@ -17,6 +17,7 @@ import {
   ShieldCheck,
   Key,
   AlertTriangle,
+  Car
 } from "lucide-react";
 
 interface SidebarProps {
@@ -58,6 +59,7 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
     { name: "Vets", icon: <Stethoscope size={20} />, href: "/vets" },
     { name: "Medical Emergency", icon: <AlertTriangle size={20} />, href: "/vets/medical-emergencies" },
     { name: "Appointment", icon: <CalendarCheck size={20} />, href: "/appointments" },
+    { name: "Cabs Scheduled", icon: <Car size={20} />, href: "/cabs-scheduled" },
 
     // ✅ NEW PRODUCTS SECTION
     { name: "Products", icon: <Package size={20} />, href: "/products" },

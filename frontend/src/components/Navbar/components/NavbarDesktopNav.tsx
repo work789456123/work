@@ -37,8 +37,8 @@ export default function NavbarDesktopNav({
 				if (link.children?.length > 0) {
 					return (
 						<DropdownMenu key={link.name}>
-							<DropdownMenuTrigger className="pl-3 pr-1 py-2 text-sm font-medium rounded-lg transition-colors text-white/90 outline-none hover:text-white hover:bg-white/10 flex items-center">
-								{link.name} <ChevronDown className="ml-1 h-4 w-4" />
+							<DropdownMenuTrigger className="px-2 py-2 text-sm font-medium rounded-lg transition-colors text-white/90 outline-none hover:text-white hover:bg-white/10 flex items-center whitespace-nowrap">
+								{link.name} <ChevronDown className="ml-1 h-4 w-4 shrink-0" />
 							</DropdownMenuTrigger>
 							<DropdownMenuContent className="bg-white border-gray-200">
 								{link.children.map((child: PrimaryNavChild) => (
@@ -60,8 +60,8 @@ export default function NavbarDesktopNav({
 						href={link.link ?? "/"}
 						className={
 							link.spl
-								? "px-3 py-2 text-center text-sm font-medium rounded-lg bg-yellow-500 text-black hover:bg-yellow-400 transition-colors"
-								: `px-3 py-2 text-sm font-medium rounded-lg transition-colors ${pathname === link.link ? "text-white bg-white/20" : "text-white/90 hover:text-white hover:bg-white/10"} `
+								? "px-2 py-2 text-center text-sm font-medium rounded-lg bg-yellow-500 text-black hover:bg-yellow-400 transition-colors whitespace-nowrap"
+								: `px-2 py-2 text-sm font-medium rounded-lg transition-colors whitespace-nowrap ${pathname === link.link ? "text-white bg-white/20" : "text-white/90 hover:text-white hover:bg-white/10"} `
 						}
 					>
 						{link.name.split("\n").map((line, index) => (

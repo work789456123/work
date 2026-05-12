@@ -13,3 +13,6 @@ from app.models.device_usage import DeviceUsage
 from app.models.ratelimit_exception import RatelimitException
 from app.models.products import Product
 from app.models.medical_emergency import MedicalEmergency
+from app.models.whatsapp_session import WhatsAppSession
+from app.models.telegram_session import TelegramSession
+from app.models.pet_cab import PetCabBooking

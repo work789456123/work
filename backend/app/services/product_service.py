@@ -13,7 +13,18 @@ from app.models.products import Product
 class ProductService:
     def __init__(self) -> None:
         self.upload_dir = Path("uploads/products")
-        self.upload_dir.mkdir(parents=True, exist_ok=True)
+        if not settings.USE_S3:
+            self.upload_dir.mkdir(parents=True, exist_ok=True)
+        
+        self.s3_client = None
+        if settings.USE_S3:
+            import boto3
+            self.s3_client = boto3.client(
+                "s3",
+                aws_access_key_id=settings.S3_ACCESS_KEY,
+                aws_secret_access_key=settings.S3_SECRET_KEY,
+                region_name=settings.S3_REGION
+            )
 
     async def save_image(self, file: UploadFile | None) -> str | None:
         if file is None or file.filename is None or file.filename.strip() == "":
@@ -27,23 +38,59 @@ class ProductService:
             safe_name = uuid4().hex
 
         unique_name = f"{safe_name}{ext}"
-        image_path = self.upload_dir / unique_name
-
-        with image_path.open("wb") as buffer:
-            shutil.copyfileobj(file.file, buffer)
-
-        return f"/uploads/products/{unique_name}"
+        
+        if settings.USE_S3:
+            try:
+                # Upload to S3
+                key = f"products/{unique_name}"
+                self.s3_client.upload_fileobj(
+                    file.file,
+                    settings.S3_BUCKET,
+                    key,
+                    ExtraArgs={"ContentType": file.content_type}
+                )
+                
+                if settings.S3_CUSTOM_DOMAIN:
+                    return f"https://{settings.S3_CUSTOM_DOMAIN}/{key}"
+                else:
+                    return f"https://{settings.S3_BUCKET}.s3.{settings.S3_REGION}.amazonaws.com/{key}"
+            except Exception as e:
+                import logging
+                logging.error(f"S3 upload failed: {e}")
+                raise HTTPException(status_code=500, detail="Could not upload image to cloud storage")
+        else:
+            # Local storage
+            image_path = self.upload_dir / unique_name
+            with image_path.open("wb") as buffer:
+                shutil.copyfileobj(file.file, buffer)
+            return f"/uploads/products/{unique_name}"
 
     def delete_image_by_url(self, image_url: str | None) -> None:
         if not image_url:
             return
-        normalized = image_url.split("/uploads/products/")[-1]
-        image_name = normalized.split("?")[0]
-        if image_name == "":
-            return
-        image_path = self.upload_dir / image_name
-        if image_path.exists():
-            image_path.unlink()
+            
+        if settings.USE_S3:
+            try:
+                # Extract key from URL
+                # Assumes key starts after the domain
+                if settings.S3_CUSTOM_DOMAIN:
+                    key = image_url.split(f"{settings.S3_CUSTOM_DOMAIN}/")[-1]
+                else:
+                    key = image_url.split(".amazonaws.com/")[-1]
+                
+                self.s3_client.delete_object(Bucket=settings.S3_BUCKET, Key=key)
+            except Exception as e:
+                import logging
+                logging.error(f"S3 deletion failed: {e}")
+        else:
+            # Local deletion
+            normalized = image_url.split("/uploads/products/")[-1]
+            image_name = normalized.split("?")[0]
+            if image_name == "":
+                return
+            image_path = self.upload_dir / image_name
+            if image_path.exists():
+                image_path.unlink()
 
     async def create_product(
         self,

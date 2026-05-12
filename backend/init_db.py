@@ -34,7 +34,26 @@ async def init_db():
                     logger.info(f"Column '{col_name}' added successfully.")
 
         except Exception as e:
-            logger.error(f"Error checking/adding columns: {e}")
+            logger.error(f"Error checking/adding user columns: {e}")
+
+        # 3. Check for missing columns in 'appointments' table
+        try:
+            result = await conn.execute(text(
+                "SELECT column_name FROM information_schema.columns "
+                "WHERE table_name='appointments' AND column_name='source'"
+            ))
+            if not result.fetchone():
+                logger.info("Adding missing column 'source' to 'appointments' table...")
+                await conn.execute(text("ALTER TABLE appointments ADD COLUMN source VARCHAR DEFAULT 'website'"))
+                logger.info("Column 'source' added successfully.")
+        except Exception as e:
+            logger.error(f"Error checking/adding appointment columns: {e}")
+
+        # 4. Ensure TelegramSession table exists (Base.metadata.create_all handles this, but let's be explicit if needed)
+        try:
+             await conn.run_sync(Base.metadata.create_all)
+        except Exception as e:
+            logger.error(f"Error ensuring telegram tables: {e}")
 
     logger.info("Database initialization and schema check completed.")
 

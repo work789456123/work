@@ -25,5 +25,6 @@ class Appointment(Base):
     
     time_slot = Column(String, nullable=False)
     status = Column(String, default="pending") # pending, confirmed, cancelled
+    source = Column(String, default="website")  # "website" or "whatsapp"
     
     user = relationship("User", back_populates="appointments")

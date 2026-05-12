@@ -44,6 +44,7 @@ async def send_slack_notification(appointment_id: str, appointment_in: Appointme
                     {"type": "mrkdwn", "text": f"*Time Slot:*\n{appointment_in.time_slot}"},
                     {"type": "mrkdwn", "text": f"*Pet:*\n{appointment_in.pet_name} ({appointment_in.pet_type}, {appointment_in.gender})"},
                     {"type": "mrkdwn", "text": f"*Owner:*\n{appointment_in.owner_name} — {appointment_in.owner_number}"},
+                    {"type": "mrkdwn", "text": f"*Source:*\n{'📱 WhatsApp' if getattr(appointment_in, 'source', 'website') == 'whatsapp' else '🔹 Telegram' if getattr(appointment_in, 'source', 'website') == 'telegram' else '🌐 Website'}"},
                 ]
             },
             {"type": "divider"},

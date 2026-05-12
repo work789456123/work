@@ -48,6 +48,7 @@ export const footerSocial = {
 };
 
 export const footerLegal = [
-  { label: "Privacy Policy", to: "/privacy" },
+  { label: "Privacy Policy", to: "/privacy-policy" },
   { label: "Terms & Conditions", to: "/terms-and-conditions" },
+  { label: "Data Deletion", to: "/data-deletion" },
 ];

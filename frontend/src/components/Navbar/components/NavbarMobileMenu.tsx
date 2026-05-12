@@ -78,6 +78,13 @@ export default function NavbarMobileMenu({
 				Blog
 			</Link>
 			<Link
+				href="/travel-with-pet"
+				onClick={() => onClose()}
+				className="block px-4 py-3 text-sm font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10"
+			>
+				Travel with Pet
+			</Link>
+			<Link
 				href="/about"
 				onClick={() => onClose()}
 				className="block px-4 py-3 text-sm font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10"

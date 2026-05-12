@@ -20,6 +20,7 @@ interface Appointment {
   vaccination_status: boolean;
   medical_history_available: boolean;
   medical_history: string;
+  source: string;
 }
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
@@ -145,11 +146,12 @@ export default function AppointmentsPage() {
       {/* Table */}
       <section className="rounded-2xl border border-slate-100 bg-white shadow-sm overflow-hidden">
         {/* Table header */}
-        <div className="grid grid-cols-[2fr_1.2fr_1.2fr_1fr_1fr_140px] gap-4 border-b border-slate-100 bg-slate-50 px-6 py-4 text-[11px] font-bold uppercase tracking-wider text-slate-400">
+        <div className="grid grid-cols-[2fr_1.2fr_1.2fr_1fr_0.8fr_1fr_140px] gap-4 border-b border-slate-100 bg-slate-50 px-6 py-4 text-[11px] font-bold uppercase tracking-wider text-slate-400">
           <div>User</div>
           <div>Pet</div>
           <div>Owner</div>
           <div>Time Slot</div>
+          <div>Source</div>
           <div>Status</div>
           <div className="text-right">Actions</div>
         </div>
@@ -176,7 +178,7 @@ export default function AppointmentsPage() {
           appointments.map((appt, i) => (
             <div
               key={appt.id}
-              className={`grid grid-cols-[2fr_1.2fr_1.2fr_1fr_1fr_140px] items-center gap-4 px-6 py-5 transition-colors hover:bg-slate-50 ${
+              className={`grid grid-cols-[2fr_1.2fr_1.2fr_1fr_0.8fr_1fr_140px] items-center gap-4 px-6 py-5 transition-colors hover:bg-slate-50 ${
                 i !== appointments.length - 1 ? "border-b border-slate-100" : ""
               }`}
             >
@@ -208,6 +210,17 @@ export default function AppointmentsPage() {
 
               {/* Status */}
               <StatusBadge status={appt.status} />
+
+              {/* Source */}
+              <span
+                className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold ${
+                  appt.source === "whatsapp"
+                    ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                    : "bg-blue-50 text-blue-600 border-blue-200"
+                }`}
+              >
+                {appt.source === "whatsapp" ? "💬 WhatsApp" : appt.source === "telegram" ? "🔹 Telegram" : "🌐 Website"}
+              </span>
 
               {/* Actions */}
               <div className="flex items-center justify-end gap-2 shrink-0">
