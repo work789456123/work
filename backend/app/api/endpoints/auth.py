@@ -18,6 +18,9 @@ router = APIRouter()
 
 def create_access_token(data: dict) -> str:
     to_encode = data.copy()
+    # JWT "sub" must be a string; some callers passed ORM ids as non-strings.
+    if "sub" in to_encode and to_encode["sub"] is not None:
+        to_encode["sub"] = str(to_encode["sub"])
     expire = datetime.utcnow() + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)

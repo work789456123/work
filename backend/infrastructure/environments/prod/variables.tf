@@ -61,8 +61,8 @@ variable "instance_type" {
 
 variable "desired_capacity" {
   type        = number
-  default     = 1
-  description = "ECS EC2 capacity. Increase if tasks fail to place (Qdrant + backend + frontend on awsvpc can exhaust ENIs on small instances)."
+  default     = 2
+  description = "ECS EC2 capacity. With awsvpc, each task uses an ENI; small instance types fit ~2 tasks each (e.g. backend+frontend+qdrant needs ≥2 nodes or a larger instance_type)."
 }
 
 variable "min_size" {
@@ -105,6 +105,12 @@ variable "domain_name" {
 variable "record_name" {
   description = "App DNS record, e.g. app.example.com."
   type        = string
+}
+
+variable "additional_record_names" {
+  description = "Optional extra DNS names in the same hosted zone pointing at the same ALB (e.g. dev subdomain)."
+  type        = list(string)
+  default     = []
 }
 
 variable "acm_certificate_arn" {

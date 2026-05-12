@@ -96,7 +96,7 @@ resource "aws_lb_listener_rule" "backend_api_http" {
 
   condition {
     path_pattern {
-      values = ["/api", "/api/*"]
+      values = ["/api", "/api/", "/api/*"]
     }
   }
 }
@@ -129,7 +129,7 @@ resource "aws_lb_listener_rule" "backend_api_https" {
 
   condition {
     path_pattern {
-      values = ["/api", "/api/*"]
+      values = ["/api", "/api/", "/api/*"]
     }
   }
 }
