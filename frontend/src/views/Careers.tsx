@@ -72,7 +72,7 @@ const Careers = () => {
             return;
           }
           const base64Resume = raw.split(",")[1];
-          await api.post("/career/", {
+          await api.post("/career", {
             name: formData.name,
             phone: formData.phone,
             email: formData.email,
