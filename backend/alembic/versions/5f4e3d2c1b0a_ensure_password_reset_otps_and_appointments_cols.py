@@ -1,7 +1,7 @@
 """Ensure password_reset_otps exists; add missing appointments columns (prod repair).
 
 Revision ID: 5f4e3d2c1b0a
-Revises: a3b4c5d6e7f8
+Revises: b7463f1e9a2d
 Create Date: 2026-05-13
 
 Some databases reached current Alembic heads without applying earlier revisions
@@ -16,7 +16,7 @@ import sqlalchemy as sa
 from sqlalchemy import inspect
 
 revision: str = "5f4e3d2c1b0a"
-down_revision: Union[str, None] = "a3b4c5d6e7f8"
+down_revision: Union[str, None] = "b7463f1e9a2d"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
