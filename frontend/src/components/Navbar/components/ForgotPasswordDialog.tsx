@@ -553,7 +553,7 @@ export function ForgotPasswordDialog({
 			<DialogContent
 				id="navbar-dialog-forgot-password"
 				data-testid="forgot-password-dialog"
-				className="gap-0 max-h-[90dvh] overflow-y-auto overscroll-y-contain border-[#C7D3CC]/70 p-0 shadow-2xl shadow-[#1F6559]/10 sm:max-w-[420px]"
+				className="gap-0 max-h-[calc(100vh-1.5rem)] overflow-y-auto overscroll-y-contain border-[#C7D3CC]/70 p-0 shadow-2xl shadow-[#1F6559]/10 sm:max-w-[420px]"
 			>
 				{/* ── Header ─────────────────────────────────────────────── */}
 				<div className={cn(dialogHeaderClass, "px-6 pb-10 pt-6")}>
