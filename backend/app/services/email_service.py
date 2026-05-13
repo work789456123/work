@@ -19,13 +19,18 @@ class EmailService:
         self.use_tls = settings.SMTP_TLS
 
     def send_email(self, to_email: str, subject: str, html_content: str) -> bool:
-        """Send an email using SMTP."""
+        """Send an email using SMTP. Returns True only when the message was handed off to SMTP."""
         if not self.enabled:
-            logger.info(f"Emails disabled. Mocking email to {to_email}: {subject}")
-            return True
-            
+            logger.warning(
+                "EMAILS_ENABLED is false — no email was sent to %s (%s). "
+                "Set EMAILS_ENABLED=true and SMTP_* / EMAILS_FROM_* for password reset.",
+                to_email,
+                subject,
+            )
+            return False
+
         if not all([self.host, self.port, self.user, self.password]):
-            logger.warning("SMTP not fully configured. Email not sent.")
+            logger.warning("SMTP not fully configured (host/port/user/password). Email not sent.")
             return False
 
         try:

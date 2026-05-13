@@ -104,11 +104,13 @@ async def forgot_password(body: ForgotPasswordRequest, db: AsyncSession = Depend
                 )
             result = await otp_service.request_otp(db, email)
             if not result["success"]:
-                raise HTTPException(
-                    status_code=429,
-                    detail=result["message"],
-                    headers={"Retry-After": str(result.get("retry_after", 60))},
-                )
+                if result.get("reason") == "rate_limited":
+                    raise HTTPException(
+                        status_code=429,
+                        detail=result["message"],
+                        headers={"Retry-After": str(result.get("retry_after", 60))},
+                    )
+                raise HTTPException(status_code=503, detail=result["message"])
             return {"message": "OTP sent to your super admin email."}
 
         # Regular user flow: silent success to prevent enumeration
@@ -118,11 +120,13 @@ async def forgot_password(body: ForgotPasswordRequest, db: AsyncSession = Depend
             else:
                 result = await otp_service.request_otp(db, email)
                 if not result["success"]:
-                    raise HTTPException(
-                        status_code=429,
-                        detail=result["message"],
-                        headers={"Retry-After": str(result.get("retry_after", 60))},
-                    )
+                    if result.get("reason") == "rate_limited":
+                        raise HTTPException(
+                            status_code=429,
+                            detail=result["message"],
+                            headers={"Retry-After": str(result.get("retry_after", 60))},
+                        )
+                    raise HTTPException(status_code=503, detail=result["message"])
 
         return {"message": "If an account exists for this email, an OTP has been sent."}
     except HTTPException:

@@ -29,4 +29,14 @@ backend_environment = {
   ADMIN_EMAIL        = "admin@example.com"
   ADMIN_PASSWORD     = "secure-password"
   BACKEND_PUBLIC_URL = "https://dev.pashuvaani.com"
+
+  # Password-reset emails (SMTP). Without these, forgot-password returns 503 instead of a fake success.
+  # EMAILS_ENABLED     = "true"
+  # SMTP_HOST          = "email-smtp.ap-south-1.amazonaws.com"
+  # SMTP_PORT          = "587"
+  # SMTP_USER          = "SES_SMTP_USERNAME"
+  # SMTP_PASSWORD      = "SES_SMTP_PASSWORD"
+  # SMTP_TLS           = "true"
+  # EMAILS_FROM_EMAIL  = "noreply@your-verified-domain.com"
+  # EMAILS_FROM_NAME   = "PashuVaani"
 }

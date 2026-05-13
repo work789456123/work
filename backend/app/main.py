@@ -1,11 +1,16 @@
 import logging
 import asyncio
+from contextlib import asynccontextmanager
 from pathlib import Path
+
+from alembic import command
+from alembic.config import Config
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy import text
+
 from app.api.router import api_router
 from app.core.config import settings
 from app.db.session import engine
@@ -15,8 +20,38 @@ from app.api import product
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
+def _run_alembic_upgrade_head() -> None:
+    """Apply bundled Alembic revisions (same as `alembic upgrade head` in the image workdir)."""
+    root = Path(__file__).resolve().parents[1]
+    ini = root / "alembic.ini"
+    if not ini.is_file():
+        raise FileNotFoundError(f"alembic.ini not found at {ini}")
+    cfg = Config(str(ini))
+    command.upgrade(cfg, "head")
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Production-friendly for ECS image-only deploys: schema matches this process before serving traffic.
+    if not settings.SKIP_ALEMBIC_AT_STARTUP:
+        logger.info("Applying database migrations (alembic upgrade head)...")
+        await asyncio.to_thread(_run_alembic_upgrade_head)
+        logger.info("Database migrations are up to date.")
+    else:
+        logger.info("SKIP_ALEMBIC_AT_STARTUP is set; skipping Alembic on startup.")
+    try:
+        yield
+    finally:
+        await engine.dispose()
+
+
 # Initialize FastAPI app
-app = FastAPI(title=settings.PROJECT_NAME, redirect_slashes=False)
+app = FastAPI(
+    title=settings.PROJECT_NAME,
+    redirect_slashes=False,
+    lifespan=lifespan,
+)
 
 # --- Configure CORS Middleware ---
 raw_origins = settings.CORS_ORIGINS.split(",") if settings.CORS_ORIGINS else []
@@ -83,6 +118,3 @@ async def db_health():
         logger.exception("Database health check failed: %s", exc)
         return JSONResponse(status_code=503, content={"status": "degraded", "reason": "database_unreachable"})
 
-@app.on_event("shutdown")
-async def shutdown_db_client():
-    await engine.dispose()

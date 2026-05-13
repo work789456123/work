@@ -52,6 +52,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
+          # Backend image bundles alembic/versions; migrations run at FastAPI startup (app/main.py lifespan).
           context: ./backend
           file: ./backend/Dockerfile
           push: true
