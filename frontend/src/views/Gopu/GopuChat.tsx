@@ -104,6 +104,7 @@ const GopuChat = () => {
 						isLoading={state.isLoading}
 						messagesEndRef={messagesEndRef}
 						messagesScrollRef={messagesScrollRef}
+						language={state.language}
 						onFAQClick={handleFAQClick}
 					/>
 					<GopuChatInputFooter

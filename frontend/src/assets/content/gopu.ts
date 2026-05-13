@@ -32,4 +32,8 @@ export const gopuChat = {
   footerNote:
     "Gopu.AI can provide health advice but always consult a vet for emergencies.",
   warningRemaining: "messages remaining",
+  faqChips: {
+    quickQuestions: "Quick questions",
+    quickQuestionsHi: "त्वरित प्रश्न",
+  },
 };

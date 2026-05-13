@@ -120,6 +120,56 @@ async def get_chat_history_by_session(
     }
 
 
+@router.post("/persist-faq")
+async def persist_faq_exchange(
+    payload: dict,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """
+    Persist a pre-written FAQ exchange (user question + assistant answer) into the DB
+    without calling the AI.  Used by the frontend FAQ chips so history stays intact
+    when the user continues the conversation.
+
+    Body: { session_id?: str, messages: [{role: "user"|"assistant", content: str}] }
+    Returns: { session_id: str }
+    """
+    messages_in = payload.get("messages", [])
+    if not messages_in:
+        from fastapi import HTTPException as _HTTPException
+        raise _HTTPException(status_code=422, detail="messages must be a non-empty list")
+
+    session_id_in: str | None = payload.get("session_id") or None
+
+    chat_session = None
+    if session_id_in:
+        candidate = await crud_chat.get_session(db, session_id=session_id_in)
+        if candidate and candidate.user_id == current_user.id:
+            chat_session = candidate
+
+    if chat_session is None:
+        # Reuse the latest session for continuity, same as the main chat endpoint
+        chat_session = await crud_chat.get_latest_session_for_user(db, user_id=current_user.id)
+
+    if chat_session is None:
+        chat_session = await crud_chat.create_session(db, user_id=current_user.id)
+
+    for m in messages_in:
+        role = m.get("role", "")
+        content = m.get("content", "")
+        if role in ("user", "assistant") and content:
+            await crud_chat.add_message(db, session_id=chat_session.id, role=role, content=content)
+
+    # Auto-title the session on first persisted message if it has no title yet
+    if not chat_session.title and messages_in:
+        first_user = next((m["content"] for m in messages_in if m.get("role") == "user"), None)
+        if first_user:
+            title = ai_chat_service_impl.derive_session_title(first_user)
+            await crud_chat.update_session_meta(db, session_id=chat_session.id, title=title)
+
+    return {"session_id": chat_session.id}
+
+
 @router.get("/history")
 async def get_latest_chat_history(
     db: AsyncSession = Depends(get_db),
