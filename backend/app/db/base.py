@@ -15,3 +15,4 @@ from app.models.ratelimit_exception import RatelimitException
 from app.models.products import Product
 from app.models.marketplace import Category, Seller, Cart, CartItem, Order, OrderItem
 from app.models.medical_emergency import MedicalEmergency
+from app.models.password_reset_otp import PasswordResetOTP

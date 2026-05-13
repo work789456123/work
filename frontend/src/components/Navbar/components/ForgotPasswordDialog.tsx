@@ -638,9 +638,17 @@ export function ForgotPasswordDialog({
 function extractErrorMessage(err: unknown, fallback: string): string {
 	if (isAxiosError(err) && err.response?.data) {
 		const data = err.response.data as Record<string, unknown>;
-		if (typeof data.detail === "string") return data.detail;
-		if (Array.isArray(data.detail) && data.detail[0]?.msg)
-			return data.detail[0].msg as string;
+		let msg: string | undefined;
+		if (typeof data.detail === "string") msg = data.detail;
+		else if (Array.isArray(data.detail) && data.detail[0]?.msg)
+			msg = data.detail[0].msg as string;
+		if (msg) {
+			// Avoid dumping raw SQL / stack traces into the modal (legacy 500 responses).
+			if (/asyncpg|ProgrammingError|sqlalchemy|UndefinedTable/i.test(msg) || msg.length > 400) {
+				return fallback;
+			}
+			return msg;
+		}
 	}
 	return fallback;
 }

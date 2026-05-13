@@ -1,5 +1,8 @@
 from typing import List
-from fastapi import APIRouter, Depends, BackgroundTasks
+import logging
+
+from fastapi import APIRouter, Depends, BackgroundTasks, HTTPException
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 import httpx
 
@@ -12,6 +15,7 @@ from app.services.email_service import email_service_impl
 from app.core.config import settings
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
 
 def send_confirmation_email_background(to_email: str, content: str):
@@ -82,7 +86,14 @@ async def create_appointment(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    db_appointment = await crud_appointment.create(db, appointment_in=appointment_in, user_id=current_user.id)
+    try:
+        db_appointment = await crud_appointment.create(db, appointment_in=appointment_in, user_id=current_user.id)
+    except SQLAlchemyError as e:
+        logger.exception("create_appointment failed: %s", e)
+        raise HTTPException(
+            status_code=503,
+            detail="Could not save your appointment. Please try again or contact support if this persists.",
+        ) from e
 
     # Confirmation email (background)
     email_content = f"""

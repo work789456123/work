@@ -23,5 +23,5 @@ COPY . .
 # Expose port 80
 EXPOSE 80
 
-# Run the application
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80", "--proxy-headers", "--forwarded-allow-ips='*'"]
+# Run DB migrations then the application (ensures tables like password_reset_otps exist in prod).
+CMD ["sh", "-c", "alembic upgrade head && exec uvicorn app.main:app --host 0.0.0.0 --port 80 --proxy-headers --forwarded-allow-ips='*'"]
