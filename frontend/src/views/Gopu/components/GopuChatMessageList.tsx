@@ -6,7 +6,7 @@ import { Loader2, Plus, AlertTriangle, Stethoscope } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { useRouter } from "next/navigation";
 import { gopuChat } from "@/assets/content/gopu";
-import { FAQ_LIST } from "@/data/chatbot";
+import { FAQ_LIST, faqAnswerForLanguage, faqChipLabel, normalizeGopuLanguage } from "@/data/chatbot";
 import type { GopuChatMessageListProps } from "@/types/gopu";
 
 export default function GopuChatMessageList({
@@ -14,10 +14,14 @@ export default function GopuChatMessageList({
   isLoading,
   messagesEndRef,
   messagesScrollRef,
+  language = "Hindi",
   onFAQClick,
 }: GopuChatMessageListProps) {
   const router = useRouter();
   const copy = gopuChat;
+  const lang = normalizeGopuLanguage(language);
+  const quickSectionTitle =
+    lang === "Hindi" ? copy.faqChips.quickQuestionsHi : copy.faqChips.quickQuestions;
 
   /** FAQs are only offered while the user hasn't sent any real message yet */
   const hasUserMessages = messages.some((m) => m.role === "user");
@@ -127,21 +131,26 @@ export default function GopuChatMessageList({
           {msg.isWelcome && !hasUserMessages && !isLoading && (
             <div className="mt-4 max-w-[92%] w-full animate-in fade-in slide-in-from-bottom-3 duration-500">
               <p className="text-[11px] font-semibold text-[#1F6559]/60 uppercase tracking-widest mb-2.5 ml-0.5">
-                Quick questions
+                {quickSectionTitle}
               </p>
               <div className="flex flex-col gap-2">
                 {FAQ_LIST.map((faq, i) => (
                   <button
                     key={i}
                     type="button"
-                    onClick={() => onFAQClick?.(faq)}
+                    onClick={() =>
+                      onFAQClick?.({
+                        question: faqChipLabel(faq, lang),
+                        answer: faqAnswerForLanguage(faq, lang),
+                      })
+                    }
                     className="group flex items-center gap-3 text-left px-4 py-3 rounded-2xl bg-white border border-[#1F6559]/15 hover:border-[#1F6559]/40 hover:bg-teal-50/60 transition-all duration-200 shadow-sm hover:shadow active:scale-[0.98]"
                   >
                     <span className="text-lg leading-none flex-shrink-0" aria-hidden>
                       {faq.emoji}
                     </span>
                     <span className="text-[13px] font-medium text-[#333] group-hover:text-[#1F6559] transition-colors duration-200 leading-snug">
-                      {faq.question}
+                      {faqChipLabel(faq, lang)}
                     </span>
                     <span className="ml-auto flex-shrink-0 w-5 h-5 rounded-full bg-[#1F6559]/8 flex items-center justify-center group-hover:bg-[#1F6559] transition-colors duration-200">
                       <svg

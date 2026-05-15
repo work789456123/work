@@ -33,12 +33,38 @@ const Navbar = () => {
 	const { t } = useScrollMotion();
 
 	useEffect(() => {
-		const token = localStorage.getItem("token");
-		dispatch({ type: "SET_LOGGED_IN", value: !!token });
-
 		const handleOpenAuth = () => dispatch({ type: "SHOW_AUTH" });
+		const handleAuthLogout = () => dispatch({ type: "SET_LOGGED_IN", value: false });
 		window.addEventListener("openAuthModal", handleOpenAuth);
-		return () => window.removeEventListener("openAuthModal", handleOpenAuth);
+		window.addEventListener("authLogout", handleAuthLogout);
+		return () => {
+			window.removeEventListener("openAuthModal", handleOpenAuth);
+			window.removeEventListener("authLogout", handleAuthLogout);
+		};
+	}, []);
+
+	// Token in localStorage can be expired or signed with an old SECRET_KEY — validate so Gopu/chat matches UI.
+	useEffect(() => {
+		const token = localStorage.getItem("token");
+		if (!token) {
+			dispatch({ type: "SET_LOGGED_IN", value: false });
+			return;
+		}
+		dispatch({ type: "SET_LOGGED_IN", value: true });
+		let cancelled = false;
+		void (async () => {
+			try {
+				await api.get("/auth/me");
+			} catch {
+				localStorage.removeItem("token");
+				localStorage.removeItem("user_name");
+				localStorage.removeItem("user_email");
+				if (!cancelled) dispatch({ type: "SET_LOGGED_IN", value: false });
+			}
+		})();
+		return () => {
+			cancelled = true;
+		};
 	}, []);
 
 	const handleAuth = async (e: FormEvent<HTMLFormElement>) => {

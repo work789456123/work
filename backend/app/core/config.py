@@ -40,6 +40,8 @@ class Settings(BaseSettings):
     EMAILS_FROM_NAME: Optional[str] = "PashuVaani"
     EMAIL_RESET_TOKEN_EXPIRE_HOURS: int = 48
     EMAILS_ENABLED: bool = False
+    # When True, logs the OTP at WARNING if email delivery failed (local debugging only; never in prod).
+    LOG_OTP_ON_EMAIL_FAILURE: bool = False
 
 
 
@@ -73,6 +75,9 @@ class Settings(BaseSettings):
     S3_SECRET_KEY: Optional[str] = None
     S3_REGION: str = "ap-south-1"
     S3_CUSTOM_DOMAIN: Optional[str] = None  # e.g., "cdn.pashuvaani.com"
+
+    # When true, skip `alembic upgrade head` on API startup (e.g. some tests / one-off scripts).
+    SKIP_ALEMBIC_AT_STARTUP: bool = False
 
     model_config = SettingsConfigDict(env_file=".env", case_sensitive=True, extra="ignore")
 

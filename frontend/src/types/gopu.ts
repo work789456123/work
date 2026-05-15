@@ -95,6 +95,7 @@ export type GopuChatMessageListProps = {
   isLoading: boolean;
   messagesEndRef: RefObject<HTMLDivElement | null>;
   messagesScrollRef: RefObject<HTMLDivElement | null>;
+  language?: string;
   onFAQClick?: (faq: { question: string; answer: string }) => void;
 };
 

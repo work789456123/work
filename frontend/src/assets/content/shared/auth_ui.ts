@@ -53,6 +53,8 @@ export const authDialog = {
 	toggleToLogin: "Already have an account? ",
 	toggleSignUp: "Sign Up",
 	toggleLogin: "Login",
+	forgotPassword: "Forgot password?",
+	forgotPasswordHint: "Reset using your account email.",
 };
 
 export const petDialog = {

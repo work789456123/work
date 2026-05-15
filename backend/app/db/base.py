@@ -18,3 +18,4 @@ from app.models.medical_emergency import MedicalEmergency
 from app.models.whatsapp_session import WhatsAppSession
 from app.models.telegram_session import TelegramSession
 from app.models.pet_cab import PetCabBooking
+from app.models.password_reset_otp import PasswordResetOTP

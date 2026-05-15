@@ -8,6 +8,7 @@ frontend_image = "385105851842.dkr.ecr.ap-south-1.amazonaws.com/pashuvaani-front
 
 domain_name = "example.com"
 record_name = "app.example.com"
+additional_record_names = ["dev.example.com"]
 
 # HTTPS: leave empty to create & validate ACM in ap-south-1 via Route53 (ALB must use same region as cert).
 # To use an existing certificate: set to arn:aws:acm:ap-south-1:ACCOUNT:certificate/... (NOT us-east-1).
@@ -17,7 +18,7 @@ record_name = "app.example.com"
 ssh_ingress_cidrs = ["203.0.113.10/32"]
 instance_type     = "t3.medium"
 root_volume_size  = 30
-desired_capacity  = 1
+desired_capacity  = 2
 
 # Required for backend (see backend/app/core/config.py). Use async URL or plain postgresql:// (app rewrites).
 # Example: postgresql+asyncpg://dbuser:PASSWORD@your-rds.xxxxx.ap-south-1.rds.amazonaws.com:5432/pashuvaani
@@ -28,4 +29,14 @@ backend_environment = {
   ADMIN_EMAIL        = "admin@example.com"
   ADMIN_PASSWORD     = "secure-password"
   BACKEND_PUBLIC_URL = "https://dev.pashuvaani.com"
+
+  # Password-reset emails (SMTP). Without these, forgot-password returns 503 instead of a fake success.
+  # EMAILS_ENABLED     = "true"
+  # SMTP_HOST          = "email-smtp.ap-south-1.amazonaws.com"
+  # SMTP_PORT          = "587"
+  # SMTP_USER          = "SES_SMTP_USERNAME"
+  # SMTP_PASSWORD      = "SES_SMTP_PASSWORD"
+  # SMTP_TLS           = "true"
+  # EMAILS_FROM_EMAIL  = "noreply@your-verified-domain.com"
+  # EMAILS_FROM_NAME   = "PashuVaani"
 }

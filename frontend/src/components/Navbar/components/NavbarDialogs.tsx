@@ -236,7 +236,7 @@ export function NavbarAuthDialog({
 			<DialogContent
 				id="navbar-dialog-auth"
 				data-testid="auth-dialog"
-				className="gap-0 overflow-hidden border-[#C7D3CC]/70 p-0 shadow-2xl shadow-[#1F6559]/10 sm:max-w-[420px]"
+				className="gap-0 max-h-[calc(100vh-1.5rem)] overflow-y-auto overscroll-y-contain border-[#C7D3CC]/70 p-0 shadow-2xl shadow-[#1F6559]/10 sm:max-w-[420px]"
 			>
 				<div className={cn(dialogHeaderClass, "px-6 pb-10 pt-6")}>
 					<div
@@ -310,6 +310,24 @@ export function NavbarAuthDialog({
 						>
 							{authDialog.submitRegister}
 						</button>
+					</div>
+					{/* Always in the header so it is not clipped by short viewports / centered-dialog overflow on mobile Safari */}
+					<div className="relative mt-3 flex flex-col items-center gap-0.5 pb-0.5">
+						<button
+							type="button"
+							id="auth-forgot-password-link"
+							data-testid="auth-forgot-password-link"
+							onClick={() => {
+								onOpenChange(false);
+								setShowForgotPassword(true);
+							}}
+							className="text-sm font-semibold text-white underline decoration-white/60 underline-offset-4 transition hover:text-white hover:decoration-white"
+						>
+							{authDialog.forgotPassword}
+						</button>
+						<p className="text-center text-[11px] text-white/80">
+							{authDialog.forgotPasswordHint}
+						</p>
 					</div>
 				</div>
 
@@ -478,23 +496,6 @@ export function NavbarAuthDialog({
 								</Button>
 							</div>
 						</FieldGroup>
-						{/* Forgot Password link — only on login */}
-						{isLogin && (
-							<div className="flex justify-end -mt-1">
-								<button
-									type="button"
-									id="auth-forgot-password-link"
-									data-testid="auth-forgot-password-link"
-									onClick={() => {
-										onOpenChange(false);
-										setShowForgotPassword(true);
-									}}
-									className="text-xs font-semibold text-[#1F6559] underline-offset-4 transition hover:text-[#184F46] hover:underline"
-								>
-									Forgot Password?
-								</button>
-							</div>
-						)}
 						<Button
 							type="submit"
 							data-testid="auth-submit-button"

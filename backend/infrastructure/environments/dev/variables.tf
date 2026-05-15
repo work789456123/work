@@ -88,3 +88,9 @@ variable "record_name" {
   description = "App DNS record, e.g. app.example.com."
   type        = string
 }
+
+variable "additional_record_names" {
+  description = "Optional extra DNS names in the same hosted zone pointing at the same ALB."
+  type        = list(string)
+  default     = []
+}

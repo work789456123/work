@@ -6,7 +6,7 @@ import api from "@/utils/api";
 import { gopuReducer, initialGopuState } from "@/views/Gopu/gopuChatReducer";
 import type { CreditsBalanceResponse } from "@/types/api";
 import type { GopuChatMessage } from "@/types/gopu";
-import { DEFAULT_MESSAGE } from "@/data/chatbot";
+import { getDefaultWelcomeMessage, getStoredGopuLanguage, normalizeGopuLanguage } from "@/data/chatbot";
 
 const _SEVERITY_RE = /\[SEVERITY:\s*(low|moderate|critical)\s*\]/gi;
 
@@ -70,13 +70,14 @@ export function useGopuChatController() {
       if (response.data.session_id) {
         dispatch({ type: "SET_SESSION_ID", value: response.data.session_id });
         const history = response.data.messages ?? [];
-        dispatch({ type: "SET_MESSAGES", messages: history.length > 0 ? history : [DEFAULT_MESSAGE] });
+        const welcome = getDefaultWelcomeMessage(getStoredGopuLanguage());
+        dispatch({ type: "SET_MESSAGES", messages: history.length > 0 ? history : [welcome] });
       } else {
-        dispatch({ type: "SET_MESSAGES", messages: [DEFAULT_MESSAGE] });
+        dispatch({ type: "SET_MESSAGES", messages: [getDefaultWelcomeMessage(getStoredGopuLanguage())] });
       }
     } catch (error: unknown) {
       console.error("Failed to load history", error);
-      dispatch({ type: "SET_MESSAGES", messages: [DEFAULT_MESSAGE] });
+      dispatch({ type: "SET_MESSAGES", messages: [getDefaultWelcomeMessage(getStoredGopuLanguage())] });
     } finally {
       dispatch({ type: "SET_LOADING", value: false });
     }
@@ -88,6 +89,14 @@ export function useGopuChatController() {
       if (stored === "English" || stored === "Hindi") dispatch({ type: "MERGE", patch: { language: stored } });
     } catch { /* ignore */ }
   }, []);
+
+  /** Keep the lone welcome bubble in sync with the language toggle (before any user message). */
+  useEffect(() => {
+    if (state.messages.length !== 1 || !state.messages[0]?.isWelcome) return;
+    const welcome = getDefaultWelcomeMessage(normalizeGopuLanguage(state.language));
+    if (state.messages[0].content === welcome.content) return;
+    dispatch({ type: "SET_MESSAGES", messages: [welcome] });
+  }, [state.language, state.messages]);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -128,7 +137,7 @@ export function useGopuChatController() {
       dispatch({ type: "SET_LOADING", value: true });
       const response = await api.post<{ session_id: string }>("/chat/sessions/new");
       dispatch({ type: "SET_SESSION_ID", value: response.data.session_id });
-      dispatch({ type: "SET_MESSAGES", messages: [DEFAULT_MESSAGE] });
+      dispatch({ type: "SET_MESSAGES", messages: [getDefaultWelcomeMessage(normalizeGopuLanguage(state.language))] });
       void fetchUserSessions();
       toast.success("New chat started");
     } catch (error: unknown) {
@@ -285,18 +294,34 @@ export function useGopuChatController() {
     (faq: { question: string; answer: string }) => {
       // Strip any severity tags from pre-written answers before showing in the UI
       const cleanAnswer = faq.answer.replace(_SEVERITY_RE, "").trim();
-      dispatch({
-        type: "MERGE",
-        patch: {
-          messages: [
-            ...state.messages,
-            { role: "user", content: faq.question },
-            { role: "assistant", content: cleanAnswer },
-          ],
-        },
-      });
+      const newMessages = [
+        ...state.messages,
+        { role: "user" as const, content: faq.question },
+        { role: "assistant" as const, content: cleanAnswer },
+      ];
+      dispatch({ type: "MERGE", patch: { messages: newMessages } });
+
+      // Persist the FAQ exchange to the DB so subsequent messages have full context.
+      void (async () => {
+        try {
+          const res = await api.post<{ session_id: string }>("/chat/persist-faq", {
+            session_id: state.sessionId ?? undefined,
+            messages: [
+              { role: "user", content: faq.question },
+              { role: "assistant", content: cleanAnswer },
+            ],
+          });
+          if (res.data.session_id) {
+            dispatch({ type: "SET_SESSION_ID", value: res.data.session_id });
+            void fetchUserSessions();
+          }
+        } catch (err) {
+          // Non-fatal — FAQ answer is already shown; context may be missing on next message
+          console.warn("Failed to persist FAQ exchange:", err);
+        }
+      })();
     },
-    [state.messages],
+    [state.messages, state.sessionId],
   );
 
   return {

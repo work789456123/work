@@ -1,7 +1,9 @@
 import secrets
+import logging
 from datetime import datetime, timedelta
 from jose import jwt
 from fastapi import APIRouter, Depends, HTTPException, Body
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.session import get_db
 from app.schemas.user import (
@@ -15,9 +17,13 @@ from app.services.email_service import email_service_impl
 from app.services import otp_service
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
 def create_access_token(data: dict) -> str:
     to_encode = data.copy()
+    # JWT "sub" must be a string; some callers passed ORM ids as non-strings.
+    if "sub" in to_encode and to_encode["sub"] is not None:
+        to_encode["sub"] = str(to_encode["sub"])
     expire = datetime.utcnow() + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
@@ -86,38 +92,54 @@ async def forgot_password(body: ForgotPasswordRequest, db: AsyncSession = Depend
     if not email or "@" not in email:
         raise HTTPException(status_code=400, detail="A valid email address is required.")
 
-    user = await crud_user.get_by_phone_or_email(db, phone_or_email=email)
+    try:
+        user = await crud_user.get_by_phone_or_email(db, phone_or_email=email)
 
-    # Superadmin flow: explicitly validate the email is a superadmin
-    if body.role == "superadmin":
-        if not user or user.role != "superadmin":
-            raise HTTPException(
-                status_code=400,
-                detail="No super admin account found with this email."
-            )
-        result = await otp_service.request_otp(db, email)
-        if not result["success"]:
-            raise HTTPException(
-                status_code=429,
-                detail=result["message"],
-                headers={"Retry-After": str(result.get("retry_after", 60))},
-            )
-        return {"message": "OTP sent to your super admin email."}
-
-    # Regular user flow: silent success to prevent enumeration
-    if user:
-        if body.role and user.role != body.role:
-            pass  # Don't send OTP if role doesn't match
-        else:
+        # Superadmin flow: explicitly validate the email is a superadmin
+        if body.role == "superadmin":
+            if not user or user.role != "superadmin":
+                raise HTTPException(
+                    status_code=400,
+                    detail="No super admin account found with this email."
+                )
             result = await otp_service.request_otp(db, email)
             if not result["success"]:
-                raise HTTPException(
-                    status_code=429,
-                    detail=result["message"],
-                    headers={"Retry-After": str(result.get("retry_after", 60))},
-                )
+                if result.get("reason") == "rate_limited":
+                    raise HTTPException(
+                        status_code=429,
+                        detail=result["message"],
+                        headers={"Retry-After": str(result.get("retry_after", 60))},
+                    )
+                raise HTTPException(status_code=503, detail=result["message"])
+            return {"message": "OTP sent to your super admin email."}
 
-    return {"message": "If an account exists for this email, an OTP has been sent."}
+        # Regular user flow: silent success to prevent enumeration
+        if user:
+            if body.role and user.role != body.role:
+                pass  # Don't send OTP if role doesn't match
+            else:
+                result = await otp_service.request_otp(db, email)
+                if not result["success"]:
+                    if result.get("reason") == "rate_limited":
+                        raise HTTPException(
+                            status_code=429,
+                            detail=result["message"],
+                            headers={"Retry-After": str(result.get("retry_after", 60))},
+                        )
+                    raise HTTPException(status_code=503, detail=result["message"])
+
+        return {"message": "If an account exists for this email, an OTP has been sent."}
+    except HTTPException:
+        raise
+    except SQLAlchemyError as e:
+        logger.exception("forgot-password database error: %s", e)
+        raise HTTPException(
+            status_code=503,
+            detail=(
+                "Password reset is temporarily unavailable. "
+                "If this continues, contact support — the server database may need updating."
+            ),
+        )
 
 
 @router.post("/verify-otp")
@@ -129,7 +151,14 @@ async def verify_otp(body: VerifyOTPRequest, db: AsyncSession = Depends(get_db))
     if len(otp) != 6 or not otp.isdigit():
         raise HTTPException(status_code=400, detail="OTP must be exactly 6 digits.")
 
-    result = await otp_service.verify_otp(db, email, otp)
+    try:
+        result = await otp_service.verify_otp(db, email, otp)
+    except SQLAlchemyError as e:
+        logger.exception("verify-otp database error: %s", e)
+        raise HTTPException(
+            status_code=503,
+            detail="Password reset is temporarily unavailable. Please try again later.",
+        )
     if not result["success"]:
         raise HTTPException(status_code=400, detail=result["message"])
 
@@ -145,7 +174,14 @@ async def reset_password(body: ResetPasswordRequest, db: AsyncSession = Depends(
     if len(body.new_password) < 8:
         raise HTTPException(status_code=400, detail="Password must be at least 8 characters.")
 
-    result = await otp_service.reset_password(db, body.reset_token, body.new_password)
+    try:
+        result = await otp_service.reset_password(db, body.reset_token, body.new_password)
+    except SQLAlchemyError as e:
+        logger.exception("reset-password database error: %s", e)
+        raise HTTPException(
+            status_code=503,
+            detail="Password reset is temporarily unavailable. Please try again later.",
+        )
     if not result["success"]:
         raise HTTPException(status_code=400, detail=result["message"])
 

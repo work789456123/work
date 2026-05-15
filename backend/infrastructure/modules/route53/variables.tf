@@ -8,6 +8,12 @@ variable "record_name" {
   type        = string
 }
 
+variable "additional_record_names" {
+  description = "Extra hostnames (same zone) that alias to the same ALB, e.g. [\"dev.example.com\"]."
+  type        = list(string)
+  default     = []
+}
+
 variable "alb_dns_name" {
   type = string
 }

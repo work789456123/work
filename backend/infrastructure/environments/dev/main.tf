@@ -24,72 +24,73 @@ locals {
 module "network" {
   source = "../../modules/network"
 
-  project_name          = var.project_name
-  environment           = var.environment
-  vpc_cidr              = var.vpc_cidr
-  public_subnet_cidrs   = var.public_subnet_cidrs
-  private_subnet_cidrs  = var.private_subnet_cidrs
-  common_tags           = local.common_tags
+  project_name         = var.project_name
+  environment          = var.environment
+  vpc_cidr             = var.vpc_cidr
+  public_subnet_cidrs  = var.public_subnet_cidrs
+  private_subnet_cidrs = var.private_subnet_cidrs
+  common_tags          = local.common_tags
 }
 
 module "security" {
   source = "../../modules/security"
 
-  project_name       = var.project_name
-  environment        = var.environment
-  vpc_id             = module.network.vpc_id
-  app_port           = var.app_port
-  ssh_ingress_cidrs  = var.ssh_ingress_cidrs
-  common_tags        = local.common_tags
+  project_name      = var.project_name
+  environment       = var.environment
+  vpc_id            = module.network.vpc_id
+  app_port          = var.app_port
+  ssh_ingress_cidrs = var.ssh_ingress_cidrs
+  common_tags       = local.common_tags
 }
 
 module "alb" {
   source = "../../modules/alb"
 
-  project_name           = var.project_name
-  environment            = var.environment
-  vpc_id                 = module.network.vpc_id
-  public_subnet_ids      = module.network.public_subnet_ids
-  alb_security_group_id  = module.security.alb_security_group_id
-  target_port            = var.app_port
-  health_check_path      = var.alb_health_check_path
-  common_tags            = local.common_tags
+  project_name          = var.project_name
+  environment           = var.environment
+  vpc_id                = module.network.vpc_id
+  public_subnet_ids     = module.network.public_subnet_ids
+  alb_security_group_id = module.security.alb_security_group_id
+  target_port           = var.app_port
+  health_check_path     = var.alb_health_check_path
+  common_tags           = local.common_tags
 }
 
 module "s3_media" {
   source = "../../modules/s3-media"
 
-  project_name = var.project_name
-  environment  = var.environment
+  project_name  = var.project_name
+  environment   = var.environment
   force_destroy = true
-  common_tags  = local.common_tags
+  common_tags   = local.common_tags
 }
 
 module "compute" {
   source = "../../modules/compute"
 
-  project_name           = var.project_name
-  environment            = var.environment
-  private_subnet_ids     = module.network.private_subnet_ids
-  app_security_group_id  = module.security.app_security_group_id
-  target_group_arn       = module.alb.target_group_arn
-  instance_type          = var.instance_type
-  desired_capacity       = var.desired_capacity
-  min_size               = var.min_size
-  max_size               = var.max_size
-  backend_image          = var.backend_image
-  nextjs_image           = var.nextjs_image
-  aws_region             = var.aws_region
-  media_bucket_arn       = module.s3_media.bucket_arn
-  media_bucket_name      = module.s3_media.bucket_name
-  common_tags            = local.common_tags
+  project_name          = var.project_name
+  environment           = var.environment
+  private_subnet_ids    = module.network.private_subnet_ids
+  app_security_group_id = module.security.app_security_group_id
+  target_group_arn      = module.alb.target_group_arn
+  instance_type         = var.instance_type
+  desired_capacity      = var.desired_capacity
+  min_size              = var.min_size
+  max_size              = var.max_size
+  backend_image         = var.backend_image
+  nextjs_image          = var.nextjs_image
+  aws_region            = var.aws_region
+  media_bucket_arn      = module.s3_media.bucket_arn
+  media_bucket_name     = module.s3_media.bucket_name
+  common_tags           = local.common_tags
 }
 
 module "route53" {
   source = "../../modules/route53"
 
-  domain_name  = var.domain_name
-  record_name  = var.record_name
-  alb_dns_name = module.alb.alb_dns_name
-  alb_zone_id  = module.alb.alb_zone_id
+  domain_name             = var.domain_name
+  record_name             = var.record_name
+  additional_record_names = var.additional_record_names
+  alb_dns_name            = module.alb.alb_dns_name
+  alb_zone_id             = module.alb.alb_zone_id
 }

@@ -2,6 +2,7 @@
 
 import { useEffect, useReducer, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
+import { isAxiosError } from "axios";
 import { toast } from "sonner";
 import { CalendarHeart } from "lucide-react";
 import { appointmentsPage, appointmentsPageHindi } from "@/assets/content/appointments";
@@ -56,8 +57,15 @@ function AppointmentsPage() {
 		try {
 			await api.post("/appointments", submitData);
 			dispatch({ type: "SUBMIT_SUCCESS" });
-		} catch {
-			toast.error("Failed to book appointment. Please try again.");
+		} catch (error: unknown) {
+			let message = "Failed to book appointment. Please try again.";
+			if (isAxiosError(error) && error.response?.data) {
+				const data = error.response.data as { detail?: unknown };
+				if (typeof data.detail === "string") message = data.detail;
+				else if (Array.isArray(data.detail) && data.detail[0]?.msg)
+					message = String(data.detail[0].msg);
+			}
+			toast.error(message);
 		}
 	};
 

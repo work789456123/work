@@ -33,9 +33,14 @@ export function navbarReducer(
 		case "SET_LOGGED_IN":
 			return { ...state, isLoggedIn: action.value };
 		case "SET_SHOW_AUTH":
-			return { ...state, showAuth: action.value };
+			return {
+				...state,
+				showAuth: action.value,
+				// Always land on Login when opening so "Forgot password?" is available (mode used to stick on Register).
+				...(action.value ? { authMode: "login" as const } : {}),
+			};
 		case "SHOW_AUTH":
-			return { ...state, showAuth: true };
+			return { ...state, showAuth: true, authMode: "login" };
 		case "HIDE_AUTH":
 			return { ...state, showAuth: false };
 		case "SET_AUTH_MODE":

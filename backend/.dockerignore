@@ -6,3 +6,5 @@ __pycache__
 .gitignore
 Dockerfile
 infrastructure
+
+# Never ignore alembic/ or alembic.ini — the backend image runs `alembic upgrade head` on ECS startup.

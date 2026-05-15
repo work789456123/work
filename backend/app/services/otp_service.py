@@ -18,6 +18,7 @@ import bcrypt
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
+from app.core.config import settings
 from app.models.password_reset_otp import PasswordResetOTP
 from app.services.email_service import email_service_impl
 
@@ -97,6 +98,7 @@ async def request_otp(db: AsyncSession, email: str) -> dict:
                 "success": False,
                 "message": f"Please wait {wait} seconds before requesting another OTP.",
                 "retry_after": wait,
+                "reason": "rate_limited",
             }
 
     # --- Create new OTP record ---
@@ -119,15 +121,27 @@ async def request_otp(db: AsyncSession, email: str) -> dict:
         html_content=_otp_email_html(otp_plain),
     )
     if not sent:
-        logger.warning("OTP email could not be sent to %s (SMTP not configured?)", email)
-        # We still return success so dev environments work without SMTP
-        # The OTP is logged below only in DEBUG mode for local testing
-        logger.debug("DEV OTP for %s: %s", email, otp_plain)
+        if settings.LOG_OTP_ON_EMAIL_FAILURE:
+            logger.warning("OTP for %s (email not delivered, dev log): %s", email, otp_plain)
+        else:
+            logger.warning("OTP email was not delivered to %s; rolling back OTP row.", email)
+        await db.delete(otp_record)
+        await db.commit()
+        return {
+            "success": False,
+            "message": (
+                "We could not send the reset email. The server mail settings may be missing or "
+                "incorrect. Please try again later or contact support."
+            ),
+            "retry_after": None,
+            "reason": "email_not_sent",
+        }
 
     return {
         "success": True,
         "message": f"OTP sent to {email}. Valid for {OTP_EXPIRY_MINUTES} minutes.",
         "retry_after": None,
+        "reason": None,
     }
 
 
