@@ -2,6 +2,8 @@
 
 import { useEffect, useState, FormEvent, useMemo } from "react";
 import { useRouter } from "next/navigation";
+import { AnimatePresence, motion } from "framer-motion";
+import VideoIntro from "@/components/VideoIntro";
 import { toast } from "sonner";
 import { Car, MapPin, Calendar, Clock, Phone, User, Users, X, Info, CreditCard } from "lucide-react";
 import UserPageShell from "@/motion/UserPageShell";
@@ -27,16 +29,16 @@ import PawTexture from "@/components/PawTexture";
 import api from "@/utils/api";
 
 const travelPackages = [
-  { id: 1, title: "Khatu Shyam Ji Darshan", subtitle: "One day trip from Jaipur to Khatu Shyam Ji", duration: "1 day", location: "Jaipur", price: 2199 },
-  { id: 2, title: "Salasar Balaji Darshan", subtitle: "One day trip from Jaipur to Salasar Balaji", duration: "1 day", location: "Jaipur", price: 3999 },
-  { id: 3, title: "Khatu Shyam & Salasar Balaji", subtitle: "Visit two divine temples in one trip", duration: "1 day", location: "Jaipur", price: 4199 },
-  { id: 4, title: "Triple Temple Tour", subtitle: "Visit Khatu Shyam Ji, Jeen Mata & Salasar Balaji", duration: "1 day", location: "Jaipur", price: 4699 },
-  { id: 5, title: "Complete Religious Tour", subtitle: "Complete tour of all major temples", duration: "1 day", location: "Jaipur", price: 5799 },
-  { id: 6, title: "Ranthambore", subtitle: "Ranthambore Journey", duration: "1 day", location: "Jaipur", price: 4499 },
-  { id: 7, title: "Jaipur Darshan Special", subtitle: "Places Covered (Best Route - No Rush, Full Mazaa)", duration: "1 day", location: "Jaipur", price: 2999 },
-  { id: 8, title: "Udaipur", subtitle: "Udaipur Journey", duration: "1 day", location: "Jaipur", price: 8599 },
-  { id: 9, title: "Jaipur to Delhi One Way", subtitle: "Jaipur to Delhi One Way Journey", duration: "1 day", location: "Jaipur", price: 3999 },
-  { id: 10, title: "Jaipur to Gurgaon One Way", subtitle: "Jaipur to Gurgaon One Way Journey", duration: "1 day", location: "Jaipur", price: 3599 }
+  { id: 1, title: "Khatu Shyam Ji Darshan", subtitle: "One day trip from Jaipur to Khatu Shyam Ji", duration: "1 day", location: "Jaipur", price: 2199, image: "/images/1.jpeg" },
+  { id: 2, title: "Salasar Balaji Darshan", subtitle: "One day trip from Jaipur to Salasar Balaji", duration: "1 day", location: "Jaipur", price: 3999, image: "/images/3.jpeg" },
+  { id: 3, title: "Khatu Shyam & Salasar Balaji", subtitle: "Visit two divine temples in one trip", duration: "1 day", location: "Jaipur", price: 4199, image: "/images/4.jpeg" },
+  { id: 4, title: "Triple Temple Tour", subtitle: "Visit Khatu Shyam Ji, Jeen Mata & Salasar Balaji", duration: "1 day", location: "Jaipur", price: 4699, image: "/images/2.jpeg" },
+  { id: 5, title: "Complete Religious Tour", subtitle: "Complete tour of all major temples", duration: "1 day", location: "Jaipur", price: 5799, image: "/images/5.jpeg" },
+  { id: 6, title: "Ranthambore", subtitle: "Ranthambore Journey", duration: "1 day", location: "Jaipur", price: 4499, image: "/images/6.jpeg" },
+  { id: 7, title: "Jaipur Darshan Special", subtitle: "Places Covered (Best Route - No Rush, Full Mazaa)", duration: "1 day", location: "Jaipur", price: 2999, image: "/images/7.jpeg" },
+  { id: 8, title: "Udaipur", subtitle: "Udaipur Journey", duration: "1 day", location: "Jaipur", price: 8599, image: "/images/8.jpeg" },
+  { id: 9, title: "Jaipur to Delhi One Way", subtitle: "Jaipur to Delhi One Way Journey", duration: "1 day", location: "Jaipur", price: 3999, image: "/images/9.jpg" },
+  { id: 10, title: "Jaipur to Gurgaon One Way", subtitle: "Jaipur to Gurgaon One Way Journey", duration: "1 day", location: "Jaipur", price: 3599, image: "/images/10.jpeg" },
 ];
 
 const SUGGESTED_LOCATIONS = [
@@ -95,6 +97,7 @@ for (let h = 0; h < 24; h++) {
 export default function TravelWithPetPage() {
   const router = useRouter();
   
+  const [introComplete, setIntroComplete] = useState(false);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [showCustomFormPopup, setShowCustomFormPopup] = useState(false);
   const [showPackageModal, setShowPackageModal] = useState(false);
@@ -177,9 +180,10 @@ export default function TravelWithPetPage() {
         emergency_contact: "",
         additional_notes: "",
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
-      const msg = error?.response?.data?.detail || error.message || "Failed to book pet cab. Please try again.";
+      const err = error as { response?: { data?: { detail?: string } }; message?: string };
+      const msg = err?.response?.data?.detail || err.message || "Failed to book pet cab. Please try again.";
       toast.error(typeof msg === "string" ? msg : JSON.stringify(msg));
     } finally {
       setSubmitting(false);
@@ -243,9 +247,10 @@ export default function TravelWithPetPage() {
         selectedTime: "",
         pickupLocation: "",
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
-      const msg = error?.response?.data?.detail || error.message || "Failed to book pet cab. Please try again.";
+      const err = error as { response?: { data?: { detail?: string } }; message?: string };
+      const msg = err?.response?.data?.detail || err.message || "Failed to book pet cab. Please try again.";
       toast.error(typeof msg === "string" ? msg : JSON.stringify(msg));
     } finally {
       setSubmitting(false);
@@ -253,6 +258,20 @@ export default function TravelWithPetPage() {
   };
 
   return (
+    <>
+      {/* Video intro — shown once before the page content */}
+      {!introComplete && (
+        <VideoIntro onComplete={() => setIntroComplete(true)} />
+      )}
+
+      {/* Page content fades in after the intro completes */}
+      <AnimatePresence>
+        {introComplete && (
+          <motion.div
+            key="travel-page-content"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } }}
+          >
     <UserPageShell id="page-pet-cabs" className="min-h-screen bg-gray-50/50 pb-24">
       <PageTitle
         id="pet-cabs-hero"
@@ -296,11 +315,21 @@ export default function TravelWithPetPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {travelPackages.map((pkg) => (
             <div key={pkg.id} className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden flex flex-col hover:shadow-xl transition-shadow group">
-              <div className="h-48 overflow-hidden relative bg-[#F8FBFB] flex items-center justify-center group-hover:bg-[#F0F7F7] transition-colors duration-500">
-                <div className="flex flex-col items-center gap-3 opacity-20 group-hover:opacity-30 transition-opacity duration-500">
-                  <Car size={48} className="text-[#1FA7A6]" />
-                  <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#1F6559]">PashuVaani Travel</span>
-                </div>
+              <div className="h-48 overflow-hidden relative bg-[#F8FBFB]">
+                {pkg.image ? (
+                  <img
+                    src={pkg.image}
+                    alt={pkg.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center group-hover:bg-[#F0F7F7] transition-colors duration-500">
+                    <div className="flex flex-col items-center gap-3 opacity-20 group-hover:opacity-30 transition-opacity duration-500">
+                      <Car size={48} className="text-[#1FA7A6]" />
+                      <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#1F6559]">PashuVaani Travel</span>
+                    </div>
+                  </div>
+                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent pointer-events-none"></div>
               </div>
               <div className="p-5 flex flex-col flex-grow">
@@ -436,7 +465,7 @@ export default function TravelWithPetPage() {
                   ))}
                   {SUGGESTED_LOCATIONS.filter(l => l.toLowerCase().includes(packageForm.pickupLocation.toLowerCase())).length === 0 && (
                     <div className="px-4 py-3 text-sm text-gray-500">
-                      Use "{packageForm.pickupLocation}"
+                      Use &quot;{packageForm.pickupLocation}&quot;
                     </div>
                   )}
                 </div>
@@ -647,7 +676,7 @@ export default function TravelWithPetPage() {
                       ))}
                       {SUGGESTED_LOCATIONS.filter(l => l.toLowerCase().includes(customFormData.pickup_location.toLowerCase())).length === 0 && (
                         <div className="px-4 py-3 text-sm text-gray-500">
-                          Use "{customFormData.pickup_location}"
+                          Use &quot;{customFormData.pickup_location}&quot;
                         </div>
                       )}
                     </div>
@@ -685,7 +714,7 @@ export default function TravelWithPetPage() {
                       ))}
                       {SUGGESTED_LOCATIONS.filter(l => l.toLowerCase().includes(customFormData.drop_location.toLowerCase())).length === 0 && (
                         <div className="px-4 py-3 text-sm text-gray-500">
-                          Use "{customFormData.drop_location}"
+                          Use &quot;{customFormData.drop_location}&quot;
                         </div>
                       )}
                     </div>
@@ -875,6 +904,10 @@ export default function TravelWithPetPage() {
         </DialogContent>
       </Dialog>
     </UserPageShell>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
 
