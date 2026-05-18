@@ -1,9 +1,10 @@
 from typing import List, Optional
 from datetime import datetime, timedelta
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy import func
+from sqlalchemy.orm import joinedload
 from app.db.session import get_db
 from app.api.dependencies import get_current_admin, get_super_admin
 from app.models.user import User
@@ -36,6 +37,7 @@ from app.schemas.farm import (
 )
 from app.schemas.ratelimit_exception import RatelimitException, RatelimitExceptionCreate
 from app.crud.ratelimit_exception import crud_ratelimit_exception
+from app.services.email_service import email_service_impl
 
 router = APIRouter()
 
@@ -370,10 +372,10 @@ async def get_all_appointments(
 @router.put("/appointments/{appointment_id}/confirm", response_model=AppointmentResponse)
 async def confirm_appointment(
     appointment_id: str,
+    background_tasks: BackgroundTasks,
     db: AsyncSession = Depends(get_db),
     current_admin: User = Depends(get_current_admin)
 ):
-    from sqlalchemy.orm import joinedload
     appointment = await crud_appointment.update_status(db, appointment_id, "confirmed")
     if not appointment:
         raise HTTPException(status_code=404, detail="Appointment not found")
@@ -382,11 +384,39 @@ async def confirm_appointment(
         select(Appointment).options(joinedload(Appointment.user)).where(Appointment.id == appointment_id)
     )
     appt = result.scalars().first()
-    return crud_appointment._to_response(appt)
+    response = crud_appointment._to_response(appt)
+
+    # Send confirmation email to user
+    if appt and appt.user and appt.user.phone_or_email and "@" in appt.user.phone_or_email:
+        html = f"""
+        <div style="font-family:sans-serif;max-width:520px;margin:auto;padding:24px;border:1px solid #e2e8f0;border-radius:12px">
+          <h2 style="color:#1F6559;margin-bottom:8px">✅ Appointment Confirmed</h2>
+          <p style="color:#475569">Dear <strong>{appt.owner_name}</strong>,</p>
+          <p style="color:#475569">Your appointment has been <strong style="color:#1F6559">confirmed</strong> by our team.</p>
+          <table style="width:100%;border-collapse:collapse;margin:16px 0">
+            <tr><td style="padding:8px 0;color:#64748b;font-size:14px">Pet</td><td style="padding:8px 0;font-weight:600;color:#1e293b">{appt.pet_name} ({appt.pet_type})</td></tr>
+            <tr><td style="padding:8px 0;color:#64748b;font-size:14px">Time Slot</td><td style="padding:8px 0;font-weight:600;color:#1e293b">{appt.time_slot}</td></tr>
+            <tr><td style="padding:8px 0;color:#64748b;font-size:14px">Owner</td><td style="padding:8px 0;font-weight:600;color:#1e293b">{appt.owner_name}</td></tr>
+            <tr><td style="padding:8px 0;color:#64748b;font-size:14px">Contact</td><td style="padding:8px 0;font-weight:600;color:#1e293b">{appt.owner_number}</td></tr>
+          </table>
+          <p style="color:#475569;font-size:14px">Please be available at the scheduled time. If you need to reschedule, contact us.</p>
+          <p style="color:#94a3b8;font-size:12px;margin-top:24px">— PashuVaani Team</p>
+        </div>
+        """
+        background_tasks.add_task(
+            email_service_impl.send_email,
+            appt.user.phone_or_email,
+            "Appointment Confirmed — PashuVaani",
+            html,
+        )
+
+    return response
+
 
 @router.put("/appointments/{appointment_id}/cancel", response_model=AppointmentResponse)
 async def cancel_appointment(
     appointment_id: str,
+    background_tasks: BackgroundTasks,
     db: AsyncSession = Depends(get_db),
     current_admin: User = Depends(get_current_admin)
 ):
@@ -399,7 +429,31 @@ async def cancel_appointment(
         select(Appointment).options(joinedload(Appointment.user)).where(Appointment.id == appointment_id)
     )
     appt = result.scalars().first()
-    return crud_appointment._to_response(appt)
+    response = crud_appointment._to_response(appt)
+
+    # Send cancellation email to user
+    if appt and appt.user and appt.user.phone_or_email and "@" in appt.user.phone_or_email:
+        html = f"""
+        <div style="font-family:sans-serif;max-width:520px;margin:auto;padding:24px;border:1px solid #e2e8f0;border-radius:12px">
+          <h2 style="color:#dc2626;margin-bottom:8px">❌ Appointment Cancelled</h2>
+          <p style="color:#475569">Dear <strong>{appt.owner_name}</strong>,</p>
+          <p style="color:#475569">We regret to inform you that your appointment has been <strong style="color:#dc2626">cancelled</strong>.</p>
+          <table style="width:100%;border-collapse:collapse;margin:16px 0">
+            <tr><td style="padding:8px 0;color:#64748b;font-size:14px">Pet</td><td style="padding:8px 0;font-weight:600;color:#1e293b">{appt.pet_name} ({appt.pet_type})</td></tr>
+            <tr><td style="padding:8px 0;color:#64748b;font-size:14px">Time Slot</td><td style="padding:8px 0;font-weight:600;color:#1e293b">{appt.time_slot}</td></tr>
+          </table>
+          <p style="color:#475569;font-size:14px">Please book a new appointment at your convenience. We apologise for any inconvenience.</p>
+          <p style="color:#94a3b8;font-size:12px;margin-top:24px">— PashuVaani Team</p>
+        </div>
+        """
+        background_tasks.add_task(
+            email_service_impl.send_email,
+            appt.user.phone_or_email,
+            "Appointment Cancelled — PashuVaani",
+            html,
+        )
+
+    return response
 
 @router.get("/doctor-applications", response_model=List[DoctorApplicationResponse])
 async def get_doctor_applications(

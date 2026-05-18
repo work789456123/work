@@ -99,6 +99,13 @@ export default function NavbarMobileMenu({
 				Founders Stories
 			</Link>
 			<Link
+				href="/accreditations"
+				onClick={() => onClose()}
+				className="block px-4 py-3 text-sm font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10"
+			>
+				Accreditations
+			</Link>
+			<Link
 				href="/contact"
 				onClick={() => onClose()}
 				className="block px-4 py-3 text-sm font-medium rounded-lg text-white/90 hover:text-white hover:bg-white/10"

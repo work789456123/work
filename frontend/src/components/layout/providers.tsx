@@ -9,7 +9,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
     <>
       <ForceLightDocument />
       {children}
-      <Toaster position="top-right" richColors theme="light" />
+      <Toaster position="top-right" richColors theme="light" duration={2000} />
       <SiteLoadingScreen />
     </>
   );

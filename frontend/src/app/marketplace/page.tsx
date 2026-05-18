@@ -35,7 +35,12 @@ type PageProps = {
 export default async function MarketplacePage({ searchParams }: PageProps) {
   const { category } = await searchParams;
 
-  const products = await fetchMarketplaceProducts();
+  let products: Awaited<ReturnType<typeof fetchMarketplaceProducts>> = [];
+  try {
+    products = await fetchMarketplaceProducts();
+  } catch {
+    // backend unreachable — render with empty list, client will retry
+  }
 
   return (
     <Suspense fallback={<MarketplaceSkeleton />}>

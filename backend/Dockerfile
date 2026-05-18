@@ -28,6 +28,6 @@ COPY . .
 # Expose port 80
 EXPOSE 80
 
-# Migrations run inside FastAPI lifespan (see app/main.py) so one process owns startup.
+# Migrations + seeding run inside FastAPI lifespan (see app/main.py) — one process owns startup.
 # After `docker push`, force a new ECS deployment so tasks pull the new digest.
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80", "--proxy-headers", "--forwarded-allow-ips=*"]

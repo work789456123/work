@@ -33,10 +33,10 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
   useEffect(() => {
     const fetchEmergencies = async () => {
       try {
-        const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+        // Always use relative paths — Next.js rewrites proxy /api to the backend
         const token = localStorage.getItem("admin_token");
         if (!token) return;
-        const res = await fetch(`${API_URL}/api/medical-emergency`, {
+        const res = await fetch(`/api/medical-emergency`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (res.ok) {

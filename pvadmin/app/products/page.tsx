@@ -27,7 +27,8 @@ type ProductForm = {
   contact: string;
 };
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
+// Always use relative paths — Next.js rewrites proxy /api to the backend
+const BACKEND_URL = "";
 
 const initialForm: ProductForm = {
   category: "Feed & Fodder",

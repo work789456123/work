@@ -70,16 +70,22 @@ async def init_db() -> None:
         admin_user = result.scalars().first()
         
         if not admin_user:
-            logger.info("Seeding Admin User...")
+            logger.info("Seeding first superadmin user...")
             user_in = UserRegister(
                 full_name="System Admin",
                 email=admin_email,
                 password=settings.ADMIN_PASSWORD
             )
             admin_user = await crud_user.create(db, user_in)
-            admin_user.role = "admin"
+            admin_user.role = "superadmin"
             admin_user.credits_remaining = 999999
             await db.commit()
+        elif admin_user.role not in ("admin", "superadmin"):
+            # Existing user was a regular user — promote to superadmin
+            logger.info("Promoting existing user %s to superadmin...", admin_email)
+            admin_user.role = "superadmin"
+            await db.commit()
+        # If already admin/superadmin, leave role unchanged so manual promotions are preserved
             
         # Seed Blogs
         blogs_count = await db.scalar(select(func.count(Blog.id)))

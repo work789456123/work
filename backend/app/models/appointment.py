@@ -27,7 +27,7 @@ class Appointment(Base):
     medical_history = Column(String, nullable=True)
     
     time_slot = Column(String, nullable=False) # In ER diagram this is appointment_time (timestamp), but keeping compatibility for now
-    status = Column(String, default="SCHEDULED") # SCHEDULED, COMPLETED, CANCELLED, RESCHEDULED, pending, confirmed
+    status = Column(String, default="pending") # pending, confirmed, cancelled
     source = Column(String, default="website")  # "website" or "whatsapp"
     
     notes = Column(Text, nullable=True)

@@ -1,23 +1,24 @@
 import axios, { type InternalAxiosRequestConfig, isAxiosError } from "axios";
 
 function getBackendUrl(): string {
-  // In production, force relative paths to prevent domain mismatch/CORS issues
-  if (process.env.NODE_ENV === "production") return "";
+  // Always use relative paths — Next.js rewrites proxy /api to the backend.
+  // This works in both dev (via next.config rewrites) and production (standalone).
+  if (typeof window !== "undefined") return "";
 
-  const env = process.env.NEXT_PUBLIC_BACKEND_URL;
+  // Server-side (SSR/RSC): use the internal Docker/network URL so server
+  // components can reach the backend directly without going through the proxy.
+  const env = process.env.BACKEND_INTERNAL_URL ?? process.env.NEXT_PUBLIC_BACKEND_URL;
   if (env !== undefined && env !== "") return env;
   return "http://localhost:8000";
 }
 
 export const API_BASE = `${getBackendUrl()}/api`;
 
-/** Origin for bare `fetch` calls (must match browser host in prod so cookies/relative paths stay consistent). */
+/** Origin for bare `fetch` calls. Always relative in the browser (proxy handles routing). */
 export function getApiOrigin(): string {
-  if (typeof window !== "undefined" && process.env.NODE_ENV === "production") {
-    return window.location.origin;
-  }
-  const env =
-    process.env.NEXT_PUBLIC_BACKEND_URL ?? process.env.NEXT_PUBLIC_API_URL;
+  if (typeof window !== "undefined") return "";
+  // Server-side: use internal URL
+  const env = process.env.BACKEND_INTERNAL_URL ?? process.env.NEXT_PUBLIC_BACKEND_URL;
   if (env !== undefined && env !== "") return env.replace(/\/$/, "");
   return "http://localhost:8000";
 }

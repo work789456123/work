@@ -13,9 +13,16 @@ export type BackendProduct = {
 const FALLBACK_IMAGE = "/images/Masti-Care-1kg-scaled.webp";
 
 export function getBackendUrl() {
-  const env = process.env.NEXT_PUBLIC_BACKEND_URL;
-  if (env && env.trim() !== "") return env;
-  return "http://localhost:8000";
+  // Server-side (SSR/RSC): prefer internal Docker URL, then public URL
+  if (typeof window === "undefined") {
+    const internal = process.env.BACKEND_INTERNAL_URL;
+    if (internal && internal.trim() !== "") return internal.trim();
+    const pub = process.env.NEXT_PUBLIC_BACKEND_URL;
+    if (pub && pub.trim() !== "") return pub.trim();
+    return "http://localhost:8000";
+  }
+  // Browser: always use relative paths — Next.js proxy rewrites handle routing
+  return "";
 }
 
 export function slugify(input: string): string {

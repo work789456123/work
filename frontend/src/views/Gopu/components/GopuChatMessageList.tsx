@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Loader2, Plus, AlertTriangle, Stethoscope } from "lucide-react";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { useRouter } from "next/navigation";
 import { gopuChat } from "@/assets/content/gopu";
 import { FAQ_LIST, faqAnswerForLanguage, faqChipLabel, normalizeGopuLanguage } from "@/data/chatbot";
@@ -74,29 +75,34 @@ export default function GopuChatMessageList({
               {msg.role === "user" ? (
                 <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.content}</p>
               ) : (
-                <div className="text-sm leading-relaxed prose prose-sm max-w-none prose-p:leading-relaxed prose-p:my-0 prose-pre:my-0">
+                <div className="text-sm leading-relaxed">
                   <ReactMarkdown
+                    remarkPlugins={[remarkGfm]}
                     components={{
-                      p: ({ node, ...props }) => {
+                      p: ({ node, ...props }) => { void node; return <p className="mb-2 last:mb-0 leading-relaxed" {...props} />; },
+                      ul: ({ node, ...props }) => { void node; return <ul className="list-disc ml-5 my-2 space-y-1" {...props} />; },
+                      ol: ({ node, ...props }) => { void node; return <ol className="list-decimal ml-5 my-2 space-y-1" {...props} />; },
+                      li: ({ node, ...props }) => { void node; return <li className="leading-relaxed" {...props} />; },
+                      strong: ({ node, ...props }) => { void node; return <strong className="font-semibold text-[#1F6559]" {...props} />; },
+                      em: ({ node, ...props }) => { void node; return <em className="italic" {...props} />; },
+                      h1: ({ node, ...props }) => { void node; return <h1 className="text-base font-bold text-[#1F6559] mt-3 mb-1.5" {...props} />; },
+                      h2: ({ node, ...props }) => { void node; return <h2 className="text-sm font-bold text-[#1F6559] mt-3 mb-1.5" {...props} />; },
+                      h3: ({ node, ...props }) => { void node; return <h3 className="text-sm font-semibold text-[#333] mt-2 mb-1" {...props} />; },
+                      blockquote: ({ node, ...props }) => { void node; return <blockquote className="border-l-4 border-[#1F6559]/30 pl-3 my-2 text-[#555] italic" {...props} />; },
+                      code: ({ node, className, children, ...props }) => {
                         void node;
-                        return <p className="mb-1 last:mb-0" {...props} />;
+                        const isBlock = className?.includes("language-");
+                        return isBlock
+                          ? <code className="block bg-[#f4f4f4] rounded-lg p-3 my-2 text-xs font-mono overflow-x-auto whitespace-pre" {...props}>{children}</code>
+                          : <code className="bg-[#f4f4f4] rounded px-1 py-0.5 text-xs font-mono" {...props}>{children}</code>;
                       },
-                      ul: ({ node, ...props }) => {
-                        void node;
-                        return <ul className="list-disc ml-4 my-1.5" {...props} />;
-                      },
-                      ol: ({ node, ...props }) => {
-                        void node;
-                        return <ol className="list-decimal ml-4 my-1.5" {...props} />;
-                      },
-                      li: ({ node, ...props }) => {
-                        void node;
-                        return <li className="my-0.5" {...props} />;
-                      },
-                      strong: ({ node, ...props }) => {
-                        void node;
-                        return <strong className="font-bold text-[#1F6559]" {...props} />;
-                      },
+                      pre: ({ node, ...props }) => { void node; return <pre className="my-2 overflow-x-auto" {...props} />; },
+                      table: ({ node, ...props }) => { void node; return <div className="overflow-x-auto my-3"><table className="w-full text-xs border-collapse" {...props} /></div>; },
+                      thead: ({ node, ...props }) => { void node; return <thead className="bg-[#1F6559]/10" {...props} />; },
+                      th: ({ node, ...props }) => { void node; return <th className="border border-[#1F6559]/20 px-3 py-1.5 text-left font-semibold text-[#1F6559]" {...props} />; },
+                      td: ({ node, ...props }) => { void node; return <td className="border border-[#EAEAEA] px-3 py-1.5 align-top" {...props} />; },
+                      tr: ({ node, ...props }) => { void node; return <tr className="even:bg-[#FAFAFA]" {...props} />; },
+                      hr: ({ node, ...props }) => { void node; return <hr className="my-3 border-[#EAEAEA]" {...props} />; },
                     }}
                   >
                     {msg.content}

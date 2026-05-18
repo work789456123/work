@@ -43,6 +43,7 @@ export const primaryNav = [
     children: [
       { spl: false, name: "About Us", link: "/about" },
       { spl: false, name: "Founders Stories", link: "/our-story" },
+      { spl: false, name: "Accreditations", link: "/accreditations" },
       { spl: false, name: "Contact Us", link: "/contact" },
     ],
   },

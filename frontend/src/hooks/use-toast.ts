@@ -3,7 +3,7 @@ import * as React from "react";
 import type { ToastAction, ToastState, ToasterToast } from "@/types/toast";
 
 const TOAST_LIMIT = 1;
-const TOAST_REMOVE_DELAY = 1_000_000;
+const TOAST_REMOVE_DELAY = 2_000;
 
 const toastTimeouts = new Map<string, ReturnType<typeof setTimeout>>();
 

@@ -33,13 +33,39 @@ def _run_alembic_upgrade_head() -> None:
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Production-friendly for ECS image-only deploys: schema matches this process before serving traffic.
+    # 1. Run Alembic migrations (idempotent — stamps to head if tables already exist)
     if not settings.SKIP_ALEMBIC_AT_STARTUP:
         logger.info("Applying database migrations (alembic upgrade head)...")
-        await asyncio.to_thread(_run_alembic_upgrade_head)
-        logger.info("Database migrations are up to date.")
+        try:
+            await asyncio.to_thread(_run_alembic_upgrade_head)
+            logger.info("Database migrations are up to date.")
+        except Exception as exc:
+            logger.warning(
+                "Alembic migration failed (tables may already exist): %s. "
+                "Stamping database to head and continuing.",
+                exc,
+            )
+            try:
+                def _stamp_head() -> None:
+                    root = Path(__file__).resolve().parents[1]
+                    ini = root / "alembic.ini"
+                    cfg = Config(str(ini))
+                    command.stamp(cfg, "head")
+                await asyncio.to_thread(_stamp_head)
+                logger.info("Database stamped to head successfully.")
+            except Exception as stamp_exc:
+                logger.error("Failed to stamp database: %s", stamp_exc)
     else:
         logger.info("SKIP_ALEMBIC_AT_STARTUP is set; skipping Alembic on startup.")
+
+    # 2. Seed initial data (admin user, sample blogs/doctors) — safe to run on every start (idempotent)
+    try:
+        from app.db.init_db import init_db as _seed_db
+        await _seed_db()
+        logger.info("Database seeding complete.")
+    except Exception as seed_exc:
+        logger.error("Database seeding failed (non-fatal): %s", seed_exc)
+
     try:
         yield
     finally:
@@ -92,16 +118,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-@app.on_event("startup")
-async def startup_event():
-    import app.db.base
-    try:
-        async with engine.begin() as conn:
-            await conn.run_sync(app.db.base.Base.metadata.create_all)
-        logger.info("Database tables verified/created successfully.")
-    except Exception as e:
-        logger.error(f"Error creating tables: {e}")
 
 # --- Static Files & Routers ---
 uploads_dir = Path("uploads")

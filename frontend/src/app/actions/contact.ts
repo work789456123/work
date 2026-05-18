@@ -1,9 +1,11 @@
 "use server";
 
 function getBackendUrl(): string {
-  const env = process.env.NEXT_PUBLIC_BACKEND_URL;
-  if (env !== undefined && env !== "") return env;
-  if (process.env.NODE_ENV === "production") return "";
+  // Server action — always runs server-side, use internal Docker URL when available
+  const internal = process.env.BACKEND_INTERNAL_URL;
+  if (internal && internal.trim() !== "") return internal.trim();
+  const pub = process.env.NEXT_PUBLIC_BACKEND_URL;
+  if (pub && pub.trim() !== "") return pub.trim();
   return "http://localhost:8000";
 }
 
@@ -24,9 +26,6 @@ export async function submitContactMessage(data: {
   }
 
   const base = getBackendUrl();
-  if (!base && process.env.NODE_ENV === "production") {
-    return { ok: false, error: "Service is not configured." };
-  }
 
   try {
     const res = await fetch(`${base}/api/contact`, {

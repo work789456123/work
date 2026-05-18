@@ -36,6 +36,8 @@ interface ProfileButtonProps {
 export default function ProfileButton({ onLogout }: ProfileButtonProps) {
   const router = useRouter();
   const [user, setUser] = useState<{ name: string; email: string } | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+  const [trackingOpen, setTrackingOpen] = useState(false);
 
   useEffect(() => {
     const loadUser = () => {
@@ -49,6 +51,15 @@ export default function ProfileButton({ onLogout }: ProfileButtonProps) {
     // Listen for auth success to refresh user info
     window.addEventListener("authSuccess", loadUser);
     return () => window.removeEventListener("authSuccess", loadUser);
+  }, []);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   const getInitials = (name: string) => {
@@ -100,47 +111,107 @@ export default function ProfileButton({ onLogout }: ProfileButtonProps) {
           </div>
         </DropdownMenuItem>
 
-        <DropdownMenuSub>
-          <DropdownMenuSubTrigger className="p-2.5 rounded-xl cursor-pointer hover:bg-[#1F6559]/5 focus:bg-[#1F6559]/5 hover:text-[#1F1F1F] focus:text-[#1F1F1F] text-[#1F1F1F] transition-colors data-[state=open]:bg-[#1F6559]/5 data-[state=open]:text-[#1F1F1F]">
-            <div className="flex items-center w-full">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#1F6559]/10 text-[#1F6559] mr-3">
-                <ShieldCheck className="h-4 w-4" />
+        {isMobile ? (
+          <>
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                setTrackingOpen(!trackingOpen);
+              }}
+              className="flex items-center justify-between w-full p-2.5 rounded-xl cursor-pointer hover:bg-[#1F6559]/5 focus:bg-[#1F6559]/5 hover:text-[#1F1F1F] focus:text-[#1F1F1F] text-[#1F1F1F] transition-all outline-none"
+            >
+              <div className="flex items-center">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#1F6559]/10 text-[#1F6559] mr-3">
+                  <ShieldCheck className="h-4 w-4" />
+                </div>
+                <span className="font-semibold text-sm">{navbarActions.profile.tracking}</span>
               </div>
-              <span className="font-semibold text-sm">{navbarActions.profile.tracking}</span>
-            </div>
-          </DropdownMenuSubTrigger>
-          <DropdownMenuPortal>
-            <DropdownMenuSubContent className="w-56 p-2 rounded-xl border-[#E2E8E5] shadow-lg ml-1">
-              <DropdownMenuItem 
-                onClick={() => router.push("/tracking/appointments")}
-                className="p-2.5 rounded-lg cursor-pointer hover:bg-[#1F6559]/5 focus:bg-[#1F6559]/5 hover:text-[#1F1F1F] focus:text-[#1F1F1F] text-[#1F1F1F]"
-              >
-                <div className="flex items-center">
-                  <Calendar className="h-4 w-4 mr-2.5 text-[#1F6559]" />
-                  <span className="text-sm font-medium">{navbarActions.profile.appointmentTracking}</span>
+              <ChevronRight className={`h-4 w-4 transition-transform duration-200 ${trackingOpen ? "rotate-90" : ""}`} />
+            </button>
+
+            <AnimatePresence initial={false}>
+              {trackingOpen && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.2, ease: "easeInOut" }}
+                  className="overflow-hidden pl-4 pr-1 space-y-1 my-1"
+                >
+                  <DropdownMenuItem 
+                    onClick={() => router.push("/tracking/appointments")}
+                    className="p-2.5 rounded-lg cursor-pointer hover:bg-[#1F6559]/5 focus:bg-[#1F6559]/5 hover:text-[#1F1F1F] focus:text-[#1F1F1F] text-[#1F1F1F] transition-colors"
+                  >
+                    <div className="flex items-center">
+                      <Calendar className="h-4 w-4 mr-2.5 text-[#1F6559]" />
+                      <span className="text-sm font-medium">{navbarActions.profile.appointmentTracking}</span>
+                    </div>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem 
+                    onClick={() => router.push("/tracking/pet-cabs")}
+                    className="p-2.5 rounded-lg cursor-pointer hover:bg-[#1F6559]/5 focus:bg-[#1F6559]/5 hover:text-[#1F1F1F] focus:text-[#1F1F1F] text-[#1F1F1F] transition-colors"
+                  >
+                    <div className="flex items-center">
+                      <Package className="h-4 w-4 mr-2.5 text-[#1F6559]" />
+                      <span className="text-sm font-medium">Pet Cab Tracking</span>
+                    </div>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem 
+                    onClick={() => router.push("/tracking/medical-queries")}
+                    className="p-2.5 rounded-lg cursor-pointer hover:bg-[#1F6559]/5 focus:bg-[#1F6559]/5 hover:text-[#1F1F1F] focus:text-[#1F1F1F] text-[#1F1F1F] transition-colors"
+                  >
+                    <div className="flex items-center">
+                      <MessageSquare className="h-4 w-4 mr-2.5 text-[#1F6559]" />
+                      <span className="text-sm font-medium">{navbarActions.profile.medicalQueryTracking}</span>
+                    </div>
+                  </DropdownMenuItem>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </>
+        ) : (
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger className="p-2.5 rounded-xl cursor-pointer hover:bg-[#1F6559]/5 focus:bg-[#1F6559]/5 hover:text-[#1F1F1F] focus:text-[#1F1F1F] text-[#1F1F1F] transition-colors data-[state=open]:bg-[#1F6559]/5 data-[state=open]:text-[#1F1F1F]">
+              <div className="flex items-center w-full">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#1F6559]/10 text-[#1F6559] mr-3">
+                  <ShieldCheck className="h-4 w-4" />
                 </div>
-              </DropdownMenuItem>
-              <DropdownMenuItem 
-                onClick={() => router.push("/tracking/pet-cabs")}
-                className="p-2.5 rounded-lg cursor-pointer hover:bg-[#1F6559]/5 focus:bg-[#1F6559]/5 hover:text-[#1F1F1F] focus:text-[#1F1F1F] text-[#1F1F1F]"
-              >
-                <div className="flex items-center">
-                  <Package className="h-4 w-4 mr-2.5 text-[#1F6559]" />
-                  <span className="text-sm font-medium">Pet Cab Tracking</span>
-                </div>
-              </DropdownMenuItem>
-              <DropdownMenuItem 
-                onClick={() => router.push("/tracking/medical-queries")}
-                className="p-2.5 rounded-lg cursor-pointer hover:bg-[#1F6559]/5 focus:bg-[#1F6559]/5 hover:text-[#1F1F1F] focus:text-[#1F1F1F] text-[#1F1F1F]"
-              >
-                <div className="flex items-center">
-                  <MessageSquare className="h-4 w-4 mr-2.5 text-[#1F6559]" />
-                  <span className="text-sm font-medium">{navbarActions.profile.medicalQueryTracking}</span>
-                </div>
-              </DropdownMenuItem>
-            </DropdownMenuSubContent>
-          </DropdownMenuPortal>
-        </DropdownMenuSub>
+                <span className="font-semibold text-sm">{navbarActions.profile.tracking}</span>
+              </div>
+            </DropdownMenuSubTrigger>
+            <DropdownMenuPortal>
+              <DropdownMenuSubContent className="w-56 p-2 rounded-xl border-[#E2E8E5] shadow-lg ml-1">
+                <DropdownMenuItem 
+                  onClick={() => router.push("/tracking/appointments")}
+                  className="p-2.5 rounded-lg cursor-pointer hover:bg-[#1F6559]/5 focus:bg-[#1F6559]/5 hover:text-[#1F1F1F] focus:text-[#1F1F1F] text-[#1F1F1F]"
+                >
+                  <div className="flex items-center">
+                    <Calendar className="h-4 w-4 mr-2.5 text-[#1F6559]" />
+                    <span className="text-sm font-medium">{navbarActions.profile.appointmentTracking}</span>
+                  </div>
+                </DropdownMenuItem>
+                <DropdownMenuItem 
+                  onClick={() => router.push("/tracking/pet-cabs")}
+                  className="p-2.5 rounded-lg cursor-pointer hover:bg-[#1F6559]/5 focus:bg-[#1F6559]/5 hover:text-[#1F1F1F] focus:text-[#1F1F1F] text-[#1F1F1F]"
+                >
+                  <div className="flex items-center">
+                    <Package className="h-4 w-4 mr-2.5 text-[#1F6559]" />
+                    <span className="text-sm font-medium">Pet Cab Tracking</span>
+                  </div>
+                </DropdownMenuItem>
+                <DropdownMenuItem 
+                  onClick={() => router.push("/tracking/medical-queries")}
+                  className="p-2.5 rounded-lg cursor-pointer hover:bg-[#1F6559]/5 focus:bg-[#1F6559]/5 hover:text-[#1F1F1F] focus:text-[#1F1F1F] text-[#1F1F1F]"
+                >
+                  <div className="flex items-center">
+                    <MessageSquare className="h-4 w-4 mr-2.5 text-[#1F6559]" />
+                    <span className="text-sm font-medium">{navbarActions.profile.medicalQueryTracking}</span>
+                  </div>
+                </DropdownMenuItem>
+              </DropdownMenuSubContent>
+            </DropdownMenuPortal>
+          </DropdownMenuSub>
+        )}
 
         <DropdownMenuSeparator className="bg-[#E2E8E5]/60" />
         

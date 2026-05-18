@@ -9,7 +9,8 @@ export default function AuthPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+  // Always use relative path — next.config rewrites proxy /api to the backend
+  const API_URL = "";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

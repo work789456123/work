@@ -1,4 +1,4 @@
-# Build backend + frontend Docker images and push to Amazon ECR (ap-south-1).
+# Build backend + frontend + pvadmin Docker images and push to Amazon ECR (ap-south-1).
 #
 # Required GitHub repository secrets:
 #   AWS_ACCESS_KEY_ID
@@ -7,8 +7,9 @@
 #    ecr:CompleteLayerUpload, ecr:InitiateLayerUpload, ecr:PutImage, ecr:UploadLayerPart,
 #    ecr:BatchGetImage on the target repositories.)
 #
-# Optional repository variable:
-#   NEXT_PUBLIC_BACKEND_URL — passed to the frontend build (default: https://pashuvaani.com)
+# Required repository variables (Settings → Variables → Repository variables):
+#   NEXT_PUBLIC_BACKEND_URL — public URL of the backend, e.g. https://api.pashuvaani.com
+#                             Baked into the frontend JS bundle at build time.
 
 name: Build and push to ECR
 
@@ -20,6 +21,7 @@ on:
     paths:
       - "backend/**"
       - "frontend/**"
+      - "pvadmin/**"
       - ".github/workflows/ecr-build-push.yml"
 
 permissions:
@@ -52,7 +54,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          # Backend image bundles alembic/versions; migrations run at FastAPI startup (app/main.py lifespan).
+          # Backend image bundles alembic/versions; migrations + seeding run at FastAPI startup (app/main.py lifespan).
           context: ./backend
           file: ./backend/Dockerfile
           push: true
@@ -88,7 +90,41 @@ jobs:
           file: ./frontend/Dockerfile
           push: true
           platforms: linux/amd64
-          build-args: NEXT_PUBLIC_BACKEND_URL="${{ vars.NEXT_PUBLIC_BACKEND_URL || '' }}"
+          # NEXT_PUBLIC_BACKEND_URL is baked into the JS bundle at build time.
+          # Set this as a repository variable: Settings → Variables → NEXT_PUBLIC_BACKEND_URL
+          build-args: |
+            NEXT_PUBLIC_BACKEND_URL=${{ vars.NEXT_PUBLIC_BACKEND_URL }}
           tags: |
             ${{ steps.login-ecr.outputs.registry }}/pashuvaani-frontend:latest
             ${{ steps.login-ecr.outputs.registry }}/pashuvaani-frontend:${{ github.sha }}
+
+  pvadmin:
+    name: pvadmin image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: ./pvadmin
+          file: ./pvadmin/Dockerfile
+          push: true
+          platforms: linux/amd64
+          tags: |
+            ${{ steps.login-ecr.outputs.registry }}/pashuvaani-pvadmin:latest
+            ${{ steps.login-ecr.outputs.registry }}/pashuvaani-pvadmin:${{ github.sha }}

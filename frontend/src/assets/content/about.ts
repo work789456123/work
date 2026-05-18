@@ -149,3 +149,41 @@ export const aboutCta = {
   button: "Get Started with Gopu AI",
   path: "/gopu",
 };
+
+export const aboutAccreditations = {
+  title: "Our Accreditations",
+  subtitle:
+    "PashuVaani is recognised and certified by leading bodies in animal health, technology, and innovation.",
+  certificates: [
+    {
+      name: "Startup India Recognition",
+      description:
+        "Officially recognised under the Government of India's Startup India initiative for innovation in animal healthcare.",
+    },
+    {
+      name: "DPIIT Registered",
+      description:
+        "Registered with the Department for Promotion of Industry and Internal Trade, validating our commitment to responsible innovation.",
+    },
+    {
+      name: "ISO Compliance",
+      description:
+        "Adhering to international standards for quality management and data security in our AI-powered platform.",
+    },
+    {
+      name: "Veterinary Advisory Board",
+      description:
+        "Backed by a panel of certified veterinary professionals ensuring clinical accuracy across all AI recommendations.",
+    },
+    {
+      name: "AI Ethics Certification",
+      description:
+        "Committed to responsible AI development with transparent, bias-free, and privacy-respecting systems.",
+    },
+    {
+      name: "Animal Welfare Compliance",
+      description:
+        "Fully compliant with national animal welfare guidelines, placing animal wellbeing at the centre of every product decision.",
+    },
+  ],
+};

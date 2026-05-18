@@ -17,7 +17,8 @@ interface FormData {
   password: string;
 }
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+// Always use relative paths — Next.js rewrites proxy /api to the backend
+const API_URL = "";
 
 function getToken() {
   if (typeof window === "undefined") return null;

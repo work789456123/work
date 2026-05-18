@@ -44,7 +44,8 @@ export function MarketplaceView({ categories, products, initialCategory }: Props
   );
   const [sort, setSort] = useState<SortKey>("featured");
   const [liveProducts, setLiveProducts] = useState<Product[]>(products);
-  const [isLoadingProducts, setIsLoadingProducts] = useState(true);
+  // Start as false when SSR already provided products, true only when list is empty (backend may be loading)
+  const [isLoadingProducts, setIsLoadingProducts] = useState(products.length === 0);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
   const categoryParam = searchParams.get("category");

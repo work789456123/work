@@ -59,7 +59,8 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+  // Always use relative paths — Next.js rewrites proxy /api to the backend
+  const API_URL = "";
 
   useEffect(() => {
     const token = localStorage.getItem("admin_token");

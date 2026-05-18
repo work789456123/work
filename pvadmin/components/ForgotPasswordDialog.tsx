@@ -17,7 +17,8 @@ export function ForgotPasswordDialog({
   open,
   onOpenChange,
   onBackToLogin,
-  apiBaseUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000",
+  // Always use relative paths — Next.js rewrites proxy /api to the backend
+  apiBaseUrl = "",
 }: ForgotPasswordDialogProps) {
   const [mode, setMode] = useState<Mode>("admin");
   const [step, setStep] = useState<Step>("email");

@@ -311,24 +311,6 @@ export function NavbarAuthDialog({
 							{authDialog.submitRegister}
 						</button>
 					</div>
-					{/* Always in the header so it is not clipped by short viewports / centered-dialog overflow on mobile Safari */}
-					<div className="relative mt-3 flex flex-col items-center gap-0.5 pb-0.5">
-						<button
-							type="button"
-							id="auth-forgot-password-link"
-							data-testid="auth-forgot-password-link"
-							onClick={() => {
-								onOpenChange(false);
-								setShowForgotPassword(true);
-							}}
-							className="text-sm font-semibold text-white underline decoration-white/60 underline-offset-4 transition hover:text-white hover:decoration-white"
-						>
-							{authDialog.forgotPassword}
-						</button>
-						<p className="text-center text-[11px] text-white/80">
-							{authDialog.forgotPasswordHint}
-						</p>
-					</div>
 				</div>
 
 				<div className="bg-white px-6 pb-6 pt-5">
@@ -495,6 +477,7 @@ export function NavbarAuthDialog({
 									)}
 								</Button>
 							</div>
+
 						</FieldGroup>
 						<Button
 							type="submit"
@@ -503,6 +486,25 @@ export function NavbarAuthDialog({
 						>
 							{isLogin ? authDialog.submitLogin : authDialog.submitRegister}
 						</Button>
+						{isLogin && (
+							<div className="flex flex-col items-center gap-0.5">
+								<button
+									type="button"
+									id="auth-forgot-password-link"
+									data-testid="auth-forgot-password-link"
+									onClick={() => {
+										onOpenChange(false);
+										setShowForgotPassword(true);
+									}}
+									className="text-xs font-semibold text-[#1F6559] underline-offset-4 transition hover:text-[#184F46] hover:underline"
+								>
+									{authDialog.forgotPassword}
+								</button>
+								<p className="text-[11px] text-[#6F6F6F]">
+									{authDialog.forgotPasswordHint}
+								</p>
+							</div>
+						)}
 						<div className="pt-1 flex flex-col items-center gap-1">
 							<p className="text-center text-sm leading-relaxed text-[#6F6F6F]">
 								{isLogin ? authDialog.toggleToRegister : authDialog.toggleToLogin}

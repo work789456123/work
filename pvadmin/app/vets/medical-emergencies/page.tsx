@@ -23,7 +23,8 @@ export default function MedicalEmergenciesPage() {
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+  // Always use relative paths — Next.js rewrites proxy /api to the backend
+  const API_URL = "";
 
   const fetchEmergencies = useCallback(async (silent = false) => {
     const token = localStorage.getItem("admin_token");
