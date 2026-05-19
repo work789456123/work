@@ -37,7 +37,7 @@ services:
   frontend:
     image: node:20-alpine
     container_name: pashuvaani_frontend
-    restart: always
+    restart: no
     working_dir: /app
     environment:
       - NEXT_PUBLIC_BACKEND_URL=http://localhost:8000
@@ -56,7 +56,7 @@ services:
   pvadmin:
     image: node:20-alpine
     container_name: pashuvaani_pvadmin
-    restart: always
+    restart: no
     working_dir: /app
     environment:
       - BACKEND_INTERNAL_URL=http://backend:80

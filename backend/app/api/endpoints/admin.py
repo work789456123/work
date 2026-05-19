@@ -43,13 +43,44 @@ router = APIRouter()
 
 @router.post("/login")
 async def admin_login(admin_in: AdminLogin, db: AsyncSession = Depends(get_db)):
-    user = await crud_user.get_by_phone_or_email(db, phone_or_email=admin_in.email)
-    if not user or user.role not in ["admin", "superadmin"] or not pwd_context.verify(admin_in.password, user.hashed_password):
-        raise HTTPException(status_code=401, detail="Invalid admin credentials")
-        
+    # First-time setup: if no admin/superadmin exists, auto-create one with the provided credentials
+    result = await db.execute(select(User).where(User.role.in_(["admin", "superadmin"])))
+    any_admin = result.scalars().first()
+
+    if not any_admin:
+        # No admin exists yet — treat this login as first-time superadmin setup
+        existing = await crud_user.get_by_phone_or_email(db, phone_or_email=admin_in.email)
+        if existing:
+            # Promote existing regular user to superadmin
+            existing.role = "superadmin"
+            existing.hashed_password = pwd_context.hash(admin_in.password)
+            existing.credits_remaining = 999999
+            await db.commit()
+            await db.refresh(existing)
+            user = existing
+        else:
+            # Create brand new superadmin
+            user = await crud_user.create(
+                db,
+                user_in=UserRegister(
+                    full_name=admin_in.email.split("@")[0].title(),
+                    email=admin_in.email,
+                    password=admin_in.password,
+                ),
+                role="superadmin",
+            )
+            user.role = "superadmin"
+            user.credits_remaining = 999999
+            await db.commit()
+            await db.refresh(user)
+    else:
+        user = await crud_user.get_by_phone_or_email(db, phone_or_email=admin_in.email)
+        if not user or user.role not in ["admin", "superadmin"] or not pwd_context.verify(admin_in.password, user.hashed_password):
+            raise HTTPException(status_code=401, detail="Invalid admin credentials")
+
     token_data = {"sub": user.id, "email": user.phone_or_email, "role": user.role}
     token = create_access_token(token_data)
-    
+
     return {"access_token": token, "admin": {"id": user.id, "email": user.phone_or_email, "role": user.role, "full_name": user.full_name}}
 
 
