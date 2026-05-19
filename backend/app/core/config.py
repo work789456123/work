@@ -11,8 +11,6 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 43200  # 30 days
     DATABASE_URL: str
     OPENAI_API_KEY: str
-    ADMIN_EMAIL: str
-    ADMIN_PASSWORD: str
     CORS_ORIGINS: str = "*"
     BACKEND_PUBLIC_URL: str = "http://localhost:8000"
 
