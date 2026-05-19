@@ -6,8 +6,6 @@ from sqlalchemy.future import select
 from sqlalchemy import func
 from app.db.session import AsyncSessionLocal, engine
 from app.core.config import settings
-from app.crud.user import crud_user
-from app.schemas.user import UserRegister
 from app.models.user import User
 from app.models.blog import Blog
 from app.models.doctor import Doctor
@@ -65,28 +63,6 @@ async def init_db() -> None:
         await conn.run_sync(app.db.base.Base.metadata.create_all)
         
     async with AsyncSessionLocal() as db:
-        admin_email = settings.ADMIN_EMAIL
-        result = await db.execute(select(User).where(User.phone_or_email == admin_email))
-        admin_user = result.scalars().first()
-        
-        if not admin_user:
-            logger.info("Seeding first superadmin user...")
-            user_in = UserRegister(
-                full_name="System Admin",
-                email=admin_email,
-                password=settings.ADMIN_PASSWORD
-            )
-            admin_user = await crud_user.create(db, user_in)
-            admin_user.role = "superadmin"
-            admin_user.credits_remaining = 999999
-            await db.commit()
-        elif admin_user.role not in ("admin", "superadmin"):
-            # Existing user was a regular user — promote to superadmin
-            logger.info("Promoting existing user %s to superadmin...", admin_email)
-            admin_user.role = "superadmin"
-            await db.commit()
-        # If already admin/superadmin, leave role unchanged so manual promotions are preserved
-            
         # Seed Blogs
         blogs_count = await db.scalar(select(func.count(Blog.id)))
         if not blogs_count:
