@@ -112,7 +112,7 @@ export default function ReportEmergencyScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f9fafb' },
+  container: { flex: 1, backgroundColor: 'transparent' },
   alertBanner: {
     backgroundColor: '#dc2626',
     padding: 20,

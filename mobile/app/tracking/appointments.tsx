@@ -99,7 +99,7 @@ export default function TrackAppointmentsScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f9fafb' },
+  container: { flex: 1, backgroundColor: 'transparent' },
   list: { padding: 16 },
   card: {
     backgroundColor: '#fff',

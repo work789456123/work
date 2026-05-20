@@ -333,7 +333,7 @@ export default function BookPetCabScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f9fafb' },
+  container: { flex: 1, backgroundColor: 'transparent' },
   infoCard: { flexDirection: 'row', backgroundColor: '#ede9fe', margin: 16, borderRadius: 10, padding: 12, gap: 8, alignItems: 'flex-start' },
   infoText: { flex: 1, fontSize: 13, color: '#5b21b6' },
   sectionHeading: { fontSize: 14, fontWeight: '700', color: '#374151', marginHorizontal: 16, marginBottom: 10, marginTop: 4 },

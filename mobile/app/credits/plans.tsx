@@ -143,7 +143,7 @@ export default function PlansScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f9fafb' },
+  container: { flex: 1, backgroundColor: 'transparent' },
   statusCard: {
     backgroundColor: '#fff',
     borderRadius: 12,

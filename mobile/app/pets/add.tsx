@@ -160,7 +160,7 @@ export default function MyPetsScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f9fafb' },
+  container: { flex: 1, backgroundColor: 'transparent' },
   list: { padding: 16 },
   addBtn: {
     backgroundColor: '#d97706',

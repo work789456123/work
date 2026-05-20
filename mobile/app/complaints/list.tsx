@@ -103,7 +103,7 @@ export default function ComplaintsListScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f9fafb' },
+  container: { flex: 1, backgroundColor: 'transparent' },
   list: { padding: 16 },
   newBtn: {
     backgroundColor: '#0891b2',

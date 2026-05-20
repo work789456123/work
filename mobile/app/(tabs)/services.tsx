@@ -90,7 +90,7 @@ export default function ServicesScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f9fafb' },
+  container: { flex: 1, backgroundColor: 'transparent' },
   header: { backgroundColor: '#16a34a', padding: 20 },
   headerTitle: { fontSize: 20, fontWeight: '700', color: '#fff' },
   headerSub: { fontSize: 12, color: '#bbf7d0', marginTop: 2 },

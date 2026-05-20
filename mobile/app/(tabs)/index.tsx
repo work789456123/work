@@ -151,7 +151,7 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: '#16a34a' },
-  container: { flex: 1, backgroundColor: '#f9fafb' },
+  container: { flex: 1, backgroundColor: 'transparent' },
   header: {
     backgroundColor: '#16a34a',
     paddingHorizontal: 20,

@@ -140,7 +140,7 @@ export default function MarketplaceScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f9fafb' },
+  container: { flex: 1, backgroundColor: 'transparent' },
   centered: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   header: { backgroundColor: '#16a34a', padding: 20 },
   headerTitle: { fontSize: 20, fontWeight: '700', color: '#fff' },

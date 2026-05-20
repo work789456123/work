@@ -152,7 +152,7 @@ export default function ChatListScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f9fafb' },
+  container: { flex: 1, backgroundColor: 'transparent' },
   header: {
     backgroundColor: '#16a34a',
     padding: 20,

@@ -179,7 +179,7 @@ export default function BookAppointmentScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f9fafb' },
+  container: { flex: 1, backgroundColor: 'transparent' },
   infoCard: {
     flexDirection: 'row',
     backgroundColor: '#dbeafe',
