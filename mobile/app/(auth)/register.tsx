@@ -60,7 +60,7 @@ export default function RegisterScreen() {
       <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
         <View style={styles.header}>
           <Image
-            source={require('../../assets/icon.jpeg')}
+            source={require('../../assets/icon.png')}
             style={styles.logoImage}
             resizeMode="contain"
           />
