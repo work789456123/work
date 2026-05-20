@@ -21,7 +21,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/logo.jpeg",
-        "backgroundColor": "#16a34a"
+        "backgroundColor": "#0d1f1a"
       },
       "package": "com.pashuvaani.app",
       "permissions": [
