@@ -60,7 +60,7 @@ export default function LoginScreen() {
         {!keyboardVisible && (
           <View style={styles.header}>
             <Image
-              source={require('../../assets/icon.jpeg')}
+              source={require('../../assets/icon.png')}
               style={styles.logoImage}
               resizeMode="cover"
             />

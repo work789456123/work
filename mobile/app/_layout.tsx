@@ -32,18 +32,17 @@ export default function RootLayout() {
 
   if (!appReady || isLoading) {
     return (
-      <View style={styles.splash}>
-        <View style={styles.logoWrapper}>
-          <Image
-            source={require('../assets/icon.jpeg')}
-            style={styles.splashLogo}
-            resizeMode="cover"
-            onError={() => {}}
-          />
-        </View>
-        <Text style={styles.splashTitle}>PashuVaani</Text>
-        <Text style={styles.splashTagline}>The Voice of Animal Health</Text>
-      </View>
+      <ImageBackground
+        source={require('../assets/background.jpeg')}
+        style={styles.splash}
+        resizeMode="cover"
+      >
+        <Image
+          source={require('../assets/icon.png')}
+          style={styles.splashLogo}
+          resizeMode="contain"
+        />
+      </ImageBackground>
     );
   }
 
@@ -90,7 +89,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#f0fdf4',
+  },
+  splashLogo: {
+    width: 200,
+    height: 200,
   },
   logoWrapper: {
     width: 110,
@@ -111,12 +113,12 @@ const styles = StyleSheet.create({
   splashTitle: {
     fontSize: 30,
     fontWeight: '800',
-    color: '#16a34a',
+    color: '#fff',
     letterSpacing: 0.5,
   },
   splashTagline: {
     fontSize: 13,
-    color: '#6b7280',
+    color: '#e2e8f0',
     marginTop: 4,
   },
   background: { flex: 1, backgroundColor: '#1a3a2a' },

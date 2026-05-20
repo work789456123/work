@@ -47,7 +47,7 @@ export default function BlogDetailScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff' },
+  container: { flex: 1, backgroundColor: 'transparent' },
   centered: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   coverImage: { width: '100%', height: 220 },
   content: { padding: 20 },
