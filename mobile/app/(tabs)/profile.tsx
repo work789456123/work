@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
+  ImageBackground,
 } from 'react-native';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -40,18 +41,24 @@ export default function ProfileScreen() {
   return (
     <ScrollView style={styles.container}>
       {/* Profile Header */}
-      <View style={styles.header}>
-        <View style={styles.avatar}>
-          <Text style={styles.avatarText}>
-            {user?.full_name?.charAt(0).toUpperCase() || 'U'}
-          </Text>
+      <ImageBackground
+        source={require('../../assets/background.jpeg')}
+        style={styles.header}
+        resizeMode="cover"
+      >
+        <View style={styles.headerOverlay}>
+          <View style={styles.avatar}>
+            <Text style={styles.avatarText}>
+              {user?.full_name?.charAt(0).toUpperCase() || 'U'}
+            </Text>
+          </View>
+          <Text style={styles.name}>{user?.full_name}</Text>
+          <Text style={styles.email}>{user?.phone_or_email}</Text>
+          <View style={styles.roleBadge}>
+            <Text style={styles.roleText}>{user?.role?.toUpperCase()}</Text>
+          </View>
         </View>
-        <Text style={styles.name}>{user?.full_name}</Text>
-        <Text style={styles.email}>{user?.phone_or_email}</Text>
-        <View style={styles.roleBadge}>
-          <Text style={styles.roleText}>{user?.role?.toUpperCase()}</Text>
-        </View>
-      </View>
+      </ImageBackground>
 
       {/* Menu */}
       <View style={styles.menu}>
@@ -82,7 +89,10 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: 'transparent' },
   header: {
-    backgroundColor: '#16a34a',
+    overflow: 'hidden',
+  },
+  headerOverlay: {
+    backgroundColor: 'rgba(22, 163, 74, 0.72)',
     padding: 32,
     alignItems: 'center',
   },

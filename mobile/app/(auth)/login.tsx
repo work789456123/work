@@ -9,7 +9,6 @@ import {
   ScrollView,
   ActivityIndicator,
   Image,
-  useWindowDimensions,
 } from 'react-native';
 import { Link, router } from 'expo-router';
 import { useState } from 'react';
@@ -23,7 +22,6 @@ export default function LoginScreen() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [keyboardVisible, setKeyboardVisible] = useState(false);
   const { login } = useAuthStore();
   const insets = useSafeAreaInsets();
 
@@ -37,8 +35,7 @@ export default function LoginScreen() {
       await login(email.trim().toLowerCase(), password);
       router.replace('/(tabs)');
     } catch (err: any) {
-      const msg =
-        err?.response?.data?.detail || 'Login failed. Please try again.';
+      const msg = err?.response?.data?.detail || 'Login failed. Please try again.';
       Toast.show({ type: 'error', text1: msg });
     } finally {
       setLoading(false);
@@ -47,75 +44,71 @@ export default function LoginScreen() {
 
   return (
     <KeyboardAvoidingView
-      style={[styles.container, { paddingTop: insets.top }]}
+      style={[styles.container, { paddingTop: insets.top, paddingBottom: insets.bottom }]}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={0}
     >
       <ScrollView
         contentContainerStyle={styles.scroll}
         keyboardShouldPersistTaps="handled"
-        onScrollBeginDrag={() => setKeyboardVisible(false)}
+        showsVerticalScrollIndicator={false}
       >
-        {/* Header — hide when keyboard is open to prevent merging */}
-        {!keyboardVisible && (
-          <View style={styles.header}>
+        {/* Logo */}
+        <View style={styles.logoSection}>
+          <View style={styles.logoCircle}>
             <Image
-              source={require('../../assets/logo.jpeg')}
+              source={require('../../assets/logo.png')}
               style={styles.logoImage}
-              resizeMode="cover"
+              resizeMode="contain"
             />
-            <Text style={styles.logo}>PashuVaani</Text>
-            <Text style={styles.tagline}>The Voice of Animal Health</Text>
           </View>
-        )}
+          <Text style={styles.appName}>PashuVaani</Text>
+          <Text style={styles.tagline}>The Voice of Animal Health</Text>
+        </View>
 
-        {/* Form */}
+        {/* Card */}
         <View style={styles.card}>
-          <Text style={styles.title}>Welcome Back</Text>
+          <Text style={styles.cardTitle}>Welcome Back</Text>
+          <Text style={styles.cardSub}>Access your animal's health records.</Text>
 
-          <Text style={styles.label}>Email</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="you@example.com"
-            placeholderTextColor="#9ca3af"
-            keyboardType="email-address"
-            autoCapitalize="none"
-            value={email}
-            onChangeText={setEmail}
-            onFocus={() => setKeyboardVisible(true)}
-            onBlur={() => setKeyboardVisible(false)}
-          />
-
-          <Text style={styles.label}>Password</Text>
-          <View style={styles.passwordRow}>
+          {/* Email */}
+          <Text style={styles.label}>Email Address</Text>
+          <View style={styles.inputRow}>
             <TextInput
-              style={styles.passwordInput}
+              style={styles.inputField}
+              placeholder="you@example.com"
+              placeholderTextColor="#adb5bd"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              value={email}
+              onChangeText={setEmail}
+            />
+            <Ionicons name="mail-outline" size={18} color="#adb5bd" style={styles.inputIcon} />
+          </View>
+
+          {/* Password */}
+          <View style={styles.labelRow}>
+            <Text style={styles.label}>Password</Text>
+            <Link href="/forgot-password" asChild>
+              <TouchableOpacity>
+                <Text style={styles.forgotText}>Forgot password?</Text>
+              </TouchableOpacity>
+            </Link>
+          </View>
+          <View style={styles.inputRow}>
+            <TextInput
+              style={styles.inputField}
               placeholder="••••••••"
-              placeholderTextColor="#9ca3af"
+              placeholderTextColor="#adb5bd"
               secureTextEntry={!showPassword}
               value={password}
               onChangeText={setPassword}
-              onFocus={() => setKeyboardVisible(true)}
-              onBlur={() => setKeyboardVisible(false)}
             />
-            <TouchableOpacity
-              style={styles.eyeBtn}
-              onPress={() => setShowPassword(!showPassword)}
-            >
-              <Ionicons
-                name={showPassword ? 'eye-off-outline' : 'eye-outline'}
-                size={20}
-                color="#9ca3af"
-              />
+            <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={styles.inputIcon}>
+              <Ionicons name={showPassword ? 'eye-off-outline' : 'eye-outline'} size={18} color="#adb5bd" />
             </TouchableOpacity>
           </View>
 
-          <Link href="/forgot-password" asChild>
-            <TouchableOpacity>
-              <Text style={styles.forgotText}>Forgot password?</Text>
-            </TouchableOpacity>
-          </Link>
-
+          {/* Button */}
           <TouchableOpacity
             style={[styles.button, loading && styles.buttonDisabled]}
             onPress={handleLogin}
@@ -124,10 +117,14 @@ export default function LoginScreen() {
             {loading ? (
               <ActivityIndicator color="#fff" />
             ) : (
-              <Text style={styles.buttonText}>Login</Text>
+              <View style={styles.buttonInner}>
+                <Text style={styles.buttonText}>Login</Text>
+                <Ionicons name="arrow-forward" size={18} color="#fff" />
+              </View>
             )}
           </TouchableOpacity>
 
+          {/* Footer */}
           <View style={styles.footer}>
             <Text style={styles.footerText}>Don't have an account? </Text>
             <Link href="/(auth)/register" asChild>
@@ -137,6 +134,19 @@ export default function LoginScreen() {
             </Link>
           </View>
         </View>
+
+        {/* Trust badges */}
+        <View style={styles.badges}>
+          <View style={styles.badge}>
+            <Ionicons name="shield-checkmark-outline" size={13} color="#6b7280" />
+            <Text style={styles.badgeText}>Secure Access</Text>
+          </View>
+          <Text style={styles.badgeDot}>•</Text>
+          <View style={styles.badge}>
+            <Ionicons name="time-outline" size={13} color="#6b7280" />
+            <Text style={styles.badgeText}>24/7 Support</Text>
+          </View>
+        </View>
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -144,62 +154,78 @@ export default function LoginScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#f0fdf4' },
-  scroll: { flexGrow: 1, justifyContent: 'center', padding: 24 },
-  header: { alignItems: 'center', marginBottom: 32 },
-  logoImage: { width: 90, height: 90, marginBottom: 8, borderRadius: 45, overflow: 'hidden' },
-  logo: { fontSize: 28, fontWeight: '800', color: '#16a34a' },
-  tagline: { fontSize: 13, color: '#6b7280', marginTop: 2 },
+  scroll: { flexGrow: 1, justifyContent: 'center', paddingHorizontal: 24, paddingVertical: 32 },
+
+  logoSection: { alignItems: 'center', marginBottom: 32 },
+  logoCircle: {
+    width: 80,
+    height: 80,
+    borderRadius: 22,
+    overflow: 'hidden',
+    marginBottom: 14,
+    backgroundColor: '#1a3a2a',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.18,
+    shadowRadius: 10,
+    elevation: 6,
+  },
+  logoImage: { width: '100%', height: '100%' },
+  appName: { fontSize: 30, fontWeight: '800', color: '#1a3a2a', letterSpacing: -0.5 },
+  tagline: { fontSize: 13, color: '#6b7280', marginTop: 4 },
+
   card: {
-    backgroundColor: 'rgba(255,255,255,0.85)',
-    borderRadius: 16,
+    backgroundColor: '#fff',
+    borderRadius: 20,
     padding: 24,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
+    shadowOpacity: 0.07,
+    shadowRadius: 12,
     elevation: 4,
   },
-  title: { fontSize: 22, fontWeight: '700', color: '#111827', marginBottom: 20 },
-  label: { fontSize: 14, fontWeight: '600', color: '#374151', marginBottom: 6 },
-  input: {
-    borderWidth: 1,
-    borderColor: '#d1fae5',
-    borderRadius: 10,
-    padding: 12,
-    fontSize: 15,
-    color: '#111827',
-    backgroundColor: '#f9fafb',
-    marginBottom: 14,
-  },
-  forgotText: { color: '#16a34a', fontSize: 13, textAlign: 'right', marginBottom: 20 },
-  passwordRow: {
+  cardTitle: { fontSize: 24, fontWeight: '700', color: '#111827', marginBottom: 4 },
+  cardSub: { fontSize: 13, color: '#6b7280', marginBottom: 24 },
+
+  labelRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 },
+  label: { fontSize: 13, fontWeight: '600', color: '#374151', marginBottom: 6 },
+  forgotText: { fontSize: 13, color: '#16a34a', fontWeight: '600' },
+
+  inputRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: '#f0fdf4',
+    borderRadius: 10,
     borderWidth: 1,
     borderColor: '#d1fae5',
-    borderRadius: 10,
-    backgroundColor: '#f9fafb',
-    marginBottom: 14,
+    marginBottom: 16,
+    paddingHorizontal: 14,
   },
-  passwordInput: {
+  inputField: {
     flex: 1,
-    padding: 12,
+    paddingVertical: 13,
     fontSize: 15,
     color: '#111827',
   },
-  eyeBtn: {
-    paddingHorizontal: 12,
-    paddingVertical: 12,
-  },
+  inputIcon: { marginLeft: 8 },
+
   button: {
-    backgroundColor: '#16a34a',
-    borderRadius: 10,
-    padding: 14,
+    backgroundColor: '#1a3a2a',
+    borderRadius: 50,
+    paddingVertical: 15,
     alignItems: 'center',
+    marginTop: 4,
   },
   buttonDisabled: { opacity: 0.6 },
+  buttonInner: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   buttonText: { color: '#fff', fontSize: 16, fontWeight: '700' },
+
   footer: { flexDirection: 'row', justifyContent: 'center', marginTop: 20 },
   footerText: { color: '#6b7280', fontSize: 14 },
-  linkText: { color: '#16a34a', fontSize: 14, fontWeight: '600' },
+  linkText: { color: '#16a34a', fontSize: 14, fontWeight: '700' },
+
+  badges: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 24, gap: 8 },
+  badge: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+  badgeText: { fontSize: 12, color: '#6b7280' },
+  badgeDot: { color: '#9ca3af', fontSize: 12 },
 });

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { View, Image, Text, ImageBackground, StyleSheet } from 'react-native';
+import { View, Image, ImageBackground, StyleSheet } from 'react-native';
 import Toast from 'react-native-toast-message';
 import * as SplashScreen from 'expo-splash-screen';
 import { useAuthStore } from '@/store/authStore';
@@ -10,7 +10,7 @@ import { useAuthStore } from '@/store/authStore';
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const { loadFromStorage, isLoading } = useAuthStore();
+  const { loadFromStorage } = useAuthStore();
   const [appReady, setAppReady] = useState(false);
 
   useEffect(() => {
@@ -28,31 +28,29 @@ export default function RootLayout() {
       .catch(() => {});
   }, []);
 
-  if (!appReady || isLoading) {
+  if (!appReady) {
     return (
       <ImageBackground
         source={require('../assets/background.jpeg')}
         style={styles.splash}
         resizeMode="cover"
       >
-        <Image
-          source={require('../assets/icon.png')}
-          style={styles.splashLogo}
-          resizeMode="contain"
-        />
+        <View style={styles.splashLogoWrapper}>
+          <Image
+            source={require('../assets/logo.png')}
+            style={styles.splashLogo}
+            resizeMode="contain"
+          />
+        </View>
       </ImageBackground>
     );
   }
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <ImageBackground
-        source={require('../assets/background.jpeg')}
-        style={styles.background}
-        resizeMode="cover"
-      >
+      <View style={styles.background}>
         <StatusBar style="dark" backgroundColor="#16a34a" />
-        <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: 'transparent' } }}>
+        <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: 'transparent' }, animation: 'none' }}>
           <Stack.Screen name="(auth)" />
           <Stack.Screen name="(tabs)" />
           <Stack.Screen name="chat/[sessionId]" options={{ headerShown: true, title: 'Chat with Gopu', headerStyle: { backgroundColor: '#16a34a' }, headerTintColor: '#fff' }} />
@@ -76,7 +74,7 @@ export default function RootLayout() {
           <Stack.Screen name="doctors/index" options={{ headerShown: true, title: 'Doctors', headerStyle: { backgroundColor: '#16a34a' }, headerTintColor: '#fff' }} />
         </Stack>
         <Toast />
-      </ImageBackground>
+      </View>
     </GestureHandlerRootView>
   );
 }
@@ -87,11 +85,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  splashLogo: {
+  splashLogoWrapper: {
     width: 280,
     height: 280,
     borderRadius: 32,
     overflow: 'hidden',
   },
-  background: { flex: 1 },
+  splashLogo: {
+    width: '100%',
+    height: '100%',
+  },
+  background: { flex: 1, backgroundColor: '#f0fdf4' },
 });
