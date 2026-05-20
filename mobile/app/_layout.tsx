@@ -17,8 +17,6 @@ export default function RootLayout() {
     loadFromStorage()
       .catch(() => {})
       .finally(async () => {
-        // Keep custom splash visible for at least 2s so logo is seen
-        await new Promise((resolve) => setTimeout(resolve, 2000));
         await SplashScreen.hideAsync();
         setAppReady(true);
       });
@@ -37,13 +35,11 @@ export default function RootLayout() {
         style={styles.splash}
         resizeMode="cover"
       >
-        <View style={styles.logoCard}>
-          <Image
-            source={require('../assets/logo.jpeg')}
-            style={styles.splashLogo}
-            resizeMode="contain"
-          />
-        </View>
+        <Image
+          source={require('../assets/icon.png')}
+          style={styles.splashLogo}
+          resizeMode="contain"
+        />
       </ImageBackground>
     );
   }
@@ -87,20 +83,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  logoCard: {
-    width: 260,
-    height: 260,
+  splashLogo: {
+    width: 280,
+    height: 280,
     borderRadius: 32,
     overflow: 'hidden',
-    elevation: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 10,
-  },
-  splashLogo: {
-    width: 260,
-    height: 260,
   },
   background: { flex: 1, backgroundColor: '#fff' },
 });

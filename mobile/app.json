@@ -19,10 +19,6 @@
       "bundleIdentifier": "com.pashuvaani.app"
     },
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/logo.jpeg",
-        "backgroundColor": "#0d1f1a"
-      },
       "package": "com.pashuvaani.app",
       "permissions": [
         "android.permission.RECORD_AUDIO",

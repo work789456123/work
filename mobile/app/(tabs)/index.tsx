@@ -9,6 +9,7 @@ import {
   Dimensions,
   ImageBackground,
   SafeAreaView,
+  Image,
 } from 'react-native';
 import { router } from 'expo-router';
 import { useState, useEffect, useCallback } from 'react';
@@ -98,10 +99,16 @@ export default function HomeScreen() {
       >
         {/* Header */}
         <View style={styles.header}>
-          <View>
-            <Text style={styles.naaste}>{getGreetingEmoji()} {getGreeting()}, {firstName}!</Text>
-            <Text style={styles.welcome}>Welcome to PashuVaani</Text>
-            <Text style={styles.subtitle}>The Voice of Animal Health</Text>
+          <View style={styles.headerLeft}>
+            <Image
+              source={require('../../assets/logo.jpeg')}
+              style={styles.headerLogo}
+              resizeMode="contain"
+            />
+            <View>
+              <Text style={styles.naaste}>{getGreetingEmoji()} {getGreeting()}, {firstName}!</Text>
+              <Text style={styles.welcome}>Welcome to PashuVaani</Text>
+            </View>
           </View>
           <TouchableOpacity onPress={() => router.push('/credits/plans')} style={styles.creditsBadge}>
             <Ionicons name="star" size={13} color="#fbbf24" />
@@ -167,7 +174,18 @@ const styles = StyleSheet.create({
     paddingBottom: 24,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-start',
+    alignItems: 'center',
+  },
+  headerLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    flex: 1,
+  },
+  headerLogo: {
+    width: 44,
+    height: 44,
+    borderRadius: 10,
   },
   naaste: { fontSize: 22, fontWeight: '800', color: '#fff', marginBottom: 2 },
   welcome: { fontSize: 14, fontWeight: '600', color: '#bbf7d0' },
