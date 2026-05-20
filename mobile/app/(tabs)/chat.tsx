@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
   },
   faqCard: {
     width: '47%',
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(255,255,255,0.85)',
     borderRadius: 12,
     padding: 12,
     borderWidth: 1,
@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
   empty: { alignItems: 'center', paddingTop: 12 },
   emptySub: { fontSize: 13, color: '#9ca3af', textAlign: 'center' },
   sessionCard: {
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(255,255,255,0.85)',
     borderRadius: 12,
     padding: 14,
     flexDirection: 'row',

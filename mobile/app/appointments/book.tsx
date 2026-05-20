@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
   },
   infoText: { flex: 1, fontSize: 13, color: '#1e40af' },
   section: {
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(255,255,255,0.85)',
     borderRadius: 12,
     marginHorizontal: 16,
     marginBottom: 12,

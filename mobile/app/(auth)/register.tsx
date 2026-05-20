@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
   logo: { fontSize: 28, fontWeight: '800', color: '#16a34a' },
   tagline: { fontSize: 13, color: '#6b7280', marginTop: 2 },
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(255,255,255,0.85)',
     borderRadius: 16,
     padding: 24,
     shadowColor: '#000',

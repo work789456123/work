@@ -8,7 +8,6 @@ import {
   Image,
   ActivityIndicator,
   RefreshControl,
-  ImageBackground,
 } from 'react-native';
 import { router } from 'expo-router';
 import { useState, useEffect, useCallback } from 'react';
@@ -80,7 +79,7 @@ export default function MarketplaceScreen() {
   }
 
   return (
-    <ImageBackground source={require('../../assets/background.jpeg')} style={styles.container} resizeMode="cover">
+    <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Marketplace 🛒</Text>
         <Text style={styles.headerSub}>Pet products & supplies</Text>
@@ -136,7 +135,7 @@ export default function MarketplaceScreen() {
           );
         }}
       />
-    </ImageBackground>
+    </View>
   );
 }
 
@@ -149,7 +148,7 @@ const styles = StyleSheet.create({
   searchBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(255,255,255,0.85)',
     margin: 16,
     borderRadius: 10,
     paddingHorizontal: 12,
@@ -165,7 +164,7 @@ const styles = StyleSheet.create({
   list: { paddingHorizontal: 12, paddingBottom: 24 },
   card: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(255,255,255,0.85)',
     borderRadius: 12,
     margin: 6,
     overflow: 'hidden',

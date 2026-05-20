@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
   title: { fontSize: 22, fontWeight: '700', color: '#111827', marginTop: 10 },
   sub: { fontSize: 14, color: '#6b7280', marginTop: 4, textAlign: 'center' },
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(255,255,255,0.85)',
     borderRadius: 12,
     margin: 16,
     padding: 16,

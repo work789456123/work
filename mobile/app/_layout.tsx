@@ -46,7 +46,11 @@ export default function RootLayout() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <View style={styles.background}>
+      <ImageBackground
+        source={require('../assets/background.jpeg')}
+        style={styles.background}
+        resizeMode="cover"
+      >
         <StatusBar style="dark" backgroundColor="#16a34a" />
         <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: 'transparent' } }}>
           <Stack.Screen name="(auth)" />
@@ -72,7 +76,7 @@ export default function RootLayout() {
           <Stack.Screen name="doctors/index" options={{ headerShown: true, title: 'Doctors', headerStyle: { backgroundColor: '#16a34a' }, headerTintColor: '#fff' }} />
         </Stack>
         <Toast />
-      </View>
+      </ImageBackground>
     </GestureHandlerRootView>
   );
 }
@@ -89,5 +93,5 @@ const styles = StyleSheet.create({
     borderRadius: 32,
     overflow: 'hidden',
   },
-  background: { flex: 1, backgroundColor: '#fff' },
+  background: { flex: 1 },
 });

@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
   stepNum: { fontSize: 12, fontWeight: '700', color: '#fff' },
   stepLine: { width: 40, height: 2, backgroundColor: '#e5e7eb' },
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(255,255,255,0.85)',
     borderRadius: 12,
     margin: 16,
     padding: 20,

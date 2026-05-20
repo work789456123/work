@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
   section: { marginTop: 16, paddingHorizontal: 16 },
   sectionTitle: { fontSize: 13, fontWeight: '700', color: '#6b7280', textTransform: 'uppercase', marginBottom: 8, letterSpacing: 0.5 },
   serviceRow: {
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(255,255,255,0.85)',
     borderRadius: 12,
     padding: 14,
     flexDirection: 'row',

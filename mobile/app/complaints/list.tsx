@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
   },
   newBtnText: { color: '#fff', fontWeight: '700', fontSize: 15 },
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(255,255,255,0.85)',
     borderRadius: 12,
     padding: 14,
     marginBottom: 12,

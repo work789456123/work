@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
   },
   roleText: { color: '#fff', fontSize: 11, fontWeight: '700', letterSpacing: 1 },
   menu: {
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(255,255,255,0.85)',
     borderRadius: 16,
     margin: 16,
     overflow: 'hidden',
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(255,255,255,0.85)',
     borderRadius: 12,
     marginHorizontal: 16,
     padding: 16,

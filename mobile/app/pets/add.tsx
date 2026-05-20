@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
   },
   addBtnText: { color: '#fff', fontWeight: '700', fontSize: 15 },
   form: {
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(255,255,255,0.85)',
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
   saveBtnText: { color: '#fff', fontWeight: '700', fontSize: 15 },
   sectionTitle: { fontSize: 14, fontWeight: '700', color: '#6b7280', marginBottom: 10, textTransform: 'uppercase' },
   petCard: {
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(255,255,255,0.85)',
     borderRadius: 12,
     padding: 14,
     flexDirection: 'row',

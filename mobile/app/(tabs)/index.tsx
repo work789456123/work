@@ -7,7 +7,6 @@ import {
   RefreshControl,
   StatusBar,
   Dimensions,
-  ImageBackground,
   SafeAreaView,
   Image,
 } from 'react-native';
@@ -86,11 +85,6 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView style={[styles.safe, { paddingTop: insets.top }]}>
-      <ImageBackground
-        source={require('../../assets/background.jpeg')}
-        style={{ flex: 1 }}
-        resizeMode="cover"
-      >
       <StatusBar barStyle="light-content" backgroundColor="#16a34a" translucent={false} />
       <ScrollView
         style={styles.container}
@@ -159,7 +153,6 @@ export default function HomeScreen() {
 
         <View style={{ height: 24 }} />
       </ScrollView>
-      </ImageBackground>
     </SafeAreaView>
   );
 }
