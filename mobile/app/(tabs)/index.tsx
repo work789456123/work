@@ -7,6 +7,8 @@ import {
   RefreshControl,
   StatusBar,
   Dimensions,
+  ImageBackground,
+  SafeAreaView,
 } from 'react-native';
 import { router } from 'expo-router';
 import { useState, useEffect, useCallback } from 'react';
@@ -82,7 +84,12 @@ export default function HomeScreen() {
   };
 
   return (
-    <View style={[styles.safe, { paddingTop: insets.top }]}>
+    <SafeAreaView style={[styles.safe, { paddingTop: insets.top }]}>
+      <ImageBackground
+        source={require('../../assets/background.jpeg')}
+        style={{ flex: 1 }}
+        resizeMode="cover"
+      >
       <StatusBar barStyle="light-content" backgroundColor="#16a34a" translucent={false} />
       <ScrollView
         style={styles.container}
@@ -145,7 +152,8 @@ export default function HomeScreen() {
 
         <View style={{ height: 24 }} />
       </ScrollView>
-    </View>
+      </ImageBackground>
+    </SafeAreaView>
   );
 }
 

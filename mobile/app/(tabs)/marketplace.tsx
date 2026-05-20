@@ -8,6 +8,7 @@ import {
   Image,
   ActivityIndicator,
   RefreshControl,
+  ImageBackground,
 } from 'react-native';
 import { router } from 'expo-router';
 import { useState, useEffect, useCallback } from 'react';
@@ -79,7 +80,7 @@ export default function MarketplaceScreen() {
   }
 
   return (
-    <View style={styles.container}>
+    <ImageBackground source={require('../../assets/background.jpeg')} style={styles.container} resizeMode="cover">
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Marketplace 🛒</Text>
         <Text style={styles.headerSub}>Pet products & supplies</Text>
@@ -135,7 +136,7 @@ export default function MarketplaceScreen() {
           );
         }}
       />
-    </View>
+    </ImageBackground>
   );
 }
 
