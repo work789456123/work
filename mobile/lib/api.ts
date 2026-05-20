@@ -2,7 +2,7 @@ import axios, { AxiosInstance } from 'axios';
 import * as SecureStore from 'expo-secure-store';
 
 // ─── Team testing via ngrok ──────────────────────────────────────────────────
-export const BASE_URL = 'https://sulphuric-conjoined-rarity.ngrok-free.dev';
+export const BASE_URL = 'https://pashuvaani-backend.onrender.com';
 // For production: export const BASE_URL = 'https://api.pashuvaani.com';
 
 const TOKEN_KEY = 'pashuvaani_access_token';
@@ -26,7 +26,6 @@ const api: AxiosInstance = axios.create({
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
-    'ngrok-skip-browser-warning': 'true',
   },
 });
 

@@ -53,6 +53,7 @@ export default function RootLayout() {
         source={require('../assets/background.jpeg')}
         style={styles.background}
         resizeMode="cover"
+        defaultSource={require('../assets/background.jpeg')}
       >
         <StatusBar style="dark" backgroundColor="#16a34a" />
         <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: 'transparent' } }}>
@@ -118,5 +119,5 @@ const styles = StyleSheet.create({
     color: '#6b7280',
     marginTop: 4,
   },
-  background: { flex: 1 },
+  background: { flex: 1, backgroundColor: '#1a3a2a' },
 });

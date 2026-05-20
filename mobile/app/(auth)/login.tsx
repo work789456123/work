@@ -9,19 +9,23 @@ import {
   ScrollView,
   ActivityIndicator,
   Image,
+  useWindowDimensions,
 } from 'react-native';
 import { Link, router } from 'expo-router';
 import { useState } from 'react';
 import { useAuthStore } from '@/store/authStore';
 import Toast from 'react-native-toast-message';
 import { Ionicons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
   const { login } = useAuthStore();
+  const insets = useSafeAreaInsets();
 
   const handleLogin = async () => {
     if (!email.trim() || !password.trim()) {
@@ -43,20 +47,27 @@ export default function LoginScreen() {
 
   return (
     <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      style={[styles.container, { paddingTop: insets.top }]}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={0}
     >
-      <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
-        {/* Header */}
-        <View style={styles.header}>
-          <Image
-            source={require('../../assets/icon.jpeg')}
-            style={styles.logoImage}
-            resizeMode="contain"
-          />
-          <Text style={styles.logo}>PashuVaani</Text>
-          <Text style={styles.tagline}>The Voice of Animal Health</Text>
-        </View>
+      <ScrollView
+        contentContainerStyle={styles.scroll}
+        keyboardShouldPersistTaps="handled"
+        onScrollBeginDrag={() => setKeyboardVisible(false)}
+      >
+        {/* Header — hide when keyboard is open to prevent merging */}
+        {!keyboardVisible && (
+          <View style={styles.header}>
+            <Image
+              source={require('../../assets/icon.jpeg')}
+              style={styles.logoImage}
+              resizeMode="cover"
+            />
+            <Text style={styles.logo}>PashuVaani</Text>
+            <Text style={styles.tagline}>The Voice of Animal Health</Text>
+          </View>
+        )}
 
         {/* Form */}
         <View style={styles.card}>
@@ -71,6 +82,8 @@ export default function LoginScreen() {
             autoCapitalize="none"
             value={email}
             onChangeText={setEmail}
+            onFocus={() => setKeyboardVisible(true)}
+            onBlur={() => setKeyboardVisible(false)}
           />
 
           <Text style={styles.label}>Password</Text>
@@ -82,6 +95,8 @@ export default function LoginScreen() {
               secureTextEntry={!showPassword}
               value={password}
               onChangeText={setPassword}
+              onFocus={() => setKeyboardVisible(true)}
+              onBlur={() => setKeyboardVisible(false)}
             />
             <TouchableOpacity
               style={styles.eyeBtn}

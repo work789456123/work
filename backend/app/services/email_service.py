@@ -42,11 +42,17 @@ class EmailService:
             part = MIMEText(html_content, "html")
             message.attach(part)
 
-            with smtplib.SMTP(self.host, self.port) as server:
-                if self.use_tls:
-                    server.starttls()
-                server.login(self.user, self.password)
-                server.sendmail(self.from_email, to_email, message.as_string())
+            # Use SMTP_SSL for port 465, STARTTLS for port 587
+            if self.port == 465:
+                with smtplib.SMTP_SSL(self.host, self.port) as server:
+                    server.login(self.user, self.password)
+                    server.sendmail(self.from_email, to_email, message.as_string())
+            else:
+                with smtplib.SMTP(self.host, self.port) as server:
+                    if self.use_tls:
+                        server.starttls()
+                    server.login(self.user, self.password)
+                    server.sendmail(self.from_email, to_email, message.as_string())
             
             return True
         except Exception as e:
