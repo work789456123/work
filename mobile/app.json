@@ -28,6 +28,10 @@
         "android.permission.RECORD_AUDIO",
         "android.permission.CAMERA",
         "android.permission.VIBRATE",
+        "android.permission.MODIFY_AUDIO_SETTINGS",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.CAMERA",
+        "android.permission.VIBRATE",
         "android.permission.MODIFY_AUDIO_SETTINGS"
       ]
     },
@@ -61,6 +65,12 @@
         "origin": false
       }
     },
-    "owner": "workyash"
+    "owner": "workyash",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/4fec796f-e0d8-45f6-832c-2c4568f38961"
+    }
   }
 }
